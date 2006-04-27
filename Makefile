@@ -1,6 +1,6 @@
 # Generic Makefile for compiling Atmel AVR microcontroller firmware
 
-# $Id: Makefile,v 1.1 2006-04-27 16:42:57 cvs Exp $
+# $Id: Makefile,v 1.2 2006-04-27 16:44:22 cvs Exp $
 
 AVRBIN		= /usr/local/atmel/bin
 CC		= $(AVRBIN)/avr-gcc
@@ -32,6 +32,11 @@ CFLAGS		= -g -O -Wall -mmcu=$(MCU)
 
 default:
 	@echo You must specify an explicit target!
+
+# Update from CVS repository
+
+update:
+	cvs -q update -I ! 2>&1 | grep -v CVS
 
 # Clean out working files
 
