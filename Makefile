@@ -1,8 +1,8 @@
 # Generic Makefile for compiling Atmel AVR microcontroller firmware
 
-# $Id: Makefile,v 1.2 2006-04-27 16:44:22 cvs Exp $
+# $Id: Makefile,v 1.3 2006-04-28 15:53:11 cvs Exp $
 
-AVRBIN		= /usr/local/atmel/bin
+AVRBIN		= /export/software/Linux/atmel/bin
 CC		= $(AVRBIN)/avr-gcc
 LD		= $(AVRBIN)/avr-ld
 STRIP		= $(AVRBIN)/avr-strip
@@ -16,17 +16,20 @@ CFLAGS		= -g -O -Wall -mmcu=$(MCU)
 
 .SUFFIXES: .asm .bin .hex .o
 
-.bin.asm:
-	$(OBJDUMP) -S -d $< >$@
-
 .c.bin:
 	$(CC) $(CFLAGS) -o $@ $<
 
 .o.bin:
 	$(CC) $(CFLAGS) -o $@ $<
 
+.bin.asm:
+	$(OBJDUMP) -S -d $< >$@
+
 .bin.hex:
 	$(OBJCOPY) -O ihex $< $@
+
+.S.o:
+	$(CC) $(CFLAGS) -o $@ -c $<
 
 # Define default rule placeholder
 
@@ -41,4 +44,4 @@ update:
 # Clean out working files
 
 clean:
-	rm -f *.o *.bin *.hex 
+	rm -f *.asm *.bin *.hex *.o
