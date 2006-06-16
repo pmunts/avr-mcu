@@ -1,14 +1,16 @@
 # Generic Makefile for compiling Atmel AVR microcontroller firmware
 
-# $Id: AVR.mk,v 1.4 2006-05-12 22:26:01 cvs Exp $
+# $Id: AVR.mk,v 1.5 2006-06-16 20:07:11 cvs Exp $
 
-AVR		?= /usr/local/avr
+AVR		?= /c/PROGRA~1/WinAVR
 AVRBIN		= $(AVR)/bin
 CC		= $(AVRBIN)/avr-gcc
 LD		= $(AVRBIN)/avr-ld
 STRIP		= $(AVRBIN)/avr-strip
 OBJCOPY		= $(AVRBIN)/avr-objcopy
 OBJDUMP		= $(AVRBIN)/avr-objdump
+
+MCU		= ATmega8515
 
 CFLAGS		= -g -O -Wall -mmcu=$(MCU) -DMCU=$(MCU) $(EXTRAFLAGS)
 
