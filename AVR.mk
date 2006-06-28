@@ -1,6 +1,6 @@
 # Generic Makefile for compiling Atmel AVR microcontroller firmware
 
-# $Id: AVR.mk,v 1.7 2006-06-20 23:54:04 cvs Exp $
+# $Id: AVR.mk,v 1.8 2006-06-28 17:28:03 cvs Exp $
 
 AVR		= /usr/local/avr
 AVRBIN		= $(AVR)/bin
@@ -10,9 +10,9 @@ STRIP		= $(AVRBIN)/avr-strip
 OBJCOPY		= $(AVRBIN)/avr-objcopy
 OBJDUMP		= $(AVRBIN)/avr-objdump
 
-MCU		= atmega8515
+MCU		= atmega128
 
-CFLAGS		= -g -O -Wall -mmcu=$(MCU) -DMCU=$(MCU) $(EXTRAFLAGS)
+CFLAGS		= -g -O -Wall -mmcu=$(MCU) -DMCU_$(MCU) $(EXTRAFLAGS)
 
 # Define suffix rules
 
