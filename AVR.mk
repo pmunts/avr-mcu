@@ -1,9 +1,8 @@
 # Generic Makefile for compiling Atmel AVR microcontroller firmware
 
-# $Id: AVR.mk,v 1.8 2006-06-28 17:28:03 cvs Exp $
+# $Id: AVR.mk,v 1.9 2006-07-05 20:51:33 cvs Exp $
 
-AVR		= /usr/local/avr
-AVRBIN		= $(AVR)/bin
+AVRBIN		= /usr/local/avr-tools/bin
 CC		= $(AVRBIN)/avr-gcc
 LD		= $(AVRBIN)/avr-ld
 STRIP		= $(AVRBIN)/avr-strip
