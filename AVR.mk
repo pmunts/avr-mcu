@@ -1,13 +1,13 @@
 # Generic Makefile for compiling Atmel AVR microcontroller firmware
 
-# $Id: AVR.mk,v 1.9 2006-07-05 20:51:33 cvs Exp $
+# $Id: AVR.mk,v 1.10 2006-07-06 15:45:13 cvs Exp $
 
-AVRBIN		= /usr/local/avr-tools/bin
-CC		= $(AVRBIN)/avr-gcc
-LD		= $(AVRBIN)/avr-ld
-STRIP		= $(AVRBIN)/avr-strip
-OBJCOPY		= $(AVRBIN)/avr-objcopy
-OBJDUMP		= $(AVRBIN)/avr-objdump
+AVRTOOLS	?= /usr/local/avr-tools
+CC		= $(AVRTOOLS)/bin/avr-gcc
+LD		= $(AVRTOOLS)/bin/avr-ld
+STRIP		= $(AVRTOOLS)/bin/avr-strip
+OBJCOPY		= $(AVRTOOLS)/bin/avr-objcopy
+OBJDUMP		= $(AVRTOOLS)/bin/avr-objdump
 
 MCU		= atmega128
 
