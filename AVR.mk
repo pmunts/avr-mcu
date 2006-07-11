@@ -1,6 +1,6 @@
 # Generic Makefile for compiling Atmel AVR microcontroller firmware
 
-# $Id: AVR.mk,v 1.11 2006-07-11 18:36:31 cvs Exp $
+# $Id: AVR.mk,v 1.12 2006-07-11 18:39:39 cvs Exp $
 
 AVRTOOLS	?= /usr/local/avr-tools
 CC		= $(AVRTOOLS)/bin/avr-gcc
@@ -18,8 +18,8 @@ CFLAGS		= -g -O -Wall -mmcu=$(MCU) -DMCU_$(MCU) -L . $(EXTRAFLAGS)
 
 .SUFFIXES: .asm .elf .hex .o
 
-.c.elf:
-	$(CC) $(CFLAGS) -o $@ $< -lmunts $(EXTRAOBJS)
+.c.o:
+	$(CC) $(CFLAGS) -c -o $@ $<
 
 .o.elf:
 	$(CC) $(CFLAGS) -o $@ $< -lmunts $(EXTRAOBJS)
