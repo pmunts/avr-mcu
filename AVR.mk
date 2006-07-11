@@ -1,27 +1,28 @@
 # Generic Makefile for compiling Atmel AVR microcontroller firmware
 
-# $Id: AVR.mk,v 1.10 2006-07-06 15:45:13 cvs Exp $
+# $Id: AVR.mk,v 1.11 2006-07-11 18:36:31 cvs Exp $
 
 AVRTOOLS	?= /usr/local/avr-tools
 CC		= $(AVRTOOLS)/bin/avr-gcc
 LD		= $(AVRTOOLS)/bin/avr-ld
+AR		= $(AVRTOOLS)/bin/avr-ar
 STRIP		= $(AVRTOOLS)/bin/avr-strip
 OBJCOPY		= $(AVRTOOLS)/bin/avr-objcopy
 OBJDUMP		= $(AVRTOOLS)/bin/avr-objdump
 
 MCU		= atmega128
 
-CFLAGS		= -g -O -Wall -mmcu=$(MCU) -DMCU_$(MCU) $(EXTRAFLAGS)
+CFLAGS		= -g -O -Wall -mmcu=$(MCU) -DMCU_$(MCU) -L . $(EXTRAFLAGS)
 
 # Define suffix rules
 
 .SUFFIXES: .asm .elf .hex .o
 
 .c.elf:
-	$(CC) $(CFLAGS) -o $@ $< $(EXTRAOBJS)
+	$(CC) $(CFLAGS) -o $@ $< -lmunts $(EXTRAOBJS)
 
 .o.elf:
-	$(CC) $(CFLAGS) -o $@ $< $(EXTRAOBJS)
+	$(CC) $(CFLAGS) -o $@ $< -lmunts $(EXTRAOBJS)
 
 .elf.asm:
 	$(OBJDUMP) -S -d $< >$@
