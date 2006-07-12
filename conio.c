@@ -1,8 +1,9 @@
 /* Simple serial console services */
 
-// $Id: conio.c,v 1.1 2006-07-12 00:02:06 cvs Exp $
+// $Id: conio.c,v 1.2 2006-07-12 16:17:56 cvs Exp $
 
 #include <stdio.h>
+#include <string.h>
 
 #include "conio.h"
 #include "uart.h"
@@ -23,16 +24,18 @@ void cputs(char *s)
   while (*s) putchar(*s++);
 }
 
-/* Override gets() with a version that does line editing */
+/* Override fgets() with a version that does line editing */
 
-char *gets(char *s)
+char *fgets(char *s, int bufsize, FILE *f)
 {
   char *p;
   int c;
 
+  memset(s, 0, bufsize);
+
   p = s;
 
-  for (;;)
+  for (p = s; p < s + bufsize-1;)
   {
     c = getchar();
     switch (c)
@@ -41,7 +44,7 @@ char *gets(char *s)
       case '\n' :
         putchar('\r');
         putchar('\n');
-        *p = 0;
+        *p = '\n';
         return s;
 
       case '\b' :
@@ -60,4 +63,6 @@ char *gets(char *s)
         break;
     }
   }
+
+  return s;
 }
