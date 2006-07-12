@@ -1,6 +1,6 @@
 /* Simple serial console services */
 
-// $Id: conio.c,v 1.2 2006-07-12 16:17:56 cvs Exp $
+// $Id: conio.c,v 1.3 2006-07-12 17:01:17 cvs Exp $
 
 #include <stdio.h>
 #include <string.h>
@@ -50,7 +50,7 @@ char *fgets(char *s, int bufsize, FILE *f)
       case '\b' :
         if (p > s)
         {
-          p--;
+          *p-- = 0;
           putchar('\b');
           putchar(' ');
           putchar('\b');
