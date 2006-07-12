@@ -1,6 +1,6 @@
 # Generic Makefile for compiling Atmel AVR microcontroller firmware
 
-# $Id: AVR.mk,v 1.13 2006-07-12 00:02:06 cvs Exp $
+# $Id: AVR.mk,v 1.14 2006-07-12 16:55:30 cvs Exp $
 
 AVRTOOLS	?= /usr/local/avr-tools
 CC		= $(AVRTOOLS)/bin/avr-gcc
@@ -10,20 +10,33 @@ STRIP		= $(AVRTOOLS)/bin/avr-strip
 OBJCOPY		= $(AVRTOOLS)/bin/avr-objcopy
 OBJDUMP		= $(AVRTOOLS)/bin/avr-objdump
 
+AVRPROGRAM	?= /c/PROGRA~1/Atmel/AVRTOO~1/STK500/STK500.exe -cUSB -d$(MCU) -e -pf -vf -if
+
 MCU		= atmega128
 FREQ		= 16000000L
 
 CFLAGS		= -g -O -Wall -mmcu=$(MCU) -DMCU_$(MCU) -DFREQ=$(FREQ) -L . $(EXTRAFLAGS)
 
-# Define suffix rules
+# Define default target placeholder
 
-.SUFFIXES: .asm .elf .hex .o
+default:
+	@echo You must explicitly specify the target
+
+# These are the target suffixes
+
+.SUFFIXES: .asm .elf .hex .o .download
+
+# Don't delete intermediate files
+
+.SECONDARY:
+
+# Now define some suffix rules
 
 .c.o:
 	$(CC) $(CFLAGS) -c -o $@ $<
 
 .o.elf:
-	$(CC) $(CFLAGS) -o $@ $< -lmunts $(EXTRAOBJS)
+	$(CC) $(CFLAGS) -o $@ $(LDFLAGS) $< -lmunts $(EXTRAOBJS)
 
 .elf.asm:
 	$(OBJDUMP) -S -d $< >$@
@@ -31,13 +44,11 @@ CFLAGS		= -g -O -Wall -mmcu=$(MCU) -DMCU_$(MCU) -DFREQ=$(FREQ) -L . $(EXTRAFLAGS
 .elf.hex:
 	$(OBJCOPY) -S -O ihex $< $@
 
+.hex.download:
+	$(AVRPROGRAM)$<
+
 .S.o:
 	$(CC) $(CFLAGS) -o $@ -c $<
-
-# Define default target placeholder
-
-default:
-	@echo You must explicitly specify the target
 
 # Update from CVS repository
 
