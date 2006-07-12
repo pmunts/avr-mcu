@@ -1,11 +1,13 @@
 /* Basic UART polling serial console driver */
 
-// $Id: uart.c,v 1.1 2006-07-12 00:02:06 cvs Exp $
+// $Id: uart.c,v 1.2 2006-07-12 17:17:11 cvs Exp $
 
 #include <avr/io.h>
 #include <stdio.h>
 
 #include "uart.h"
+
+unsigned long int CPUFREQ = 16000000;
 
 void uart_init(unsigned long int baudrate)
 {
@@ -13,7 +15,7 @@ void uart_init(unsigned long int baudrate)
 
   UDR0 = 0;
 
-  b = FREQ/(16L*baudrate) - 1;
+  b = CPUFREQ/(16L*baudrate) - 1;
   UBRR0H = b / 256;
   UBRR0L = b % 256;
   UCSR0A = 0x00;
