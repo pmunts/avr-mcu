@@ -1,6 +1,6 @@
 /* Simple bit twiddler test program */
 
-// $Id: test_gpio.c,v 1.1 2006-07-21 20:19:31 cvs Exp $
+// $Id: test_gpio.c,v 1.2 2006-08-04 15:53:13 cvs Exp $
 
 #include <avr/io.h>
 #include <avr/wdt.h>
@@ -11,7 +11,9 @@ int main(void)
 
   wdt_disable();
 
+#ifndef __AVR_ATmega168__
   DDRA = 0xFF;
+#endif
   DDRB = 0xFF;
   DDRC = 0xFF;
   DDRD = 0xFF;
@@ -23,7 +25,9 @@ int main(void)
 
   for (a = 0;; a++)
   {
+#ifndef __AVR_ATmega168__
     PORTA = a;
+#endif
     PORTB = a;
     PORTC = a;
     PORTD = a;
