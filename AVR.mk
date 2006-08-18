@@ -1,6 +1,6 @@
 # Generic Makefile for compiling Atmel AVR microcontroller firmware
 
-# $Id: AVR.mk,v 1.17 2006-08-18 22:10:59 cvs Exp $
+# $Id: AVR.mk,v 1.18 2006-08-18 23:47:04 cvs Exp $
 
 AVRTOOLS	?= /usr/local/avr-tools
 CC		= $(AVRTOOLS)/bin/avr-gcc
@@ -12,7 +12,7 @@ OBJDUMP		= $(AVRTOOLS)/bin/avr-objdump
 
 MCU		?= UNDEFINED
 AVRPROGRAM	?= /c/PROGRA~1/Atmel/AVRTOO~1/STK500/STK500.exe -cUSB -d$(MCU) -e -pf -vf -if
-AVRSRC		?= .
+AVRSRC		?= $(PWD)
 
 CFLAGS		= -g -O -Wall -I$(AVRSRC) -mmcu=$(MCU) $(EXTRAFLAGS)
 LDFLAGS		= -L $(AVRSRC)
@@ -59,10 +59,8 @@ update:
 # Clean out working files
 
 clean:
-	rm -f *.asm *.elf *.hex *.o
-
-reallyclean: clean
-	rm -f *.a
+	rm -f *.asm *.elf *.hex *.o *.a
+	@if [ "$(AVRSRC)" != "$(PWD)" ]; then cd $(AVRSRC); rm -f *.asm *.elf *.hex *.o *.a ; fi
 
 # Build processor dependent libraries
 
