@@ -1,6 +1,6 @@
 # Generic Makefile for compiling Atmel AVR microcontroller firmware
 
-# $Id: AVR.mk,v 1.16 2006-08-17 19:35:37 cvs Exp $
+# $Id: AVR.mk,v 1.17 2006-08-18 22:10:59 cvs Exp $
 
 AVRTOOLS	?= /usr/local/avr-tools
 CC		= $(AVRTOOLS)/bin/avr-gcc
@@ -10,11 +10,12 @@ STRIP		= $(AVRTOOLS)/bin/avr-strip
 OBJCOPY		= $(AVRTOOLS)/bin/avr-objcopy
 OBJDUMP		= $(AVRTOOLS)/bin/avr-objdump
 
+MCU		?= UNDEFINED
 AVRPROGRAM	?= /c/PROGRA~1/Atmel/AVRTOO~1/STK500/STK500.exe -cUSB -d$(MCU) -e -pf -vf -if
+AVRSRC		?= .
 
-MCU		= atmega128
-CFLAGS		= -g -O -Wall -mmcu=$(MCU) $(EXTRAFLAGS)
-LDFLAGS		= -L .
+CFLAGS		= -g -O -Wall -I$(AVRSRC) -mmcu=$(MCU) $(EXTRAFLAGS)
+LDFLAGS		= -L $(AVRSRC)
 
 # Define default target placeholder
 
@@ -35,7 +36,7 @@ default:
 	$(CC) $(CFLAGS) -c -o $@ $<
 
 .o.elf:
-	$(MAKE) libmunts-$(MCU).a MCU=$(MCU)
+	cd $(AVRSRC) && $(MAKE) libmunts-$(MCU).a MCU=$(MCU)
 	$(CC) $(CFLAGS) -o $@ $(LDFLAGS) $< -lmunts-$(MCU) $(EXTRAOBJS)
 
 .elf.asm:
