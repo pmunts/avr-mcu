@@ -1,6 +1,6 @@
 # Generic Makefile for compiling Atmel AVR microcontroller firmware
 
-# $Id: AVR.mk,v 1.18 2006-08-18 23:47:04 cvs Exp $
+# $Id: AVR.mk,v 1.19 2006-09-20 05:37:27 cvs Exp $
 
 AVRTOOLS	?= /usr/local/avr-tools
 CC		= $(AVRTOOLS)/bin/avr-gcc
@@ -12,7 +12,7 @@ OBJDUMP		= $(AVRTOOLS)/bin/avr-objdump
 
 MCU		?= UNDEFINED
 AVRPROGRAM	?= /c/PROGRA~1/Atmel/AVRTOO~1/STK500/STK500.exe -cUSB -d$(MCU) -e -pf -vf -if
-AVRSRC		?= $(PWD)
+AVRSRC		?= .
 
 CFLAGS		= -g -O -Wall -I$(AVRSRC) -mmcu=$(MCU) $(EXTRAFLAGS)
 LDFLAGS		= -L $(AVRSRC)
