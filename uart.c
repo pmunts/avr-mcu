@@ -1,6 +1,6 @@
 /* Basic UART polling serial console driver */
 
-// $Id: uart.c,v 1.5 2006-10-09 04:31:31 cvs Exp $
+// $Id: uart.c,v 1.6 2006-10-09 04:39:21 cvs Exp $
 
 #include <avr/io.h>
 #include <stdio.h>
@@ -31,6 +31,10 @@
 
 #ifndef UCSR0C
 #define UCSR0C	UCSRC
+#endif
+
+#ifndef U2X0
+#define U2X0	U2X
 #endif
 
 #ifndef UCSZ00
@@ -68,7 +72,7 @@ void uart_init(unsigned long int baudrate)
   b = CPUFREQ/8/baudrate - 1;
   UBRR0H = b / 256;
   UBRR0L = b % 256;
-  UCSR0A = _BV(U2X);
+  UCSR0A = _BV(U2X0);
   UCSR0B = _BV(TXEN0) | _BV(RXEN0);
 #ifdef URSEL
   UCSR0C = _BV(URSEL) | _BV(UCSZ01) | _BV(UCSZ00);
