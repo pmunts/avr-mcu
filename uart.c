@@ -1,6 +1,6 @@
 /* Basic UART polling serial console driver */
 
-// $Id: uart.c,v 1.4 2006-10-06 14:42:54 cvs Exp $
+// $Id: uart.c,v 1.5 2006-10-09 04:31:31 cvs Exp $
 
 #include <avr/io.h>
 #include <stdio.h>
@@ -57,7 +57,7 @@
 #define TXEN0	TXEN
 #endif
 
-unsigned long int CPUFREQ = 16000000;
+unsigned long int CPUFREQ = 16000000L;
 
 void uart_init(unsigned long int baudrate)
 {
@@ -65,12 +65,16 @@ void uart_init(unsigned long int baudrate)
 
   UDR0 = 0;
 
-  b = CPUFREQ/(16L*baudrate) - 1;
+  b = CPUFREQ/8/baudrate - 1;
   UBRR0H = b / 256;
   UBRR0L = b % 256;
-  UCSR0A = 0x00;
+  UCSR0A = _BV(U2X);
   UCSR0B = _BV(TXEN0) | _BV(RXEN0);
+#ifdef URSEL
+  UCSR0C = _BV(URSEL) | _BV(UCSZ01) | _BV(UCSZ00);
+#else
   UCSR0C = _BV(UCSZ01) | _BV(UCSZ00);
+#endif
 }
 
 int uart_putch(char c, FILE *f)
