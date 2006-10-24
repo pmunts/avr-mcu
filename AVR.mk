@@ -1,6 +1,6 @@
 # Generic Makefile for compiling Atmel AVR microcontroller firmware
 
-# $Id: AVR.mk,v 1.19 2006-09-20 05:37:27 cvs Exp $
+# $Id: AVR.mk,v 1.20 2006-10-24 18:13:52 cvs Exp $
 
 AVRTOOLS	?= /usr/local/avr-tools
 CC		= $(AVRTOOLS)/bin/avr-gcc
@@ -64,5 +64,5 @@ clean:
 
 # Build processor dependent libraries
 
-libmunts-$(MCU).a: conio.o uart.o
+libmunts-$(MCU).a: conio.o uart.o adc.o
 	$(AR) -r libmunts-$(MCU).a $?
