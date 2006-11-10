@@ -1,6 +1,6 @@
 # Generic Makefile for compiling Atmel AVR microcontroller firmware
 
-# $Id: AVR.mk,v 1.21 2006-11-10 21:06:15 cvs Exp $
+# $Id: AVR.mk,v 1.22 2006-11-10 22:10:33 cvs Exp $
 
 AVRTOOLS	?= /usr/local/avr-tools
 CC		= $(AVRTOOLS)/bin/avr-gcc
@@ -11,7 +11,7 @@ OBJCOPY		= $(AVRTOOLS)/bin/avr-objcopy
 OBJDUMP		= $(AVRTOOLS)/bin/avr-objdump
 
 MCU		?= UNDEFINED
-AVRPROGRAM	?= avrdude -p $(MCU) -c avrispmkII -P usb -v -U
+AVRPROGRAM	?= $(AVRDUDE)avrdude -p $(MCU) -c avrispmkII -P usb -v -U
 AVRSRC		?= .
 
 CFLAGS		= -g -O -Wall -I$(AVRSRC) -mmcu=$(MCU) $(EXTRAFLAGS)
