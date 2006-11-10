@@ -1,6 +1,6 @@
 # Generic Makefile for compiling Atmel AVR microcontroller firmware
 
-# $Id: AVR.mk,v 1.20 2006-10-24 18:13:52 cvs Exp $
+# $Id: AVR.mk,v 1.21 2006-11-10 21:06:15 cvs Exp $
 
 AVRTOOLS	?= /usr/local/avr-tools
 CC		= $(AVRTOOLS)/bin/avr-gcc
@@ -11,7 +11,7 @@ OBJCOPY		= $(AVRTOOLS)/bin/avr-objcopy
 OBJDUMP		= $(AVRTOOLS)/bin/avr-objdump
 
 MCU		?= UNDEFINED
-AVRPROGRAM	?= /c/PROGRA~1/Atmel/AVRTOO~1/STK500/STK500.exe -cUSB -d$(MCU) -e -pf -vf -if
+AVRPROGRAM	?= avrdude -p $(MCU) -c avrispmkII -P usb -v -U
 AVRSRC		?= .
 
 CFLAGS		= -g -O -Wall -I$(AVRSRC) -mmcu=$(MCU) $(EXTRAFLAGS)
@@ -46,7 +46,7 @@ default:
 	$(OBJCOPY) -S -O ihex $< $@
 
 .hex.download:
-	$(AVRPROGRAM)$<
+	$(AVRPROGRAM) $<
 
 .S.o:
 	$(CC) $(CFLAGS) -o $@ -c $<
