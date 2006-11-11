@@ -1,6 +1,6 @@
 # Generic Makefile for compiling Atmel AVR microcontroller firmware
 
-# $Id: AVR.mk,v 1.22 2006-11-10 22:10:33 cvs Exp $
+# $Id: AVR.mk,v 1.23 2006-11-11 01:25:01 cvs Exp $
 
 AVRTOOLS	?= /usr/local/avr-tools
 CC		= $(AVRTOOLS)/bin/avr-gcc
@@ -46,7 +46,7 @@ default:
 	$(OBJCOPY) -S -O ihex $< $@
 
 .hex.download:
-	$(AVRPROGRAM) $<
+	$(AVRPROGRAM) ./$<
 
 .S.o:
 	$(CC) $(CFLAGS) -o $@ -c $<
