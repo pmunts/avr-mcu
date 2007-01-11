@@ -1,6 +1,6 @@
 /* Basic UART polling serial console driver */
 
-// $Id: uart.c,v 1.7 2006-10-13 21:02:42 cvs Exp $
+// $Id: uart.c,v 1.8 2007-01-11 19:15:56 cvs Exp $
 
 #include <avr/io.h>
 #include <avr/wdt.h>
@@ -85,6 +85,11 @@ void uart_init(unsigned long int baudrate)
 int uart_putch(char c, FILE *f)
 {
   if (c == '\n') uart_putch('\r', f);
+
+#ifdef CTSINPUT
+  while (!CTSINPUT)
+    wdt_reset();
+#endif
 
   while (bit_is_clear(UCSR0A, UDRE0))
     wdt_reset();
