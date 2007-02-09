@@ -1,6 +1,6 @@
 # Generic Makefile for compiling Atmel AVR microcontroller firmware
 
-# $Id: AVR.mk,v 1.25 2007-02-08 23:52:16 cvs Exp $
+# $Id: AVR.mk,v 1.26 2007-02-09 17:04:03 cvs Exp $
 
 AVRTOOLS	?= /usr/local/avr-tools
 CC		= $(AVRTOOLS)/bin/avr-gcc
@@ -11,10 +11,10 @@ OBJCOPY		= $(AVRTOOLS)/bin/avr-objcopy
 OBJDUMP		= $(AVRTOOLS)/bin/avr-objdump
 
 MCU		?= UNDEFINED
-AVRPROGRAM	?= /c/PROGRA~1/Atmel/AVRTOO~1/STK500/Stk500 -cUSB -d$(MCU) -e -pf -vf -if
+AVRPROGRAM	?= $(AVRDUDE)avrdude -p $(MCU) -c avrispmkII -P usb -v -U ./
 AVRSRC		?= .
 
-CFLAGS		= -g -O -Wall -I$(AVRSRC) -mmcu=$(MCU) $(EXTRAFLAGS) $(DEBUG)
+CFLAGS		= -g -O -Wall -I$(AVRSRC) -mmcu=$(MCU) $(DEBUG) $(EXTRAFLAGS)
 LDFLAGS		= -L $(AVRSRC)
 
 # Define default target placeholder
