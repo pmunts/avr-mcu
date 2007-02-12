@@ -1,6 +1,6 @@
 /* Simple standard I/O test program */
 
-// $Id: test_conio.c,v 1.1 2006-07-21 20:19:31 cvs Exp $
+// $Id: test_conio.c,v 1.2 2007-02-12 20:59:07 cvs Exp $
 
 #include <avr/wdt.h>
 
@@ -9,13 +9,17 @@
 
 #include "conio.h"
 
+#ifndef BAUDRATE
+#define BAUDRATE 115200
+#endif
+
 int main(void)
 {
   char buf[32];
 
   wdt_disable();
 
-  conio_init(19200);
+  conio_init(BAUDRATE);
 
   puts("\033[H\033[2JAtmel AVR Console I/O Test\n");
 
