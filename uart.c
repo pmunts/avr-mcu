@@ -1,6 +1,6 @@
 /* Basic UART polling serial console driver */
 
-// $Id: uart.c,v 1.10 2007-02-12 18:46:44 cvs Exp $
+// $Id: uart.c,v 1.11 2007-02-12 19:03:09 cvs Exp $
 
 #include <avr/interrupt.h>
 #include <avr/io.h>
@@ -183,8 +183,8 @@ int uart_getch(FILE *f)
 {
   char c;
 
-  while (UART0_Rcv_count == 0)
-    wdt_reset();
+  if (UART0_Rcv_count == 0)
+    return _FDEV_ERR;
 
   c = UART0_Rcv_buf[UART0_Rcv_head];
 

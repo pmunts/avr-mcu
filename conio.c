@@ -1,6 +1,6 @@
 /* Simple serial console services */
 
-// $Id: conio.c,v 1.4 2006-07-12 20:11:05 cvs Exp $
+// $Id: conio.c,v 1.5 2007-02-12 19:03:09 cvs Exp $
 
 #include <stdio.h>
 #include <string.h>
@@ -33,6 +33,9 @@ char *fgets(char *s, int bufsize, FILE *f)
     c = getchar();
     switch (c)
     {
+      case EOF :
+        break;
+
       case '\r' :
       case '\n' :
         putchar('\r');
