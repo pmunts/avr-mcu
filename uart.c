@@ -1,7 +1,8 @@
 /* Basic UART polling serial console driver */
 
-// $Id: uart.c,v 1.8 2007-01-11 19:15:56 cvs Exp $
+// $Id: uart.c,v 1.9 2007-02-12 18:11:35 cvs Exp $
 
+#include <avr/interrupt.h>
 #include <avr/io.h>
 #include <avr/wdt.h>
 #include <stdio.h>
@@ -62,6 +63,46 @@
 #define TXEN0	TXEN
 #endif
 
+#ifndef RXCIE0
+#define RXCIE0	RXCIE
+#endif
+
+#ifndef UART0_RX_vect
+#ifdef UART_RX_vect
+#define UART0_RX_vect UART_RX_vect
+#endif
+#ifdef USART0_RXC_vect
+#define UART0_RX_vect USART0_RXC_vect
+#endif
+#ifdef USART0_RX_vect
+#define UART0_RX_vect USART0_RX_vect
+#endif
+#ifdef USART_RXC_vect
+#define UART0_RX_vect USART_RXC_vect
+#endif
+#ifdef USART_RX_vect
+#define UART0_RX_vect USART_RX_vect
+#endif
+#endif
+
+#ifndef UART0_TX_vect
+#ifdef UART_TX_vect
+#define UART0_TX_vect UART_TX_vect
+#endif
+#ifdef USART0_TXC_vect
+#define UART0_TX_vect USART0_TXC_vect
+#endif
+#ifdef USART0_TX_vect
+#define UART0_TX_vect USART0_TX_vect
+#endif
+#ifdef USART_TXC_vect
+#define UART0_TX_vect USART_TXC_vect
+#endif
+#ifdef USART_TX_vect
+#define UART0_TX_vect USART_TX_vect
+#endif
+#endif
+
 unsigned long int CPUFREQ = 16000000L;
 
 void uart_init(unsigned long int baudrate)
@@ -74,12 +115,14 @@ void uart_init(unsigned long int baudrate)
   UBRR0H = b / 256;
   UBRR0L = b % 256;
   UCSR0A = _BV(U2X0);
-  UCSR0B = _BV(TXEN0) | _BV(RXEN0);
+  UCSR0B = _BV(TXEN0) | _BV(RXEN0) | _BV(RXCIE0);
 #ifdef URSEL
   UCSR0C = _BV(URSEL) | _BV(UCSZ01) | _BV(UCSZ00);
 #else
   UCSR0C = _BV(UCSZ01) | _BV(UCSZ00);
 #endif
+
+  sei();
 }
 
 int uart_putch(char c, FILE *f)
@@ -98,10 +141,46 @@ int uart_putch(char c, FILE *f)
   return 0;
 }
 
+/* Serial port 0 receive buffer */
+
+#define RXBUFSIZE	64
+
+volatile unsigned char UART0_Rcv_head;
+volatile unsigned char UART0_Rcv_tail;
+volatile unsigned int  UART0_Rcv_count;
+volatile unsigned char UART0_Rcv_buf[RXBUFSIZE];
+
+/* Serial port 0 receive interrupt service routine */
+
+ISR(UART0_RX_vect)
+{
+  unsigned char c;
+
+  c = UDR0;
+
+  if (UART0_Rcv_count < RXBUFSIZE)
+  {
+    UART0_Rcv_buf[UART0_Rcv_tail] = c;
+    UART0_Rcv_count++;
+    UART0_Rcv_tail++;
+    UART0_Rcv_tail &= RXBUFSIZE-1;
+  }
+}
+
+/* Serial port 0 receive standard I/O driver routine */
+
 int uart_getch(FILE *f)
 {
-  while (bit_is_clear(UCSR0A, RXC0))
+  char c;
+
+  while (UART0_Rcv_count == 0)
     wdt_reset();
 
-  return UDR0;
+  c = UART0_Rcv_buf[UART0_Rcv_head];
+
+  UART0_Rcv_count--;
+  UART0_Rcv_head++;
+  UART0_Rcv_head &= RXBUFSIZE-1;
+
+  return c;
 }
