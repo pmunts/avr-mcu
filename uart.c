@@ -1,6 +1,6 @@
 /* Basic UART polling serial console driver */
 
-// $Id: uart.c,v 1.9 2007-02-12 18:11:35 cvs Exp $
+// $Id: uart.c,v 1.10 2007-02-12 18:46:44 cvs Exp $
 
 #include <avr/interrupt.h>
 #include <avr/io.h>
@@ -129,8 +129,8 @@ int uart_putch(char c, FILE *f)
 {
   if (c == '\n') uart_putch('\r', f);
 
-#ifdef CTSINPUT
-  while (!CTSINPUT)
+#ifdef CTS_ASSERTED
+  while (!CTS_ASSERTED)
     wdt_reset();
 #endif
 
@@ -157,6 +157,16 @@ ISR(UART0_RX_vect)
   unsigned char c;
 
   c = UDR0;
+
+#ifdef DEASSERT_RTS
+  if (UART0_Rcv_count > RXBUFSIZE - 10)
+    DEASSERT_RTS;
+#endif
+
+#ifdef ASSERT_RTS
+  if (UART0_Rcv_count < RXBUFSIZE - 20)
+    ASSERT_RTS;
+#endif
 
   if (UART0_Rcv_count < RXBUFSIZE)
   {
