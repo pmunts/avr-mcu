@@ -1,6 +1,6 @@
 # Generic Makefile for compiling Atmel AVR microcontroller firmware
 
-# $Id: AVR.mk,v 1.27 2007-03-10 02:03:00 cvs Exp $
+# $Id: AVR.mk,v 1.28 2007-07-12 19:06:31 cvs Exp $
 
 AVRTOOLS	?= /usr/local/avr-tools
 CC		= $(AVRTOOLS)/bin/avr-gcc
@@ -24,7 +24,7 @@ default:
 
 # These are the target suffixes
 
-.SUFFIXES: .asm .elf .hex .o .download
+.SUFFIXES: .asm .elf .hex .o .program
 
 # Don't delete intermediate files
 
@@ -45,7 +45,7 @@ default:
 .elf.hex:
 	$(OBJCOPY) -S -O ihex $< $@
 
-.hex.download:
+.hex.program:
 	$(AVRPROGRAM)$<
 
 .S.o:
