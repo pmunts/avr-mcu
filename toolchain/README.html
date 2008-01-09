@@ -1,0 +1,16 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<html>
+<head>
+<meta name="generator" content="HTML Tidy for Cygwin (vers 1st September 2004), see www.w3.org">
+<title>AVR Microcontroller Toolchain Notes</title>
+</head>
+<body>
+<h1>AVR Microcontroller Toolchain Notes</h1>
+This toolchain includes <b>binutils</b>, <b>gcc</b>, and <b>avr-libc.</b> It may be built for Windows (using Cygwin) and for Linux. The Windows and Linux releases are virtually identical in every respect. (This is the reason I created my own toolchain: I routinely flip back and forth among Windows, Linux, and OpenBSD development environments.)
+<p>I build my Linux releases on a CentOS 4 machine. They work on a variety of Linux, FreeBSD, and OpenBSD hosts.</p>
+<p>I use the <a href="http://www.atmel.com/dyn/products/tools_card.asp?tool_id=3808">Atmel AVRISP mkII</a> and <b><a href="http://www.nongnu.org/avrdude">avrdude</a></b> for in system programming. Since <b>avrdude</b> binaries are available for all of the environments I am interested in, I do not include it in my toolchain.</p>
+<hr>
+Questions or comments to <a href="mailto:phil@munts.net">phil@munts.net</a>
+<p><i>$Id: README.html,v 1.1 2008-01-09 11:50:24 cvs Exp $</i></p>
+</body>
+</html>
