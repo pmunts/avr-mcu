@@ -1,6 +1,6 @@
 # Download and build GNU toolchain for Atmel AVR microcontrollers
 
-# $Id: Makefile,v 1.1 2007-10-10 02:23:48 cvs Exp $
+# $Id: Makefile,v 1.2 2008-01-09 11:26:20 cvs Exp $
 
 PKGNAME		= avr-tools
 INSTBASE	= $(shell pwd)/$(PKGNAME)
@@ -13,13 +13,13 @@ BINUTILDIST	= $(TEMP)/binutils-$(BINUTILVER).tar.gz
 BINUTILURL	= $(BINUTILSERVER)/`basename $(BINUTILDIST)`
 BINUTILSRC	= binutils-$(BINUTILVER)
 
-GCCVER		= 4.2.1
+GCCVER		= 4.2.2
 GCCSERVER	= ftp://ftp.gnu.org/pub/gnu/gcc/gcc-$(GCCVER)
 GCCDIST		= $(TEMP)/gcc-$(GCCVER).tar.bz2
 GCCURL		= $(GCCSERVER)/`basename $(GCCDIST)`
 GCCSRC		= gcc-$(GCCVER)
 
-AVRLIBCVER	= 1.4.6
+AVRLIBCVER	= 1.6.1
 AVRLIBCSERVER	= http://download.savannah.gnu.org/releases/avr-libc
 AVRLIBCDIST	= $(TEMP)/avr-libc-$(AVRLIBCVER).tar.bz2
 AVRLIBCURL	= $(AVRLIBCSERVER)/`basename $(AVRLIBCDIST)`
