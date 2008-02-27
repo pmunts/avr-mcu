@@ -1,6 +1,6 @@
 # Generic Makefile for compiling Atmel AVR microcontroller firmware
 
-# $Id: AVR.mk,v 1.29 2007-10-29 15:59:54 cvs Exp $
+# $Id: AVR.mk,v 1.30 2008-02-27 08:27:07 cvs Exp $
 
 AVRTOOLS	?= /usr/local/avr-tools
 CC		= $(AVRTOOLS)/bin/avr-gcc
@@ -41,8 +41,8 @@ default_catch:
 	$(CC) $(CFLAGS) -c -o $@ $<
 
 .o.elf:
-	cd $(AVRSRC) && $(MAKE) libmunts-$(MCU).a MCU=$(MCU)
-	$(CC) $(CFLAGS) -o $@ $(LDFLAGS) $< -lmunts-$(MCU) $(EXTRAOBJS)
+	cd $(AVRSRC) && $(MAKE) lib$(MCU).a MCU=$(MCU)
+	$(CC) $(CFLAGS) -o $@ $(LDFLAGS) $< -l$(MCU) $(EXTRAOBJS)
 
 .elf.asm:
 	$(OBJDUMP) -S -d $< >$@
@@ -52,6 +52,9 @@ default_catch:
 
 .hex.program:
 	$(AVRPROGRAM)$<
+
+.s.o:
+	$(CC) $(CFLAGS) -o $@ -c $<
 
 .S.o:
 	$(CC) $(CFLAGS) -o $@ -c $<
@@ -69,5 +72,5 @@ clean:
 
 # Build processor dependent libraries
 
-libmunts-$(MCU).a: conio.o uart.o adc.o
-	$(AR) -r libmunts-$(MCU).a $?
+lib$(MCU).a: conio.o uart.o adc.o
+	$(AR) -r lib$(MCU).a $?
