@@ -1,6 +1,6 @@
 # Generic Makefile for compiling Atmel AVR microcontroller firmware
 
-# $Id: AVR.mk,v 1.31 2008-02-27 08:55:05 cvs Exp $
+# $Id: AVR.mk,v 1.32 2008-02-27 09:09:32 cvs Exp $
 
 AVRTOOLS	?= /usr/local/avr-tools
 CC		= $(AVRTOOLS)/bin/avr-gcc
@@ -70,8 +70,7 @@ update:
 # Clean out working files
 
 clean:
-	rm -f *.a *.asm *.bin *.elf *.hex *.map *.o
-	@if [ "$(AVRSRC)" != "$(PWD)" ]; then cd $(AVRSRC); rm -f *.a *.asm *.bin *.elf *.hex *.map *.o ; fi
+	rm -f *.a *.asm *.bin *.elf *.hex *.map *.o $(AVRSRC)/*.a $(AVRSRC)/*.o
 
 # Build processor dependent libraries
 
