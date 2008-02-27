@@ -1,6 +1,6 @@
 # Generic Makefile for compiling Atmel AVR microcontroller firmware
 
-# $Id: AVR.mk,v 1.30 2008-02-27 08:27:07 cvs Exp $
+# $Id: AVR.mk,v 1.31 2008-02-27 08:55:05 cvs Exp $
 
 AVRTOOLS	?= /usr/local/avr-tools
 CC		= $(AVRTOOLS)/bin/avr-gcc
@@ -15,7 +15,7 @@ AVRPROGRAM	?= $(AVRDUDE)avrdude -p $(MCU) -c avrispmkII -P usb -v -U flash:w:
 AVRSRC		?= .
 
 CFLAGS		= -g -O -Wall -I$(AVRSRC) -mmcu=$(MCU) $(DEBUG) $(EXTRAFLAGS)
-LDFLAGS		= -L $(AVRSRC)
+LDFLAGS		= -L$(AVRSRC) -l$(MCU) -Wl,-Map,$*.map,--cref $(EXTRAOBJS)
 
 # Define default target placeholder
 
@@ -29,7 +29,7 @@ default_catch:
 
 # These are the target suffixes
 
-.SUFFIXES: .asm .elf .hex .o .program
+.SUFFIXES: .asm .bin .elf .hex .o .program
 
 # Don't delete intermediate files
 
@@ -42,10 +42,13 @@ default_catch:
 
 .o.elf:
 	cd $(AVRSRC) && $(MAKE) lib$(MCU).a MCU=$(MCU)
-	$(CC) $(CFLAGS) -o $@ $(LDFLAGS) $< -l$(MCU) $(EXTRAOBJS)
+	$(CC) $(CFLAGS) -o $@ $< $(LDFLAGS)
 
 .elf.asm:
 	$(OBJDUMP) -S -d $< >$@
+
+.elf.bin:
+	$(OBJCOPY) -S -O binary --gap-fill=0 $< $@
 
 .elf.hex:
 	$(OBJCOPY) -S -O ihex $< $@
@@ -67,8 +70,8 @@ update:
 # Clean out working files
 
 clean:
-	rm -f *.asm *.elf *.hex *.o *.a
-	@if [ "$(AVRSRC)" != "$(PWD)" ]; then cd $(AVRSRC); rm -f *.asm *.elf *.hex *.o *.a ; fi
+	rm -f *.a *.asm *.bin *.elf *.hex *.map *.o
+	@if [ "$(AVRSRC)" != "$(PWD)" ]; then cd $(AVRSRC); rm -f *.a *.asm *.bin *.elf *.hex *.map *.o ; fi
 
 # Build processor dependent libraries
 
