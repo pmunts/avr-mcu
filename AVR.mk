@@ -1,6 +1,6 @@
 # Generic Makefile for compiling Atmel AVR microcontroller firmware
 
-# $Id: AVR.mk,v 1.32 2008-02-27 09:09:32 cvs Exp $
+# $Id: AVR.mk,v 1.33 2008-10-02 18:45:19 cvs Exp $
 
 AVRTOOLS	?= /usr/local/avr-tools
 CC		= $(AVRTOOLS)/bin/avr-gcc
@@ -17,12 +17,6 @@ AVRSRC		?= .
 CFLAGS		= -g -O -Wall -I$(AVRSRC) -mmcu=$(MCU) $(DEBUG) $(EXTRAFLAGS)
 LDFLAGS		= -L$(AVRSRC) -l$(MCU) -Wl,-Map,$*.map,--cref $(EXTRAOBJS)
 
-# Define default target placeholder
-
-default_catch:
-	@echo ERROR: You must explicitly specify the target
-	@exit 1
-
 # These targets are not files
 
 .PHONY: default_catch update clean
@@ -34,6 +28,12 @@ default_catch:
 # Don't delete intermediate files
 
 .SECONDARY:
+
+# Define default target placeholder
+
+default_catch:
+	@echo ERROR: You must explicitly specify the target
+	@exit 1
 
 # Now define some suffix rules
 
