@@ -1,25 +1,26 @@
 # Download and build GNU toolchain for Atmel AVR microcontrollers
 
-# $Id: Makefile,v 1.2 2008-01-09 11:26:20 cvs Exp $
+# $Id: Makefile,v 1.3 2008-11-11 14:14:00 cvs Exp $
 
 PKGNAME		= avr-tools
 INSTBASE	= $(shell pwd)/$(PKGNAME)
 
 TEMP		= /tmp
 
-BINUTILVER	= 2.18
+BINUTILVER	= 2.19
 BINUTILSERVER	= ftp://ftp.gnu.org/pub/gnu/binutils
 BINUTILDIST	= $(TEMP)/binutils-$(BINUTILVER).tar.gz
 BINUTILURL	= $(BINUTILSERVER)/`basename $(BINUTILDIST)`
 BINUTILSRC	= binutils-$(BINUTILVER)
 
-GCCVER		= 4.2.2
+GCCVER		= 4.3.2
 GCCSERVER	= ftp://ftp.gnu.org/pub/gnu/gcc/gcc-$(GCCVER)
 GCCDIST		= $(TEMP)/gcc-$(GCCVER).tar.bz2
 GCCURL		= $(GCCSERVER)/`basename $(GCCDIST)`
 GCCSRC		= gcc-$(GCCVER)
+GCCOBJ		= gcc-$(GCCVER).obj
 
-AVRLIBCVER	= 1.6.1
+AVRLIBCVER	= 1.6.4
 AVRLIBCSERVER	= http://download.savannah.gnu.org/releases/avr-libc
 AVRLIBCDIST	= $(TEMP)/avr-libc-$(AVRLIBCVER).tar.bz2
 AVRLIBCURL	= $(AVRLIBCSERVER)/`basename $(AVRLIBCDIST)`
@@ -53,6 +54,24 @@ binutils.done: $(BINUTILDIST)
 	tar xzf $(BINUTILDIST)
 	cd $(BINUTILSRC) && ./configure --prefix=$(INSTBASE) --target=avr
 	$(MAKE) -C $(BINUTILSRC)
+ifeq ($(shell uname), Linux)
+# Force static linking
+	rm $(BINUTILSRC)/binutils/ar
+	rm $(BINUTILSRC)/binutils/addr2line
+	rm $(BINUTILSRC)/binutils/cxxfilt
+	rm $(BINUTILSRC)/binutils/nm-new
+	rm $(BINUTILSRC)/binutils/objcopy
+	rm $(BINUTILSRC)/binutils/objdump
+	rm $(BINUTILSRC)/binutils/ranlib
+	rm $(BINUTILSRC)/binutils/readelf
+	rm $(BINUTILSRC)/binutils/size
+	rm $(BINUTILSRC)/binutils/strings
+	rm $(BINUTILSRC)/binutils/strip-new
+	rm $(BINUTILSRC)/gas/as-new
+	rm $(BINUTILSRC)/gprof/gprof
+	rm $(BINUTILSRC)/ld/ld-new
+	$(MAKE) -C $(BINUTILSRC) LDFLAGS=-all-static
+endif
 	$(MAKE) -C $(BINUTILSRC) install
 	touch binutils.done
 
@@ -67,10 +86,17 @@ $(GCCDIST):
 
 gcc.done: binutils.done $(GCCDIST)
 	rm -rf $(GCCSRC)
+	rm -rf $(GCCOBJ)
 	tar xjf $(GCCDIST)
-	cd $(GCCSRC) && ./configure --prefix=$(INSTBASE) --target=avr --enable-languages=c --disable-libssp --disable-libgomp
-	export PATH=$$PATH':'$(INSTBASE)/bin && $(MAKE) -C $(GCCSRC)
-	export PATH=$$PATH':'$(INSTBASE)/bin && $(MAKE) -C $(GCCSRC) install
+	mkdir -p $(GCCOBJ)
+	cd $(GCCOBJ) && ../$(GCCSRC)/configure --prefix=$(INSTBASE) --target=avr --enable-languages=c --disable-libssp --disable-libgomp --disable-nls --disable-shared
+ifeq ($(shell uname), Linux)
+# Force static linking
+	export PATH=$$PATH':'$(INSTBASE)/bin && $(MAKE) -C $(GCCOBJ) LDFLAGS=-static
+else
+	export PATH=$$PATH':'$(INSTBASE)/bin && $(MAKE) -C $(GCCOBJ)
+endif
+	export PATH=$$PATH':'$(INSTBASE)/bin && $(MAKE) -C $(GCCOBJ) install
 	touch gcc.done
 
 ################################################################################
@@ -139,6 +165,7 @@ clean:
 	rm -rf $(INSTBASE)
 	rm -rf $(BINUTILSRC)
 	rm -rf $(GCCSRC)
+	rm -rf $(GCCOBJ)
 	rm -rf $(AVRLIBCSRC)
 
 distclean: clean
