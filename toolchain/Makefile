@@ -1,6 +1,6 @@
 # Download and build GNU toolchain for Atmel AVR microcontrollers
 
-# $Id: Makefile,v 1.3 2008-11-11 14:14:00 cvs Exp $
+# $Id: Makefile,v 1.4 2008-11-22 18:30:06 cvs Exp $
 
 PKGNAME		= avr-tools
 INSTBASE	= $(shell pwd)/$(PKGNAME)
@@ -89,7 +89,7 @@ gcc.done: binutils.done $(GCCDIST)
 	rm -rf $(GCCOBJ)
 	tar xjf $(GCCDIST)
 	mkdir -p $(GCCOBJ)
-	cd $(GCCOBJ) && ../$(GCCSRC)/configure --prefix=$(INSTBASE) --target=avr --enable-languages=c --disable-libssp --disable-libgomp --disable-nls --disable-shared
+	cd $(GCCOBJ) && ../$(GCCSRC)/configure --prefix=$(INSTBASE) --target=avr --enable-languages=c --disable-libssp --disable-libgomp --disable-nls --disable-shared $(GCCEXTRACONFIG)
 ifeq ($(shell uname), Linux)
 # Force static linking
 	export PATH=$$PATH':'$(INSTBASE)/bin && $(MAKE) -C $(GCCOBJ) LDFLAGS=-static
