@@ -1,19 +1,19 @@
 # Download and build GNU toolchain for Atmel AVR microcontrollers
 
-# $Id: Makefile,v 1.4 2008-11-22 18:30:06 cvs Exp $
+# $Id: Makefile,v 1.5 2009-02-07 20:23:35 cvs Exp $
 
 PKGNAME		= avr-tools
 INSTBASE	= $(shell pwd)/$(PKGNAME)
 
 TEMP		= /tmp
 
-BINUTILVER	= 2.19
+BINUTILVER	= 2.19.1
 BINUTILSERVER	= ftp://ftp.gnu.org/pub/gnu/binutils
 BINUTILDIST	= $(TEMP)/binutils-$(BINUTILVER).tar.gz
 BINUTILURL	= $(BINUTILSERVER)/`basename $(BINUTILDIST)`
 BINUTILSRC	= binutils-$(BINUTILVER)
 
-GCCVER		= 4.3.2
+GCCVER		= 4.3.3
 GCCSERVER	= ftp://ftp.gnu.org/pub/gnu/gcc/gcc-$(GCCVER)
 GCCDIST		= $(TEMP)/gcc-$(GCCVER).tar.bz2
 GCCURL		= $(GCCSERVER)/`basename $(GCCDIST)`
@@ -83,6 +83,8 @@ $(GCCDIST):
 	wget -P $(TEMP) $(GCCURL)
 
 # Compile gcc
+
+# CentOS 4 needs GCCEXTRACONFIG=--with-mpfr=/usr/local
 
 gcc.done: binutils.done $(GCCDIST)
 	rm -rf $(GCCSRC)
