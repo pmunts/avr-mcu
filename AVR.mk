@@ -62,10 +62,11 @@ default_catch:
 .S.o:
 	$(CC) $(CFLAGS) -o $@ -c $<
 
-# Update from CVS repository
+# Update from source code repository
 
 update:
-	@-cvs -q update -I ! 2>&1 | grep -v CVS
+	svn status
+	svn update
 
 # Clean out working files
 
