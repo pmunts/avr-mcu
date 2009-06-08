@@ -1,6 +1,6 @@
 # Download and build GNU toolchain for Atmel AVR microcontrollers
 
-# $Id: Makefile,v 1.7 2009-05-12 08:29:15 cvs Exp $
+# $Id$
 
 PKGNAME		= avr-tools
 INSTBASE	= $(shell pwd)/$(PKGNAME)

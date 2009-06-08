@@ -1,6 +1,6 @@
 /* Simple serial console services */
 
-// $Id: conio.c,v 1.5 2007-02-12 19:03:09 cvs Exp $
+// $Id$
 
 #include <stdio.h>
 #include <string.h>

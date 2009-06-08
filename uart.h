@@ -1,6 +1,6 @@
 /* Basic UART polling serial console driver */
 
-// $Id: uart.h,v 1.2 2006-07-12 17:17:11 cvs Exp $
+// $Id$
 
 #include <stdio.h>
 

@@ -1,6 +1,6 @@
 /* Basic polling Analog to Digital driver */
 
-// $Id: adc.c,v 1.1 2006-10-24 18:13:52 cvs Exp $
+// $Id$
 
 #include <avr/io.h>
 #include <avr/pgmspace.h>

@@ -1,6 +1,6 @@
 /* Simple standard I/O test program */
 
-// $Id: test_conio.c,v 1.2 2007-02-12 20:59:07 cvs Exp $
+// $Id$
 
 #include <avr/wdt.h>
 
