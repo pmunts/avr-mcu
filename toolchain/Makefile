@@ -13,14 +13,14 @@ BINUTILDIST	= $(TEMP)/binutils-$(BINUTILVER).tar.gz
 BINUTILURL	= $(BINUTILSERVER)/`basename $(BINUTILDIST)`
 BINUTILSRC	= binutils-$(BINUTILVER)
 
-GCCVER		= 4.4.0
+GCCVER		= 4.4.1
 GCCSERVER	= ftp://ftp.gnu.org/pub/gnu/gcc/gcc-$(GCCVER)
 GCCDIST		= $(TEMP)/gcc-$(GCCVER).tar.bz2
 GCCURL		= $(GCCSERVER)/`basename $(GCCDIST)`
 GCCSRC		= gcc-$(GCCVER)
 GCCOBJ		= gcc-$(GCCVER).obj
 
-AVRLIBCVER	= 1.6.5
+AVRLIBCVER	= 1.6.7
 AVRLIBCSERVER	= http://download.savannah.gnu.org/releases/avr-libc
 AVRLIBCDIST	= $(TEMP)/avr-libc-$(AVRLIBCVER).tar.bz2
 AVRLIBCURL	= $(AVRLIBCSERVER)/`basename $(AVRLIBCDIST)`
@@ -32,13 +32,24 @@ AVRLIBCMPURL	= $(AVRLIBCSERVER)/`basename $(AVRLIBCMPDIST)`
 AVRLIBCUMDIST	= $(TEMP)/avr-libc-user-manual-$(AVRLIBCVER).tar.bz2
 AVRLIBCUMURL	= $(AVRLIBCSERVER)/`basename $(AVRLIBCUMDIST)`
 
+VERSION		= $(BINUTILVER)_$(GCCVER)_$(AVRLIBCVER)
+RELEASE		= 1
+
 ifeq ($(shell uname), CYGWIN_NT-5.1)
 TARBALL		= $(PKGNAME)-cygwin.tgz
 else
 TARBALL		= $(PKGNAME)-$(shell uname -s)-$(shell uname -i).tgz
 endif
 
+.PHONY: default download clean distclean
+
 default: $(TARBALL)
+
+################################################################################
+
+# Download source distributions:
+
+download: $(BINUTILDIST) $(GCCDIST) $(AVRLIBCDIST)
 
 ################################################################################
 
@@ -54,24 +65,6 @@ binutils.done: $(BINUTILDIST)
 	tar xzf $(BINUTILDIST)
 	cd $(BINUTILSRC) && ./configure --prefix=$(INSTBASE) --target=avr
 	$(MAKE) -C $(BINUTILSRC)
-ifeq ($(shell uname), Linux)
-# Force static linking
-	rm $(BINUTILSRC)/binutils/ar
-	rm $(BINUTILSRC)/binutils/addr2line
-	rm $(BINUTILSRC)/binutils/cxxfilt
-	rm $(BINUTILSRC)/binutils/nm-new
-	rm $(BINUTILSRC)/binutils/objcopy
-	rm $(BINUTILSRC)/binutils/objdump
-	rm $(BINUTILSRC)/binutils/ranlib
-	rm $(BINUTILSRC)/binutils/readelf
-	rm $(BINUTILSRC)/binutils/size
-	rm $(BINUTILSRC)/binutils/strings
-	rm $(BINUTILSRC)/binutils/strip-new
-	rm $(BINUTILSRC)/gas/as-new
-	rm $(BINUTILSRC)/gprof/gprof
-	rm $(BINUTILSRC)/ld/ld-new
-	$(MAKE) -C $(BINUTILSRC) LDFLAGS=-all-static
-endif
 	$(MAKE) -C $(BINUTILSRC) install
 	touch binutils.done
 
@@ -92,12 +85,7 @@ gcc.done: binutils.done $(GCCDIST)
 	tar xjf $(GCCDIST)
 	mkdir -p $(GCCOBJ)
 	cd $(GCCOBJ) && ../$(GCCSRC)/configure --prefix=$(INSTBASE) --target=avr --enable-languages=c --disable-libssp --disable-libgomp --disable-nls --disable-shared $(GCCEXTRACONFIG)
-ifeq ($(shell uname), Linux)
-# Force static linking
-	export PATH=$$PATH':'$(INSTBASE)/bin && $(MAKE) -C $(GCCOBJ) LDFLAGS=-static
-else
 	export PATH=$$PATH':'$(INSTBASE)/bin && $(MAKE) -C $(GCCOBJ)
-endif
 	export PATH=$$PATH':'$(INSTBASE)/bin && $(MAKE) -C $(GCCOBJ) install
 	touch gcc.done
 
@@ -124,9 +112,7 @@ avr-libc.done: binutils.done gcc.done $(AVRLIBCDIST) $(AVRLIBCMPDIST) $(AVRLIBCU
 
 ################################################################################
 
-# Create installation tarball
-
-$(TARBALL): binutils.done gcc.done avr-libc.done
+readme.done: binutils.done gcc.done avr-libc.done
 	echo "GNU AVR microcontroller toolchain"	>$(INSTBASE)/README.txt
 	echo " "					>>$(INSTBASE)/README.txt
 	echo "Built on `date` from:"			>>$(INSTBASE)/README.txt
@@ -135,30 +121,35 @@ $(TARBALL): binutils.done gcc.done avr-libc.done
 	echo "$(GCCSRC)"				>>$(INSTBASE)/README.txt
 	echo "$(AVRLIBCSRC)"				>>$(INSTBASE)/README.txt
 	unix2dos $(INSTBASE)/README.txt
-	chmod -R ugo-w $(INSTBASE)
-ifeq ($(shell uname), Linux)
-	sudo chown -R 0.0 $(INSTBASE)
-endif
-	tar czf $(TARBALL) `basename $(INSTBASE)`
-ifeq ($(shell uname), Linux)
-	sudo chown -R $(shell id -u).$(shell id -g) $(INSTBASE)
-endif
-	chmod -R u+w $(INSTBASE)
+	touch readme.done
 
-# Store tarball to repository
+################################################################################
 
-store: $(TARBALL)
-	scp $(TARBALL) root@munts.net:/export/software/MCU
+# Create toolchain tarball
 
-# Install tarball to /usr/local
+tarball: readme.done
+	tar czf $(TARBALL) `basename $(INSTBASE)` --owner=root --group=root --mode=ugo-w
 
-install: $(TARBALL)
-	tar xzf $(TARBALL) --directory=/usr/local
+################################################################################
 
-# Uninstall
+# Create toolchain RPM package
 
-uninstall:
-	rm -rf /usr/local/$(PKGNAME)
+fakeroot: readme.done
+	mkdir -p fakeroot/usr/local
+	cp -R -p avr-tools fakeroot/usr/local
+	chmod -R -w fakeroot
+
+specfile: specfile.template fakeroot
+	sed s/@@VERSION@@/$(VERSION)/g <specfile.template | sed s/@@RELEASE@@/$(RELEASE)/g >specfile
+	find fakeroot/usr/local/avr-tools -type d | awk '{ printf("%%dir /%s\n", substr($$1, 10)); }' >>specfile
+	find fakeroot/usr/local/avr-tools -type f | cut -c 9- >>specfile
+
+rpm: specfile
+	mkdir -p rpmbuild/RPMS/$(MACHTYPE)
+	rpmbuild --buildroot=`pwd`/fakeroot --define="_topdir `pwd`/rpmbuild" -bb specfile
+	cp rpmbuild/RPMS/$(MACHTYPE)/*.rpm .
+
+################################################################################
 
 # Clean out working files
 
@@ -170,6 +161,6 @@ clean:
 	rm -rf $(GCCSRC)
 	rm -rf $(GCCOBJ)
 	rm -rf $(AVRLIBCSRC)
+	rm -rf fakeroot specfile rpmbuild *.rpm
 
 distclean: clean
-	-rm *.tgz *.tar.gz *.tar.bz2
