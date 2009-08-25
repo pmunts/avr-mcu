@@ -36,14 +36,18 @@ VERSION		= $(BINUTILVER)_$(GCCVER)_$(AVRLIBCVER)
 RELEASE		= 1
 
 ifeq ($(shell uname), CYGWIN_NT-5.1)
-TARBALL		= $(PKGNAME)-cygwin.tgz
+TARBALL		= $(PKGNAME)-$(VERSION)-cygwin.tgz
 else
-TARBALL		= $(PKGNAME)-$(shell uname -s)-$(shell uname -i).tgz
+TARBALL		= $(PKGNAME)-$(VERSION)-$(shell uname -s)-$(shell uname -i).tgz
 endif
 
-.PHONY: default download clean distclean
+.PHONY: default download tarball clean distclean
 
-default: $(TARBALL)
+ifeq ($(shell uname), Linux)
+default: rpm
+else
+default: tarball
+endif
 
 ################################################################################
 
@@ -128,7 +132,11 @@ readme.done: binutils.done gcc.done avr-libc.done
 # Create toolchain tarball
 
 tarball: readme.done
+ifeq ($(shell uname), CYGWIN_NT-5.1)
+	tar czf $(TARBALL) `basename $(INSTBASE)` --mode=ugo-w
+else
 	tar czf $(TARBALL) `basename $(INSTBASE)` --owner=root --group=root --mode=ugo-w
+endif
 
 ################################################################################
 
