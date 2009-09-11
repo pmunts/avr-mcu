@@ -3,12 +3,14 @@
 # $Id$
 
 AVRTOOLS	?= /usr/local/avr-tools
-CC		= $(AVRTOOLS)/bin/avr-gcc
-LD		= $(AVRTOOLS)/bin/avr-ld
-AR		= $(AVRTOOLS)/bin/avr-ar
-STRIP		= $(AVRTOOLS)/bin/avr-strip
-OBJCOPY		= $(AVRTOOLS)/bin/avr-objcopy
-OBJDUMP		= $(AVRTOOLS)/bin/avr-objdump
+CROSS_COMPILE	?= $(AVRTOOLS)/bin/avr-
+
+CC		= $(CROSS_COMPILE)gcc
+LD		= $(CROSS_COMPILE)ld
+AR		= $(CROSS_COMPILE)ar
+STRIP		= $(CROSS_COMPILE)strip
+OBJCOPY		= $(CROSS_COMPILE)objcopy
+OBJDUMP		= $(CROSS_COMPILE)objdump
 
 MCU		?= UNDEFINED
 AVRPROGRAM	?= $(AVRDUDE)avrdude -p $(MCU) -c avrispmkII -P usb -v -U flash:w:
