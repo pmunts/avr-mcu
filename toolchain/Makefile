@@ -7,20 +7,20 @@ INSTBASE	= $(shell pwd)/$(PKGNAME)
 
 TEMP		= /tmp
 
-BINUTILVER	= 2.20
+BINUTILVER	= 2.20.1
 BINUTILSERVER	= ftp://ftp.gnu.org/pub/gnu/binutils
 BINUTILDIST	= $(TEMP)/binutils-$(BINUTILVER).tar.gz
 BINUTILURL	= $(BINUTILSERVER)/`basename $(BINUTILDIST)`
 BINUTILSRC	= binutils-$(BINUTILVER)
 
-GCCVER		= 4.4.3
+GCCVER		= 4.4.4
 GCCSERVER	= ftp://ftp.gnu.org/pub/gnu/gcc/gcc-$(GCCVER)
 GCCDIST		= $(TEMP)/gcc-$(GCCVER).tar.bz2
 GCCURL		= $(GCCSERVER)/`basename $(GCCDIST)`
 GCCSRC		= gcc-$(GCCVER)
 GCCOBJ		= gcc-$(GCCVER).obj
 
-AVRLIBCVER	= 1.6.7
+AVRLIBCVER	= 1.7.0
 AVRLIBCSERVER	= http://download.savannah.gnu.org/releases/avr-libc
 AVRLIBCDIST	= $(TEMP)/avr-libc-$(AVRLIBCVER).tar.bz2
 AVRLIBCURL	= $(AVRLIBCSERVER)/`basename $(AVRLIBCDIST)`
@@ -145,7 +145,6 @@ endif
 fakeroot: readme.done
 	mkdir -p fakeroot/usr/local
 	cp -R -p avr-tools fakeroot/usr/local
-	chmod -R -w fakeroot
 
 specfile: specfile.template fakeroot
 	sed s/@@VERSION@@/$(VERSION)/g <specfile.template | sed s/@@RELEASE@@/$(RELEASE)/g >specfile
