@@ -1,0 +1,26 @@
+diff -crB gcc-4.5.1/gcc/config/avr/avr.c gcc-4.5.1_modified/gcc/config/avr/avr.c
+*** gcc-4.5.1/gcc/config/avr/avr.c	2010-04-02 13:54:46.000000000 -0600
+--- gcc-4.5.1_modified/gcc/config/avr/avr.c	2010-11-22 08:58:13.924870849 -0700
+***************
+*** 206,217 ****
+        break;
+  
+    if (!t->name)
+!     {
+!       fprintf (stderr, "unknown MCU '%s' specified\nKnown MCU names:\n",
+! 	       avr_mcu_name);
+!       for (t = avr_mcu_types; t->name; t++)
+! 	fprintf (stderr,"   %s\n", t->name);
+!     }
+  
+    avr_current_device = t;
+    avr_current_arch = &avr_arch_types[avr_current_device->arch];
+--- 206,212 ----
+        break;
+  
+    if (!t->name)
+!       error ("Unknown MCU %qs specified.  See --target-help for known MCU names.", avr_mcu_name);
+  
+    avr_current_device = t;
+    avr_current_arch = &avr_arch_types[avr_current_device->arch];
+Only in gcc-4.5.1_modified/gcc/config/avr: avr.c~

@@ -7,13 +7,13 @@ INSTBASE	= $(shell pwd)/$(PKGNAME)
 
 TEMP		= /tmp
 
-BINUTILVER	= 2.20.1
+BINUTILVER	= 2.21
 BINUTILSERVER	= ftp://ftp.gnu.org/pub/gnu/binutils
 BINUTILDIST	= $(TEMP)/binutils-$(BINUTILVER).tar.gz
 BINUTILURL	= $(BINUTILSERVER)/`basename $(BINUTILDIST)`
 BINUTILSRC	= binutils-$(BINUTILVER)
 
-GCCVER		= 4.4.4
+GCCVER		= 4.5.2
 GCCSERVER	= ftp://ftp.gnu.org/pub/gnu/gcc/gcc-$(GCCVER)
 GCCDIST		= $(TEMP)/gcc-$(GCCVER).tar.bz2
 GCCURL		= $(GCCSERVER)/`basename $(GCCDIST)`
@@ -87,6 +87,7 @@ gcc.done: binutils.done $(GCCDIST)
 	rm -rf $(GCCSRC)
 	rm -rf $(GCCOBJ)
 	tar xjf $(GCCDIST)
+	cd $(GCCSRC) ; patch -p1 <../gcc_45261_fix_2.patch
 	mkdir -p $(GCCOBJ)
 	cd $(GCCOBJ) && ../$(GCCSRC)/configure --prefix=$(INSTBASE) --target=avr --enable-languages=c --disable-libssp --disable-libgomp --disable-nls --disable-shared $(GCCEXTRACONFIG)
 	export PATH=$$PATH':'$(INSTBASE)/bin && $(MAKE) -C $(GCCOBJ)
