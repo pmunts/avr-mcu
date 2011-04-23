@@ -2,6 +2,8 @@
 
 # $Id$
 
+AVRSRC		?= .
+
 AVRTOOLS	?= /usr/local/avr-tools
 CROSS_COMPILE	?= $(AVRTOOLS)/bin/avr-
 
@@ -13,8 +15,9 @@ OBJCOPY		= $(CROSS_COMPILE)objcopy
 OBJDUMP		= $(CROSS_COMPILE)objdump
 
 MCU		?= UNDEFINED
-AVRPROGRAM	?= $(AVRDUDE)avrdude -p $(MCU) -c avrispmkII -P usb -v -U flash:w:
-AVRSRC		?= .
+
+AVRPROGRAM	?= avrdude -p $(MCU) -c avrispmkII -P usb -v -U flash:w:
+TEENSY		?= /usr/local/bin/teensy_loader_cli
 
 CFLAGS		= -g -O -Wall -I$(AVRSRC) -mmcu=$(MCU) $(DEBUG) $(EXTRAFLAGS)
 LDFLAGS		= -L$(AVRSRC) -l$(MCU) -Wl,-Map,$*.map,--cref $(EXTRAOBJS)
@@ -25,7 +28,7 @@ LDFLAGS		= -L$(AVRSRC) -l$(MCU) -Wl,-Map,$*.map,--cref $(EXTRAOBJS)
 
 # These are the target suffixes
 
-.SUFFIXES: .asm .bin .elf .hex .o .program
+.SUFFIXES: .asm .bin .elf .hex .o .program .teensy
 
 # Don't delete intermediate files
 
@@ -57,6 +60,9 @@ default_catch:
 
 .hex.program:
 	$(AVRPROGRAM)$<
+
+.hex.teensy:
+	$(TEENSY) -mmcu=$(MCU) -w -v $<
 
 .s.o:
 	$(CC) $(CFLAGS) -o $@ -c $<
