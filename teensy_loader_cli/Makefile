@@ -35,7 +35,8 @@ teensy_loader_cli: teensy_loader_cli.c
 endif
 
 install:
-	install -csm 0555 teensy_loader_cli /usr/local/bin
+	install -csm 0555 teensy_loader_cli	/usr/local/bin
+	install -cm 0444 49-teensy.rules	/etc/udev/rules.d
 
 clean:
 	rm -f teensy_loader_cli teensy_loader_cli.exe
