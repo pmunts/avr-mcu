@@ -11,95 +11,81 @@
 
 // Define compatibility macros
 
-#ifndef UDR0
-#define UDR0	UDR
+#ifdef CONFIG_UART0
+#define UDR UDR0
+#define UBRRH UBRR0H
+#define UBRRL UBRR0L
+#define UCSRA UCSR0A
+#define UCSRB UCSR0B
+#define UCSRC UCSR0C
+#ifndef U2X
+#define U2X U2X0
 #endif
-
-#ifndef UBRR0H
-#define UBRR0H	UBRRH
+#ifndef RXEN
+#define RXEN RXEN0
 #endif
-
-#ifndef UBRR0L
-#define UBRR0L	UBRRL
+#ifndef TXEN
+#define TXEN TXEN0
 #endif
-
-#ifndef UCSR0A
-#define UCSR0A	UCSRA
+#ifndef RXCIE
+#define RXCIE RXCIE0
 #endif
-
-#ifndef UCSR0B
-#define UCSR0B	UCSRB
+#ifndef UDRE
+#define UDRE UDRE0
 #endif
-
-#ifndef UCSR0C
-#define UCSR0C	UCSRC
+#ifndef UCSZ0
+#define UCSZ0 UCSZ00
 #endif
-
-#ifndef U2X0
-#define U2X0	U2X
+#ifndef UCSZ1
+#define UCSZ1 UCSZ01
 #endif
-
-#ifndef UCSZ00
-#define UCSZ00	UCSZ0
-#endif
-
-#ifndef UCSZ01
-#define UCSZ01	UCSZ1
-#endif
-
-#ifndef UDRE0
-#define UDRE0	UDRE
-#endif
-
-#ifndef RXC0
-#define RXC0	RXC
-#endif
-
-#ifndef RXEN0
-#define RXEN0	RXEN
-#endif
-
-#ifndef TXEN0
-#define TXEN0	TXEN
-#endif
-
-#ifndef RXCIE0
-#define RXCIE0	RXCIE
-#endif
-
-#ifndef UART0_RX_vect
-#ifdef UART_RX_vect
-#define UART0_RX_vect UART_RX_vect
-#endif
-#ifdef USART0_RXC_vect
-#define UART0_RX_vect USART0_RXC_vect
+#ifdef URSEL0
+#define URSEL URSEL0
 #endif
 #ifdef USART0_RX_vect
-#define UART0_RX_vect USART0_RX_vect
+#define UART_RX_vect USART0_RX_vect
 #endif
-#ifdef USART_RXC_vect
-#define UART0_RX_vect USART_RXC_vect
-#endif
-#ifdef USART_RX_vect
-#define UART0_RX_vect USART_RX_vect
+#ifdef UART0_RX_vect
+#define UART_RX_vect UART0_RX_vect
 #endif
 #endif
 
-#ifndef UART0_TX_vect
-#ifdef UART_TX_vect
-#define UART0_TX_vect UART_TX_vect
+#ifdef CONFIG_UART1
+#define UDR UDR1
+#define UBRRH UBRR1H
+#define UBRRL UBRR1L
+#define UCSRA UCSR1A
+#define UCSRB UCSR1B
+#define UCSRC UCSR1C
+#ifndef U2X
+#define U2X U2X1
 #endif
-#ifdef USART0_TXC_vect
-#define UART0_TX_vect USART0_TXC_vect
+#ifndef RXEN
+#define RXEN RXEN1
 #endif
-#ifdef USART0_TX_vect
-#define UART0_TX_vect USART0_TX_vect
+#ifndef TXEN
+#define TXEN TXEN1
 #endif
-#ifdef USART_TXC_vect
-#define UART0_TX_vect USART_TXC_vect
+#ifndef RXCIE
+#define RXCIE RXCIE1
 #endif
-#ifdef USART_TX_vect
-#define UART0_TX_vect USART_TX_vect
+#ifndef UDRE
+#define UDRE UDRE1
+#endif
+#ifndef UCSZ0
+#define UCSZ0 UCSZ10
+#endif
+#ifndef UCSZ1
+#define UCSZ1 UCSZ11
+#endif
+#ifdef URSEL1
+#define URSEL URSEL1
+#endif
+#ifdef USART1_RX_vect
+#define UART_RX_vect USART1_RX_vect
+#endif
+#ifdef UART1_RX_vect
+#define UART_RX_vect UART1_RX_vect
 #endif
 #endif
 
@@ -109,17 +95,17 @@ void uart_init(unsigned long int baudrate)
 {
   unsigned int b;
 
-  UDR0 = 0;
+  UDR = 0;
 
   b = CPUFREQ/8/baudrate - 1;
-  UBRR0H = b / 256;
-  UBRR0L = b % 256;
-  UCSR0A = _BV(U2X0);
-  UCSR0B = _BV(TXEN0) | _BV(RXEN0) | _BV(RXCIE0);
+  UBRRH = b / 256;
+  UBRRL = b % 256;
+  UCSRA = _BV(U2X);
+  UCSRB = _BV(TXEN) | _BV(RXEN) | _BV(RXCIE);
 #ifdef URSEL
-  UCSR0C = _BV(URSEL) | _BV(UCSZ01) | _BV(UCSZ00);
+  UCSRC = _BV(URSEL) | _BV(UCSZ1) | _BV(UCSZ0);
 #else
-  UCSR0C = _BV(UCSZ01) | _BV(UCSZ00);
+  UCSRC = _BV(UCSZ1) | _BV(UCSZ0);
 #endif
 
   sei();
@@ -134,10 +120,10 @@ int uart_putch(char c, FILE *f)
     wdt_reset();
 #endif
 
-  while (bit_is_clear(UCSR0A, UDRE0))
+  while (bit_is_clear(UCSRA, UDRE))
     wdt_reset();
 
-  UDR0 = c;
+  UDR = c;
   return 0;
 }
 
@@ -145,52 +131,52 @@ int uart_putch(char c, FILE *f)
 
 #define RXBUFSIZE	64
 
-volatile unsigned char UART0_Rcv_head;
-volatile unsigned char UART0_Rcv_tail;
-volatile unsigned int  UART0_Rcv_count;
-volatile unsigned char UART0_Rcv_buf[RXBUFSIZE];
+volatile unsigned char UART_Rcv_head;
+volatile unsigned char UART_Rcv_tail;
+volatile unsigned int  UART_Rcv_count;
+volatile unsigned char UART_Rcv_buf[RXBUFSIZE];
 
-/* Serial port 0 receive interrupt service routine */
+/* Serial port receive interrupt service routine */
 
-ISR(UART0_RX_vect)
+ISR(UART_RX_vect)
 {
   unsigned char c;
 
-  c = UDR0;
+  c = UDR;
 
 #ifdef DEASSERT_RTS
-  if (UART0_Rcv_count > RXBUFSIZE - 10)
+  if (UART_Rcv_count > RXBUFSIZE - 10)
     DEASSERT_RTS;
 #endif
 
 #ifdef ASSERT_RTS
-  if (UART0_Rcv_count < RXBUFSIZE - 20)
+  if (UART_Rcv_count < RXBUFSIZE - 20)
     ASSERT_RTS;
 #endif
 
-  if (UART0_Rcv_count < RXBUFSIZE)
+  if (UART_Rcv_count < RXBUFSIZE)
   {
-    UART0_Rcv_buf[UART0_Rcv_tail] = c;
-    UART0_Rcv_count++;
-    UART0_Rcv_tail++;
-    UART0_Rcv_tail &= RXBUFSIZE-1;
+    UART_Rcv_buf[UART_Rcv_tail] = c;
+    UART_Rcv_count++;
+    UART_Rcv_tail++;
+    UART_Rcv_tail &= RXBUFSIZE-1;
   }
 }
 
-/* Serial port 0 receive standard I/O driver routine */
+/* Serial port receive standard I/O driver routine */
 
 int uart_getch(FILE *f)
 {
   char c;
 
-  if (UART0_Rcv_count == 0)
+  if (UART_Rcv_count == 0)
     return _FDEV_ERR;
 
-  c = UART0_Rcv_buf[UART0_Rcv_head];
+  c = UART_Rcv_buf[UART_Rcv_head];
 
-  UART0_Rcv_count--;
-  UART0_Rcv_head++;
-  UART0_Rcv_head &= RXBUFSIZE-1;
+  UART_Rcv_count--;
+  UART_Rcv_head++;
+  UART_Rcv_head &= RXBUFSIZE-1;
 
   return c;
 }
