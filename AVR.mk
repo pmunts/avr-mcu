@@ -19,7 +19,7 @@ MCU		?= UNDEFINED
 AVRPROGRAM	?= avrdude -p $(MCU) -c avrispmkII -P usb -v -U flash:w:
 TEENSY		?= /usr/local/bin/teensy_loader_cli
 
-CFLAGS		= -g -O -Wall -I$(AVRSRC) -mmcu=$(MCU) $(DEBUG) $(EXTRAFLAGS)
+CFLAGS		= -g -O -Wall -I$(AVRSRC) -mmcu=$(MCU) $(CONFIGFLAGS) $(DEBUG) $(EXTRAFLAGS)
 LDFLAGS		= -L$(AVRSRC) -l$(MCU) -Wl,-Map,$*.map,--cref $(EXTRAOBJS)
 
 # These targets are not files
