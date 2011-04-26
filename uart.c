@@ -9,6 +9,33 @@
 
 #include "uart.h"
 
+// The following list is by no means definitive.  These are merely
+// the parts I (Philip Munts) work with:
+
+#ifdef __AVR_ATmega128__
+#if !defined(CONFIG_UART0) && !defined(CONFIG_UART1)
+#define CONFIG_UART0
+#endif
+#endif
+
+#ifdef __AVR_ATmega162__
+#if !defined(CONFIG_UART0) && !defined(CONFIG_UART1)
+#define CONFIG_UART0
+#endif
+#endif
+
+#ifdef __AVR_ATmega168__
+#define CONFIG_UART0
+#endif
+
+#ifdef __AVR_ATmega644__
+#define CONFIG_UART0
+#endif
+
+#ifdef __AVR_AT90USB1286__
+#define CONFIG_UART1
+#endif
+
 // Define compatibility macros
 
 #ifdef CONFIG_UART0
@@ -42,11 +69,14 @@
 #ifdef URSEL0
 #define URSEL URSEL0
 #endif
-#ifdef USART0_RX_vect
-#define UART_RX_vect USART0_RX_vect
-#endif
 #ifdef UART0_RX_vect
-#define UART_RX_vect UART0_RX_vect
+#define USART_RX_vect UART0_RX_vect
+#endif
+#ifdef USART0_RX_vect
+#define USART_RX_vect USART0_RX_vect
+#endif
+#ifdef USART0_RXC_vect
+#define USART_RX_vect USART0_RXC_vect
 #endif
 #endif
 
@@ -81,12 +111,27 @@
 #ifdef URSEL1
 #define URSEL URSEL1
 #endif
-#ifdef USART1_RX_vect
-#define UART_RX_vect USART1_RX_vect
-#endif
 #ifdef UART1_RX_vect
-#define UART_RX_vect UART1_RX_vect
+#define USART_RX_vect UART1_RX_vect
 #endif
+#ifdef USART1_RX_vect
+#define USART_RX_vect USART1_RX_vect
+#endif
+#ifdef USART0_RXC_vect
+#define USART_RX_vect USART0_RXC_vect
+#endif
+#endif
+
+// For older parts with UART instead of USART
+
+#if !defined(USART_RX_vect) && defined(UART_RX_vect)
+#define USART_RX_vect UART_RX_vect
+#endif
+
+// For ATmega32 and possibly others
+
+#if !defined(USART_RX_vect) && defined(USART_RXC_vect)
+#define USART_RX_vect USART_RXC_vect
 #endif
 
 unsigned long int CPUFREQ = 16000000L;
@@ -127,7 +172,7 @@ int uart_putch(char c, FILE *f)
   return 0;
 }
 
-/* Serial port 0 receive buffer */
+/* Serial port receive buffer */
 
 #define RXBUFSIZE	64
 
@@ -138,7 +183,7 @@ volatile unsigned char UART_Rcv_buf[RXBUFSIZE];
 
 /* Serial port receive interrupt service routine */
 
-ISR(UART_RX_vect)
+ISR(USART_RX_vect)
 {
   unsigned char c;
 
