@@ -49,7 +49,10 @@ int usbserial_putch(char c, FILE *f)
 
 int usbserial_getch(FILE *f)
 {
-  return usb_serial_getchar();
+  int c;
+
+  while ((c = usb_serial_getchar()) < 0);
+  return c;
 }
 
 void usbserial_conio_init(void)
