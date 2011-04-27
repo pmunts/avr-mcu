@@ -37,6 +37,29 @@
 
 #ifdef USBCON
 
+#include <stdio.h>
+
+#define CPU_PRESCALE(n) (CLKPR = 0x80, CLKPR = (n))
+
+int usbserial_putch(char c, FILE *f)
+{
+  if (c == '\n') usb_serial_putchar('\r');
+  return usb_serial_putchar(c);
+}
+
+int usbserial_getch(FILE *f)
+{
+  return usb_serial_getchar();
+}
+
+void usbserial_conio_init(void)
+{
+  CPU_PRESCALE(0);
+  usb_init();
+
+  fdevopen(usbserial_putch, usbserial_getch);
+}
+
 /**************************************************************************
  *
  *  Configurable Options
