@@ -24,7 +24,7 @@ LDFLAGS		= -L$(AVRSRC) -l$(MCU) -Wl,-Map,$*.map,--cref $(EXTRAOBJS)
 
 # These targets are not files
 
-.PHONY: default_catch update clean
+.PHONY: default_catch lib update clean
 
 # These are the target suffixes
 
@@ -70,6 +70,13 @@ default_catch:
 .S.o:
 	$(CC) $(CFLAGS) -o $@ -c $<
 
+# Build processor dependent libraries
+
+lib$(MCU).a: conio.o uart.o adc.o usb_serial.o
+	$(AR) -r lib$(MCU).a $?
+
+lib: lib$(MCU).a
+
 # Update from source code repository
 
 update:
@@ -80,8 +87,3 @@ update:
 
 clean:
 	rm -f *.a *.asm *.bin *.elf *.hex *.map *.o $(AVRSRC)/*.a $(AVRSRC)/*.o
-
-# Build processor dependent libraries
-
-lib$(MCU).a: conio.o uart.o adc.o
-	$(AR) -r lib$(MCU).a $?
