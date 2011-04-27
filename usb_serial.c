@@ -1,3 +1,5 @@
+// $Id$
+
 /* USB Serial Example for Teensy USB Development Board
  * http://www.pjrc.com/teensy/usb_serial.html
  * Copyright (c) 2008,2010,2011 PJRC.COM, LLC
@@ -29,8 +31,6 @@
 // Version 1.5: add support for Teensy 2.0
 // Version 1.6: fix zero length packet bug
 // Version 1.7: fix usb_serial_set_control
-
-// $Id$
 
 #define USB_SERIAL_PRIVATE_INCLUDE
 #include "usb_serial.h"
