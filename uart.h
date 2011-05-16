@@ -1,10 +1,6 @@
-/* Basic UART polling serial console driver */
+/* Basic serial port driver */
 
 // $Id$
-
-#include <stdio.h>
-
-extern unsigned long int CPUFREQ;
 
 void uart_init(unsigned long int baudrate);
 
@@ -13,4 +9,3 @@ int uart_putch(char c);
 int uart_getch(void);
 
 int uart_available(void);
-
