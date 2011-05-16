@@ -2,8 +2,8 @@
 
 // $Id$
 
-#include <avr/io.h>
 #include <avr/pgmspace.h>
+
 #include <stdio.h>
 
 #include "adc.h"
