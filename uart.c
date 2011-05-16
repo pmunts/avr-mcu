@@ -3,9 +3,9 @@
 // $Id$
 
 #include <avr/interrupt.h>
-#include <avr/io.h>
 #include <avr/wdt.h>
 
+#include "cpu.h"
 #include "uart.h"
 
 // The following list is by no means definitive.  These are merely
@@ -133,15 +133,13 @@
 #define USART_RX_vect USART_RXC_vect
 #endif
 
-unsigned long int CPUFREQ = 16000000L;
-
 void uart_init(unsigned long int baudrate)
 {
   unsigned int b;
 
   UDR = 0;
 
-  b = CPUFREQ/8/baudrate - 1;
+  b = F_CPU/8/baudrate - 1;
   UBRRH = b / 256;
   UBRRL = b % 256;
   UCSRA = _BV(U2X);
