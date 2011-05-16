@@ -41,28 +41,6 @@
 
 #define CPU_PRESCALE(n) (CLKPR = 0x80, CLKPR = (n))
 
-int usbserial_putch(char c, FILE *f)
-{
-  if (c == '\n') usb_serial_putchar('\r');
-  return usb_serial_putchar(c);
-}
-
-int usbserial_getch(FILE *f)
-{
-  int c;
-
-  while ((c = usb_serial_getchar()) < 0);
-  return c;
-}
-
-void usbserial_conio_init(void)
-{
-  CPU_PRESCALE(0);
-  usb_init();
-
-  fdevopen(usbserial_putch, usbserial_getch);
-}
-
 /**************************************************************************
  *
  *  Configurable Options
@@ -345,6 +323,7 @@ static uint8_t cdc_line_rtsdtr=0;
 // initialize USB serial
 void usb_init(void)
 {
+	CPU_PRESCALE(0);
 	HW_CONFIG();
         USB_FREEZE();				// enable USB
         PLL_CONFIG();				// config PLL, 16 MHz xtal

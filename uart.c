@@ -5,7 +5,6 @@
 #include <avr/interrupt.h>
 #include <avr/io.h>
 #include <avr/wdt.h>
-#include <stdio.h>
 
 #include "uart.h"
 
@@ -156,10 +155,8 @@ void uart_init(unsigned long int baudrate)
   sei();
 }
 
-int uart_putch(char c, FILE *f)
+int uart_putch(char c)
 {
-  if (c == '\n') uart_putch('\r', f);
-
 #ifdef CTS_ASSERTED
   while (!CTS_ASSERTED)
     wdt_reset();
@@ -210,12 +207,12 @@ ISR(USART_RX_vect)
 
 /* Serial port receive standard I/O driver routine */
 
-int uart_getch(FILE *f)
+int uart_getch(void)
 {
   char c;
 
   if (UART_Rcv_count == 0)
-    return _FDEV_ERR;
+    return -1;
 
   c = UART_Rcv_buf[UART_Rcv_head];
 
@@ -224,4 +221,11 @@ int uart_getch(FILE *f)
   UART_Rcv_head &= RXBUFSIZE-1;
 
   return c;
+}
+
+/* Serial port receive ready routine */
+
+int uart_available(void)
+{
+  return UART_Rcv_count;
 }
