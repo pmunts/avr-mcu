@@ -18,3 +18,5 @@ void cputs(char *s);
 int keypressed(void);
 
 int getch(void);
+
+int cgets(char *s, int size);
