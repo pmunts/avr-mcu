@@ -2,11 +2,10 @@
 
 // $Id$
 
-#include <avr/wdt.h>
-
 #include <stdio.h>
 #include <string.h>
 
+#include "cpu.h"
 #include "conio.h"
 #include "uart.h"
 #include "usb_serial.h"
@@ -14,9 +13,9 @@
 static FILE mystdout = FDEV_SETUP_STREAM(conio_putch, NULL, _FDEV_SETUP_WRITE);
 static FILE mystdin = FDEV_SETUP_STREAM(NULL, conio_getch, _FDEV_SETUP_READ);
 
-static char buffer[255];
-static unsigned char buffernext;
-static unsigned char buffercount;
+static char linebuffer[255];
+static char *lineptr = linebuffer;
+static unsigned char linecount = 0;
 
 void conio_init(unsigned long int baudrate)
 {
@@ -38,7 +37,6 @@ void conio_init(unsigned long int baudrate)
 
 int conio_putch(char c, FILE *f)
 {
-  if (c == '\n') putch('\r');
   putch(c);
   return 0;
 }
@@ -47,12 +45,29 @@ int conio_putch(char c, FILE *f)
 
 int conio_getch(FILE *f)
 {
+  char c;
+
+// Get a line if we have no data available
+
+  if (linecount == 0)
+    linecount = cgets(linebuffer, sizeof(linebuffer));
+
+// Return byte from the current line
+
+  c = *lineptr++;
+
+  if (--linecount == 0)
+    lineptr = linebuffer;
+
+  return c;
 }
 
 // Send 1 character to console device
 
 void putch(char c)
 {
+  if (c == '\n') putch('\r');
+
 #ifdef CONSOLE_USB
   while (usb_serial_putchar(c) < 0)
     wdt_reset();
@@ -93,4 +108,45 @@ int getch(void)
 #else
   return uart_getch();
 #endif
+}
+
+// Receive a line from console device
+
+int cgets(char *s, int size)
+{
+  char *p = s;
+  char c;
+
+  memset(s, 0, size);
+
+  for (;;)
+  {
+    c = getch();
+
+    switch (c)
+    {
+      case '\r' :
+      case '\n' :
+        cputs("\r\n");
+        *p++ = '\n';
+        return p - s;
+        break;
+
+      case '\b' :
+      case 127 :
+        if (p > s)
+        {
+          *p-- = 0;
+          cputs("\b \b");
+        }
+        break;
+
+      default :
+        putch(c);
+        *p++ = c;
+        if ((p - s) >= size)
+          return size;
+        break;
+    }
+  }
 }
