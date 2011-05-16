@@ -2,11 +2,10 @@
 
 // $Id$
 
-#include <avr/interrupt.h>
-#include <avr/wdt.h>
-
 #include "cpu.h"
 #include "uart.h"
+
+#include <avr/interrupt.h>
 
 // The following list is by no means definitive.  These are merely
 // the parts I (Philip Munts) work with:

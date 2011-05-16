@@ -2,8 +2,6 @@
 
 // $Id$
 
-#include <avr/wdt.h>
-
 #include "cpu.h"
 
 int main(void)
