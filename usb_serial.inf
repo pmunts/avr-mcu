@@ -45,5 +45,5 @@ AddService=usbser,0x00000002,LowerFilter_Service_Inst
 
 [Strings] 
 MFGNAME="PJRC.COM, LLC."
-DEVNAME="USB Serial (Communication Class, Abstract Control Model)"
+DEVNAME="Teensy AVR (Communication Class, Abstract Control Model)"
 CD1NAME="No CDROM required, usbser.sys is provided by Windows"
