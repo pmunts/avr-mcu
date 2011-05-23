@@ -60,7 +60,7 @@ download: $(BINUTILDIST) $(GCCDIST) $(AVRLIBCDIST)
 # Download binutils
 
 $(BINUTILDIST):
-	wget -P $(TEMP) $(BINUTILURL)
+	wget -nv -P $(TEMP) $(BINUTILURL)
 
 # Compile binutils
 
@@ -77,7 +77,7 @@ binutils.done: $(BINUTILDIST)
 # Download gcc
 
 $(GCCDIST):
-	wget -P $(TEMP) $(GCCURL)
+	wget -nv -P $(TEMP) $(GCCURL)
 
 # Compile gcc
 
@@ -99,9 +99,9 @@ gcc.done: binutils.done $(GCCDIST)
 # Download avr-libc
 
 $(AVRLIBCDIST):
-	wget -P $(TEMP) $(AVRLIBCURL)
-	wget -P $(TEMP) $(AVRLIBCMPURL)
-	wget -P $(TEMP) $(AVRLIBCUMURL)
+	wget -nv -P $(TEMP) $(AVRLIBCURL)
+	wget -nv -P $(TEMP) $(AVRLIBCMPURL)
+	wget -nv -P $(TEMP) $(AVRLIBCUMURL)
 
 # Compile avr-libc
 
