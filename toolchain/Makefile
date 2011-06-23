@@ -153,9 +153,8 @@ specfile: specfile.template fakeroot
 	find fakeroot/usr/local/avr-tools -type f | cut -c 9- >>specfile
 
 rpm: specfile
-	mkdir -p rpmbuild/RPMS/$(MACHTYPE)
 	rpmbuild --buildroot=`pwd`/fakeroot --define="_topdir `pwd`/rpmbuild" -bb specfile
-	cp rpmbuild/RPMS/$(MACHTYPE)/*.rpm .
+	cp rpmbuild/RPMS/*/*.rpm .
 
 ################################################################################
 
