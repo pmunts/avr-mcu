@@ -15,7 +15,7 @@ Source: %{name}-%{version}.tar.gz
 GCC toolchain for bare-machine AVR microcontrollers
 
 %post
-chmod -R ugo-w /usr/local/arm-tools
+chmod -R ugo-w /usr/local/avr-tools
 
 %files
 %defattr(-,root,root,555)
