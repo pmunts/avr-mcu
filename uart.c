@@ -19,15 +19,26 @@
 #define CONFIG_UART0
 #endif
 
+// The following hodgepodge of macros are an attempt to make sense of the
+// myriad variations of serial ports in the AVR family.
+
 // Define compatibility macros
 
 #if defined(CONFIG_UART0) && defined(UDR0)
 #define UDR UDR0
+#ifndef UBRRH
 #define UBRRH UBRR0H
+#endif
+#ifdef UBRR0
+#define UBRRL UBRR0
+#else
 #define UBRRL UBRR0L
+#endif
 #define UCSRA UCSR0A
 #define UCSRB UCSR0B
+#ifdef UCSR0C
 #define UCSRC UCSR0C
+#endif
 #ifndef U2X
 #define U2X U2X0
 #endif
@@ -65,11 +76,19 @@
 
 #if defined(CONFIG_UART1) && defined(UDR1)
 #define UDR UDR1
+#ifndef UBRRH
 #define UBRRH UBRR1H
+#endif
+#ifdef UBRR1
+#define UBRRL UBRR1
+#else
 #define UBRRL UBRR1L
+#endif
 #define UCSRA UCSR1A
 #define UCSRB UCSR1B
+#ifdef UCSR1C
 #define UCSRC UCSR1C
+#endif
 #ifndef U2X
 #define U2X U2X1
 #endif
@@ -129,10 +148,12 @@ void uart_init(unsigned long int baudrate)
   UBRRL = b % 256;
   UCSRA = _BV(U2X);
   UCSRB = _BV(TXEN) | _BV(RXEN) | _BV(RXCIE);
+#ifdef UCSRC
 #ifdef URSEL
   UCSRC = _BV(URSEL) | _BV(UCSZ1) | _BV(UCSZ0);
 #else
   UCSRC = _BV(UCSZ1) | _BV(UCSZ0);
+#endif
 #endif
 
   sei();
