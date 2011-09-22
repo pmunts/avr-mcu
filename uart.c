@@ -7,31 +7,16 @@
 
 #include <avr/interrupt.h>
 
-// The following list is by no means definitive.  These are merely
-// the parts I (Philip Munts) work with:
-
-#ifdef __AVR_ATmega128__
-#if !defined(CONFIG_UART0) && !defined(CONFIG_UART1)
-#define CONFIG_UART0
-#endif
-#endif
-
-#ifdef __AVR_ATmega162__
-#if !defined(CONFIG_UART0) && !defined(CONFIG_UART1)
-#define CONFIG_UART0
-#endif
-#endif
-
-#ifdef __AVR_ATmega168__
-#define CONFIG_UART0
-#endif
-
-#ifdef __AVR_ATmega644__
-#define CONFIG_UART0
-#endif
+// The following parts only have USART1
 
 #ifdef __AVR_AT90USB1286__
 #define CONFIG_UART1
+#endif
+
+// Catch-all: default to U(S)ART0
+
+#if !defined(CONFIG_UART0) && !defined(CONFIG_UART1)
+#define CONFIG_UART0
 #endif
 
 // Define compatibility macros
