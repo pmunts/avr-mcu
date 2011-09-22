@@ -2,7 +2,6 @@
 
 // $Id$
 
-#include "adc.h"
 #include "cpu.h"
 
 #ifdef ADEN
