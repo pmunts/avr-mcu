@@ -132,6 +132,7 @@
 #define USART_RX_vect USART_RXC_vect
 #endif
 
+#ifdef UDR
 void uart_init(unsigned long int baudrate)
 {
   unsigned int b;
@@ -226,3 +227,4 @@ int uart_available(void)
 {
   return UART_Rcv_count;
 }
+#endif
