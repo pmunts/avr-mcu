@@ -6,7 +6,6 @@
 #include <string.h>
 
 #include "cpu.h"
-#include "conio.h"
 #include "uart.h"
 #include "usb_serial.h"
 
