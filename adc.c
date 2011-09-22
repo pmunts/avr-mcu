@@ -2,15 +2,12 @@
 
 // $Id$
 
-#include <avr/pgmspace.h>
-
-#include <stdio.h>
-
 #include "adc.h"
+#include "cpu.h"
 
+#ifdef ADEN
 unsigned short int ReadADC(unsigned char channel)
 {
-#ifdef ADEN
   unsigned short int result;
 
   ADCSRA = _BV(ADEN) + _BV(ADIF) + 7;			// Turn ADC on
@@ -27,7 +24,5 @@ unsigned short int ReadADC(unsigned char channel)
   ADCSRA = 0x00;					// Turn ADC off
 
   return result;					// Return result
-#else
-  return 0;
-#endif
 }
+#endif

@@ -11,11 +11,11 @@ int main(void)
   wdt_disable();
 
 #ifndef __AVR_ATmega168__
-  DDRA = 0xFF;
+//  DDRA = 0xFF;
 #endif
   DDRB = 0xFF;
-  DDRC = 0xFF;
-  DDRD = 0xFF;
+//  DDRC = 0xFF;
+ // DDRD = 0xFF;
 #ifdef __AVR_ATmega128__
   DDRE = 0xFF;
   DDRF = 0xFF;
@@ -25,11 +25,11 @@ int main(void)
   for (a = 0;; a++)
   {
 #ifndef __AVR_ATmega168__
-    PORTA = a;
+//    PORTA = a;
 #endif
     PORTB = a;
-    PORTC = a;
-    PORTD = a;
+//    PORTC = a;
+//    PORTD = a;
 #ifdef __AVR_ATmega128__
     PORTE = a;
     PORTF = a;
