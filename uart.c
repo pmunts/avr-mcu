@@ -21,7 +21,7 @@
 
 // Define compatibility macros
 
-#ifdef CONFIG_UART0
+#if defined(CONFIG_UART0) && defined(UDR0)
 #define UDR UDR0
 #define UBRRH UBRR0H
 #define UBRRL UBRR0L
@@ -63,7 +63,7 @@
 #endif
 #endif
 
-#ifdef CONFIG_UART1
+#if defined(CONFIG_UART1) && defined(UDR1)
 #define UDR UDR1
 #define UBRRH UBRR1H
 #define UBRRL UBRR1L
