@@ -2,6 +2,8 @@
 
 // $Id$
 
+#include <stdio.h>
+
 void conio_init(unsigned long int baudrate);
 
 int conio_putch(char c, FILE *f);
