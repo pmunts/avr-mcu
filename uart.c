@@ -15,7 +15,7 @@
 
 // Catch-all: default to U(S)ART0
 
-#if !defined(CONFIG_UART0) && !defined(CONFIG_UART1)
+#if !defined(UDR) && !defined(CONFIG_UART0) && !defined(CONFIG_UART1)
 #define CONFIG_UART0
 #endif
 
