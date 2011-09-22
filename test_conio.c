@@ -12,7 +12,6 @@ static const char revision[] = "$Id$";
 #include <string.h>
 
 #include "cpu.h"
-#include "conio.h"
 
 #ifndef BAUDRATE
 #define BAUDRATE 115200
