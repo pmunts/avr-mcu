@@ -98,9 +98,9 @@ int keypressed(void)
 
 int getch(void)
 {
+#ifdef CONSOLE_USB
   int c;
 
-#ifdef CONSOLE_USB
   while ((c = usb_serial_getchar()) < 0)
     wdt_reset();
 
