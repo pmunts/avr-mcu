@@ -119,8 +119,8 @@
 #ifdef USART1_RX_vect
 #define USART_RX_vect USART1_RX_vect
 #endif
-#ifdef USART0_RXC_vect
-#define USART_RX_vect USART0_RXC_vect
+#ifdef USART1_RXC_vect
+#define USART_RX_vect USART1_RXC_vect
 #endif
 #endif
 
@@ -161,11 +161,6 @@ void uart_init(unsigned long int baudrate)
 
 int uart_putch(char c)
 {
-#ifdef CTS_ASSERTED
-  while (!CTS_ASSERTED)
-    wdt_reset();
-#endif
-
   while (bit_is_clear(UCSRA, UDRE))
     wdt_reset();
 
@@ -189,16 +184,6 @@ ISR(USART_RX_vect)
   unsigned char c;
 
   c = UDR;
-
-#ifdef DEASSERT_RTS
-  if (UART_Rcv_count > RXBUFSIZE - 10)
-    DEASSERT_RTS;
-#endif
-
-#ifdef ASSERT_RTS
-  if (UART_Rcv_count < RXBUFSIZE - 20)
-    ASSERT_RTS;
-#endif
 
   if (UART_Rcv_count < RXBUFSIZE)
   {
