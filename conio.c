@@ -17,7 +17,7 @@ static unsigned char linecount = 0;
 
 void conio_init(unsigned long int baudrate)
 {
-#ifdef CONSOLE_USB
+#ifdef CONFIG_CONSOLE_USB
   usb_init();
   getch();
 #else
@@ -66,7 +66,7 @@ void putch(char c)
 {
   if (c == '\n') putch('\r');
 
-#ifdef CONSOLE_USB
+#ifdef CONFIG_CONSOLE_USB
   while (usb_serial_putchar(c) < 0)
     wdt_reset();
 #else
@@ -85,7 +85,7 @@ void cputs(char *s)
 
 int keypressed(void)
 {
-#ifdef CONSOLE_USB
+#ifdef CONFIG_CONSOLE_USB
   return usb_serial_available();
 #else
   return uart_available();
@@ -96,7 +96,7 @@ int keypressed(void)
 
 int getch(void)
 {
-#ifdef CONSOLE_USB
+#ifdef CONFIG_CONSOLE_USB
   int c;
 
   while ((c = usb_serial_getchar()) < 0)
