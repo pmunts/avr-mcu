@@ -28,7 +28,7 @@ LDFLAGS		= -L$(AVRSRC) -l$(MCU) -Wl,-Map,$*.map,--cref $(EXTRAOBJS)
 
 # These are the target suffixes
 
-.SUFFIXES: .asm .bin .elf .hex .o .program .teensy
+.SUFFIXES: .asm .c .bin .elf .hex .o .program .teensy .s .S
 
 # Don't delete intermediate files
 
