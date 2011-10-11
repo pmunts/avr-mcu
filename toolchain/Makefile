@@ -7,20 +7,20 @@ INSTBASE	= $(shell pwd)/$(PKGNAME)
 
 TEMP		= /tmp
 
-BINUTILVER	= 2.21
+BINUTILVER	= 2.21.1
 BINUTILSERVER	= ftp://ftp.gnu.org/pub/gnu/binutils
-BINUTILDIST	= $(TEMP)/binutils-$(BINUTILVER).tar.gz
+BINUTILDIST	= $(TEMP)/binutils-$(BINUTILVER).tar.bz2
 BINUTILURL	= $(BINUTILSERVER)/`basename $(BINUTILDIST)`
 BINUTILSRC	= binutils-$(BINUTILVER)
 
-GCCVER		= 4.5.2
+GCCVER		= 4.5.3
 GCCSERVER	= ftp://ftp.gnu.org/pub/gnu/gcc/gcc-$(GCCVER)
 GCCDIST		= $(TEMP)/gcc-$(GCCVER).tar.bz2
 GCCURL		= $(GCCSERVER)/`basename $(GCCDIST)`
 GCCSRC		= gcc-$(GCCVER)
 GCCOBJ		= gcc-$(GCCVER).obj
 
-AVRLIBCVER	= 1.7.0
+AVRLIBCVER	= 1.7.1
 AVRLIBCSERVER	= http://download.savannah.gnu.org/releases/avr-libc
 AVRLIBCDIST	= $(TEMP)/avr-libc-$(AVRLIBCVER).tar.bz2
 AVRLIBCURL	= $(AVRLIBCSERVER)/`basename $(AVRLIBCDIST)`
@@ -66,7 +66,7 @@ $(BINUTILDIST):
 
 binutils.done: $(BINUTILDIST)
 	rm -rf $(BINUTILSRC)
-	tar xzf $(BINUTILDIST)
+	tar xjf $(BINUTILDIST)
 	cd $(BINUTILSRC) && ./configure --prefix=$(INSTBASE) --target=avr
 	$(MAKE) -C $(BINUTILSRC)
 	$(MAKE) -C $(BINUTILSRC) install
@@ -81,13 +81,13 @@ $(GCCDIST):
 
 # Compile gcc
 
-# CentOS 4 needs GCCEXTRACONFIG=--with-mpfr=/usr/local
-
 gcc.done: binutils.done $(GCCDIST)
+	test -f /usr/include/gmp.h
+	test -f /usr/include/mpc.h
+	test -f /usr/include/mpfr.h
 	rm -rf $(GCCSRC)
 	rm -rf $(GCCOBJ)
 	tar xjf $(GCCDIST)
-	cd $(GCCSRC) ; patch -p1 <../gcc_45261_fix_2.patch
 	mkdir -p $(GCCOBJ)
 	cd $(GCCOBJ) && ../$(GCCSRC)/configure --prefix=$(INSTBASE) --target=avr --enable-languages=c --disable-libssp --disable-libgomp --disable-nls --disable-shared $(GCCEXTRACONFIG)
 	export PATH=$$PATH':'$(INSTBASE)/bin && $(MAKE) -C $(GCCOBJ)
