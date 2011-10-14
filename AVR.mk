@@ -80,7 +80,7 @@ lib: lib$(MCU).a
 # Update from source code repository
 
 update:
-	svn status
+	svn status --no-ignore
 	svn update
 
 # Clean out working files
