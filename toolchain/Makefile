@@ -7,20 +7,20 @@ INSTBASE	= $(shell pwd)/$(PKGNAME)
 
 TEMP		= /tmp
 
-BINUTILVER	= 2.21.1
+BINUTILVER	= 2.22
 BINUTILSERVER	= ftp://ftp.gnu.org/pub/gnu/binutils
 BINUTILDIST	= $(TEMP)/binutils-$(BINUTILVER).tar.bz2
 BINUTILURL	= $(BINUTILSERVER)/`basename $(BINUTILDIST)`
 BINUTILSRC	= binutils-$(BINUTILVER)
 
-GCCVER		= 4.5.3
+GCCVER		= 4.6.2
 GCCSERVER	= ftp://ftp.gnu.org/pub/gnu/gcc/gcc-$(GCCVER)
 GCCDIST		= $(TEMP)/gcc-$(GCCVER).tar.bz2
 GCCURL		= $(GCCSERVER)/`basename $(GCCDIST)`
 GCCSRC		= gcc-$(GCCVER)
 GCCOBJ		= gcc-$(GCCVER).obj
 
-AVRLIBCVER	= 1.7.1
+AVRLIBCVER	= 1.8.0
 AVRLIBCSERVER	= http://download.savannah.gnu.org/releases/avr-libc
 AVRLIBCDIST	= $(TEMP)/avr-libc-$(AVRLIBCVER).tar.bz2
 AVRLIBCURL	= $(AVRLIBCSERVER)/`basename $(AVRLIBCDIST)`
@@ -151,6 +151,7 @@ specfile: specfile.template fakeroot
 	sed s/@@VERSION@@/$(VERSION)/g <specfile.template | sed s/@@RELEASE@@/$(RELEASE)/g >specfile
 	find fakeroot/usr/local/avr-tools -type d | awk '{ printf("%%dir /%s\n", substr($$1, 10)); }' >>specfile
 	find fakeroot/usr/local/avr-tools -type f | cut -c 9- >>specfile
+	find fakeroot/usr/local/avr-tools -type l | cut -c 9- >>specfile
 
 rpm: specfile
 	rpmbuild --buildroot=`pwd`/fakeroot --define="_topdir `pwd`/rpmbuild" -bb specfile
