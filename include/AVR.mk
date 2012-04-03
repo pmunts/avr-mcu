@@ -2,7 +2,7 @@
 
 # $Id$
 
-AVRSRC		?= .
+AVRSRC		?= ..
 
 AVRTOOLS	?= /usr/local/avr-tools
 CROSS_COMPILE	?= $(AVRTOOLS)/bin/avr-
@@ -19,8 +19,16 @@ MCU		?= UNDEFINED
 AVRPROGRAM	?= avrdude -p $(MCU) -c avrispmkII -P usb -v -U flash:w:
 TEENSY		?= /usr/local/bin/teensy_loader_cli
 
-CFLAGS		= -g -O -Wall -I$(AVRSRC) -mmcu=$(MCU) $(CONFIGFLAGS) $(DEBUG) $(EXTRAFLAGS)
-LDFLAGS		= -L$(AVRSRC) -l$(MCU) -Wl,-Map,$*.map,--cref $(EXTRAOBJS)
+CPUFLAGS	+= -mmcu=$(MCU)
+CONFIGFLAGS	?=
+DEBUGFLAGS	?= -g
+OPTFLAGS	?= -O0
+IOFLAGS		?=
+EXTRAFLAGS	?=
+CFLAGS		+= -Wall
+CFLAGS		+= -I$(AVRSRC)/include -I.
+CFLAGS		+= $(CPUFLAGS) $(OPTFLAGS) $(CONFIGFLAGS) $(IOFLAGS) $(DEBUGFLAGS) $(EXTRAFLAGS)
+LDFLAGS		= -L. -l$(MCU) -Wl,-Map,$*.map,--cref $(EXTRAOBJS)
 
 # These targets are not files
 
@@ -46,7 +54,7 @@ default_catch:
 	$(CC) $(CFLAGS) -c -o $@ $<
 
 .o.elf:
-	cd $(AVRSRC) && $(MAKE) lib$(MCU).a MCU=$(MCU)
+	$(MAKE) lib$(MCU).a MCU=$(MCU)
 	$(CC) $(CFLAGS) -o $@ $< $(LDFLAGS)
 
 .elf.asm:
@@ -70,10 +78,14 @@ default_catch:
 .S.o:
 	$(CC) $(CFLAGS) -o $@ -c $<
 
+# Support for common library functions
+
+COMMON_DIR	= $(AVRSRC)/common
+include $(COMMON_DIR)/common.mk
+
 # Build processor dependent libraries
 
-lib$(MCU).a: conio.o uart.o adc.o usb_serial.o
-	$(AR) -r lib$(MCU).a $?
+lib$(MCU).a: common_lib
 
 lib: lib$(MCU).a
 
@@ -86,4 +98,5 @@ update:
 # Clean out working files
 
 clean:
-	rm -f *.a *.asm *.bin *.elf *.hex *.map *.o $(AVRSRC)/*.a $(AVRSRC)/*.o
+	rm -f *.a *.asm *.bin *.elf *.hex *.map *.o
+	$(MAKE) common_clean
