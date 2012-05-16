@@ -5,6 +5,8 @@
 PKGNAME		= avr-tools
 INSTBASE	= $(shell pwd)/$(PKGNAME)
 
+FIND		= find
+TAR		= tar
 TEMP		= /tmp
 
 BINUTILVER	= 2.22
@@ -66,8 +68,8 @@ $(BINUTILDIST):
 
 binutils.done: $(BINUTILDIST)
 	rm -rf $(BINUTILSRC)
-	tar xjf $(BINUTILDIST)
-	cd $(BINUTILSRC) && ./configure --prefix=$(INSTBASE) --target=avr
+	$(TAR) xjf $(BINUTILDIST)
+	cd $(BINUTILSRC) && ./configure --prefix=$(INSTBASE) --target=avr --disable-nls --disable-shared --disable-werror
 	$(MAKE) -C $(BINUTILSRC)
 	$(MAKE) -C $(BINUTILSRC) install
 	touch binutils.done
@@ -82,14 +84,11 @@ $(GCCDIST):
 # Compile gcc
 
 gcc.done: binutils.done $(GCCDIST)
-	test -f /usr/include/gmp.h
-	test -f /usr/include/mpc.h
-	test -f /usr/include/mpfr.h
 	rm -rf $(GCCSRC)
 	rm -rf $(GCCOBJ)
-	tar xjf $(GCCDIST)
+	$(TAR) xjf $(GCCDIST)
 	mkdir -p $(GCCOBJ)
-	cd $(GCCOBJ) && ../$(GCCSRC)/configure --prefix=$(INSTBASE) --target=avr --enable-languages=c,c++ --disable-libssp --disable-libgomp --disable-nls --disable-shared $(GCCEXTRACONFIG)
+	cd $(GCCOBJ) && ../$(GCCSRC)/configure --prefix=$(INSTBASE) --target=avr --enable-languages=c --disable-libssp --disable-libgomp --disable-nls --disable-shared --disable-werror $(GCCEXTRACONFIG)
 	export PATH=$$PATH':'$(INSTBASE)/bin && $(MAKE) -C $(GCCOBJ)
 	export PATH=$$PATH':'$(INSTBASE)/bin && $(MAKE) -C $(GCCOBJ) install
 	touch gcc.done
@@ -107,12 +106,12 @@ $(AVRLIBCDIST):
 
 avr-libc.done: binutils.done gcc.done $(AVRLIBCDIST) $(AVRLIBCMPDIST) $(AVRLIBCUMDIST)
 	rm -rf $(AVRLIBCSRC)
-	tar xjf $(AVRLIBCDIST)
+	$(TAR) xjf $(AVRLIBCDIST)
 	export PATH=$$PATH':'$(INSTBASE)/bin && cd $(AVRLIBCSRC) && ./configure --prefix=$(INSTBASE) --host=avr
 	export PATH=$$PATH':'$(INSTBASE)/bin && $(MAKE) -C $(AVRLIBCSRC)
 	export PATH=$$PATH':'$(INSTBASE)/bin && $(MAKE) -C $(AVRLIBCSRC) install
-	tar xjf $(AVRLIBCMPDIST) --directory=$(INSTBASE)
-	tar xjf $(AVRLIBCUMDIST) --directory=$(INSTBASE)/share
+	$(TAR) xjf $(AVRLIBCMPDIST) --directory=$(INSTBASE)
+	$(TAR) xjf $(AVRLIBCUMDIST) --directory=$(INSTBASE)/share
 	touch avr-libc.done
 
 ################################################################################
@@ -134,9 +133,9 @@ readme.done: binutils.done gcc.done avr-libc.done
 
 tarball: readme.done
 ifeq ($(findstring CYGWIN, $(shell uname)), CYGWIN)
-	tar czf $(TARBALL) `basename $(INSTBASE)` --mode=ugo-w
+	$(TAR) czf $(TARBALL) `basename $(INSTBASE)` --mode=ugo-w
 else
-	tar czf $(TARBALL) `basename $(INSTBASE)` --owner=root --group=root --mode=ugo-w
+	$(TAR) czf $(TARBALL) `basename $(INSTBASE)` --owner=root --group=root --mode=ugo-w
 endif
 
 ################################################################################
@@ -149,9 +148,9 @@ fakeroot: readme.done
 
 specfile: specfile.template fakeroot
 	sed s/@@VERSION@@/$(VERSION)/g <specfile.template | sed s/@@RELEASE@@/$(RELEASE)/g >specfile
-	find fakeroot/usr/local/avr-tools -type d | awk '{ printf("%%dir /%s\n", substr($$1, 10)); }' >>specfile
-	find fakeroot/usr/local/avr-tools -type f | cut -c 9- >>specfile
-	find fakeroot/usr/local/avr-tools -type l | cut -c 9- >>specfile
+	$(FIND) fakeroot/usr/local/avr-tools -type d | awk '{ printf("%%dir /%s\n", substr($$1, 10)); }' >>specfile
+	$(FIND) fakeroot/usr/local/avr-tools -type f | cut -c 9- >>specfile
+	$(FIND) fakeroot/usr/local/avr-tools -type l | cut -c 9- >>specfile
 
 rpm: specfile
 	rpmbuild --buildroot=`pwd`/fakeroot --define="_topdir `pwd`/rpmbuild" -bb specfile
