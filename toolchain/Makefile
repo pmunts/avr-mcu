@@ -69,7 +69,7 @@ $(BINUTILDIST):
 binutils.done: $(BINUTILDIST)
 	rm -rf $(BINUTILSRC)
 	$(TAR) xjf $(BINUTILDIST)
-	cd $(BINUTILSRC) && ./configure --prefix=$(INSTBASE) --target=avr --disable-nls --disable-shared --disable-werror
+	cd $(BINUTILSRC) && ./configure --prefix=$(INSTBASE) --target=avr --disable-lto --disable-nls --disable-shared --disable-werror
 	$(MAKE) -C $(BINUTILSRC)
 	$(MAKE) -C $(BINUTILSRC) install
 	touch binutils.done
@@ -88,7 +88,7 @@ gcc.done: binutils.done $(GCCDIST)
 	rm -rf $(GCCOBJ)
 	$(TAR) xjf $(GCCDIST)
 	mkdir -p $(GCCOBJ)
-	cd $(GCCOBJ) && ../$(GCCSRC)/configure --prefix=$(INSTBASE) --target=avr --enable-languages=c --disable-libssp --disable-libgomp --disable-nls --disable-shared --disable-werror $(GCCEXTRACONFIG)
+	cd $(GCCOBJ) && ../$(GCCSRC)/configure --prefix=$(INSTBASE) --target=avr --disable-lto --enable-languages=c --disable-libssp --disable-libgomp --disable-nls --disable-shared --disable-werror $(GCCEXTRACONFIG)
 	export PATH=$$PATH':'$(INSTBASE)/bin && $(MAKE) -C $(GCCOBJ)
 	export PATH=$$PATH':'$(INSTBASE)/bin && $(MAKE) -C $(GCCOBJ) install
 	touch gcc.done
