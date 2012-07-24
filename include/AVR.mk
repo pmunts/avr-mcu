@@ -32,7 +32,7 @@ LDFLAGS		= -L. -l$(MCU) -Wl,-Map,$*.map,--cref $(EXTRAOBJS)
 
 # These targets are not files
 
-.PHONY: default_catch lib update clean
+.PHONY: default_catch lib clean
 
 # These are the target suffixes
 
@@ -89,14 +89,12 @@ lib$(MCU).a: common_lib
 
 lib: lib$(MCU).a
 
-# Update from source code repository
-
-update:
-	svn status --no-ignore
-	svn update
-
 # Clean out working files
 
 clean:
 	rm -f *.a *.asm *.bin *.elf *.hex *.map *.o
 	$(MAKE) common_clean
+
+# Include optional subordinate makefiles
+
+sinclude $(HOME)/src/include/subversion.mk
