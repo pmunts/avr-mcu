@@ -17,14 +17,6 @@ static const char revision[] = "$Id$";
 #define BAUDRATE 115200
 #endif
 
-void DoNothing1(void)
-{
-  100;
-  101;
-  102;
-  103;
-}
-
 int main(void)
 {
   int i;
