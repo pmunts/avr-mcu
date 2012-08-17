@@ -19,7 +19,6 @@ void conio_init(unsigned long int baudrate)
 {
 #ifdef CONFIG_CONSOLE_USB
   usb_init();
-  getch();
 #else
   uart_init(baudrate);
 #endif

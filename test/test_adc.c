@@ -20,6 +20,10 @@ int main(void)
 
   conio_init(BAUDRATE);
 
+#ifdef CONFIG_CONSOLE_USB
+  getch();
+#endif
+
   puts("\033[H\033[2JAtmel AVR Analog to Digital Converter Test (" __DATE__ " " __TIME__ ")\n");
   puts(revision);
   printf("\nCPU Freq:%ld Hz  Compiler:%s\n\n", F_CPU, __VERSION__);
