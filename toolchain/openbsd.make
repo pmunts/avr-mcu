@@ -30,3 +30,9 @@ $(PACKAGENAME): CONTENTS COMMENT
 	pkg_create -A `uname -m` -f CONTENTS -D COMMENT="`cat COMMENT`" -d COMMENT -p / -B fakeroot $(PACKAGENAME)
 	@-rm CONTENTS
 	@-rm COMMENT
+
+clean:
+	$(MAKE) clean
+
+distclean:
+	$(MAKE) distclean
