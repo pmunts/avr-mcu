@@ -9,9 +9,9 @@ FIND		= find
 TAR		= tar
 TEMP		= /tmp
 
-BINUTILVER	= 2.22
+BINUTILVER	= 2.23
 BINUTILSERVER	= ftp://ftp.gnu.org/pub/gnu/binutils
-BINUTILDIST	= $(TEMP)/binutils-$(BINUTILVER).tar.bz2
+BINUTILDIST	= $(TEMP)/binutils-$(BINUTILVER).tar.gz
 BINUTILURL	= $(BINUTILSERVER)/`basename $(BINUTILDIST)`
 BINUTILSRC	= binutils-$(BINUTILVER)
 
@@ -68,7 +68,7 @@ $(BINUTILDIST):
 
 binutils.done: $(BINUTILDIST)
 	rm -rf $(BINUTILSRC)
-	$(TAR) xjf $(BINUTILDIST)
+	$(TAR) xzf $(BINUTILDIST)
 	cd $(BINUTILSRC) && ./configure --prefix=$(INSTBASE) --target=avr --disable-lto --disable-nls --disable-shared --disable-werror
 	$(MAKE) -C $(BINUTILSRC)
 	$(MAKE) -C $(BINUTILSRC) install
