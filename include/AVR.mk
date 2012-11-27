@@ -32,7 +32,7 @@ LDFLAGS		= -L. -l$(MCU) -Wl,-Map,$*.map,--cref $(EXTRAOBJS)
 
 # These targets are not files
 
-.PHONY: default_catch lib clean
+.PHONY: AVR_mk_default AVR_mk_clean lib
 
 # These are the target suffixes
 
@@ -44,7 +44,7 @@ LDFLAGS		= -L. -l$(MCU) -Wl,-Map,$*.map,--cref $(EXTRAOBJS)
 
 # Define default target placeholder
 
-default_catch:
+AVR_mk_default:
 	@echo ERROR: You must explicitly specify a make target
 	@exit 1
 
@@ -91,7 +91,7 @@ lib: lib$(MCU).a
 
 # Clean out working files
 
-clean:
+AVR_mk_clean:
 	rm -f *.a *.asm *.bin *.elf *.hex *.map *.o
 	$(MAKE) common_clean
 
