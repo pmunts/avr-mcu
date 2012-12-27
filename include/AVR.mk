@@ -17,7 +17,7 @@ OBJDUMP		= $(CROSS_COMPILE)objdump
 MCU		?= UNDEFINED
 
 AVRPROGRAM	?= avrdude -p $(MCU) -c avrispmkII -P usb -v -U flash:w:
-TEENSY		?= /usr/local/bin/teensy_loader_cli
+TEENSYLOADERCLI	?= /usr/local/bin/teensy_loader_cli
 
 CPUFLAGS	+= -mmcu=$(MCU)
 CONFIGFLAGS	?=
@@ -70,7 +70,7 @@ AVR_mk_default:
 	$(AVRPROGRAM)$<
 
 .hex.teensy:
-	$(TEENSY) -mmcu=$(MCU) -w -v $<
+	$(TEENSYLOADERCLI) -mmcu=$(MCU) -w -v $<
 
 .s.o:
 	$(CC) $(CFLAGS) -o $@ -c $<
