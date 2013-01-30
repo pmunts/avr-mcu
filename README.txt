@@ -1,3 +1,4 @@
+
                AVR Microcontroller Firmware Development Framework
 
    Here is a framework for developing firmware for [1]AVR single chip
@@ -55,6 +56,6 @@ POSSIBILITY OF SUCH DAMAGE.
 
 References
 
-   1. http://http//www.atmel.com/products/microcontrollers/avr/default.aspx
+   1. http://http://www.atmel.com/products/microcontrollers/avr/default.aspx
    2. http://tech.munts.com/MCU/Frameworks/ARM
    3. mailto:phil@munts.net
