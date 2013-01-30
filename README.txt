@@ -56,6 +56,6 @@ POSSIBILITY OF SUCH DAMAGE.
 
 References
 
-   1. http://http://www.atmel.com/products/microcontrollers/avr/default.aspx
+   1. http://www.atmel.com/products/microcontrollers/avr/default.aspx
    2. http://tech.munts.com/MCU/Frameworks/ARM
    3. mailto:phil@munts.net
