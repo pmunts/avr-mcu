@@ -1,4 +1,3 @@
-
                AVR Microcontroller Firmware Development Framework
 
    Here is a framework for developing firmware for [1]AVR single chip
@@ -22,7 +21,7 @@ Copyright (C)2013, Philip Munts, President, Munts AM Corp.
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
-modification,are permitted provided that the following conditions are met:
+modification, are permitted provided that the following conditions are met:
 
 * Redistributions of source code must retain the above copyright notice,
   this list of conditions and the following disclaimer.
