@@ -23,20 +23,20 @@
 # ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
 
-PKGNAME		= avr-tools
+PKGNAME		= avr-mcu-tools
 INSTBASE	= $(shell pwd)/$(PKGNAME)
 
 FIND		= find
 TAR		= tar
 TEMP		= /tmp
 
-BINUTILVER	= 2.23
+BINUTILVER	= 2.23.2
 BINUTILSERVER	= ftp://ftp.gnu.org/pub/gnu/binutils
-BINUTILDIST	= $(TEMP)/binutils-$(BINUTILVER).tar.gz
+BINUTILDIST	= $(TEMP)/binutils-$(BINUTILVER).tar.bz2
 BINUTILURL	= $(BINUTILSERVER)/`basename $(BINUTILDIST)`
 BINUTILSRC	= binutils-$(BINUTILVER)
 
-GCCVER		= 4.7.2
+GCCVER		= 4.7.3
 GCCSERVER	= ftp://ftp.gnu.org/pub/gnu/gcc/gcc-$(GCCVER)
 GCCDIST		= $(TEMP)/gcc-$(GCCVER).tar.bz2
 GCCURL		= $(GCCSERVER)/`basename $(GCCDIST)`
@@ -66,11 +66,7 @@ endif
 
 .PHONY: default download tarball clean distclean
 
-ifeq ($(shell uname), Linux)
-default: rpm
-else
-default: tarball
-endif
+default: readme.done
 
 ################################################################################
 
@@ -89,7 +85,7 @@ $(BINUTILDIST):
 
 binutils.done: $(BINUTILDIST)
 	rm -rf $(BINUTILSRC)
-	$(TAR) xzf $(BINUTILDIST)
+	$(TAR) xjf $(BINUTILDIST)
 	cd $(BINUTILSRC) && ./configure --prefix=$(INSTBASE) --target=avr --disable-lto --disable-nls --disable-shared --disable-werror
 	$(MAKE) -C $(BINUTILSRC)
 	$(MAKE) -C $(BINUTILSRC) install
@@ -161,34 +157,34 @@ endif
 
 ################################################################################
 
-# Create toolchain RPM package
+# Create Linux RPM package
 
+ifeq ($(shell uname), Linux)
 fakeroot: readme.done
 	mkdir -p fakeroot/usr/local
-	cp -R -p avr-tools fakeroot/usr/local
+	cp -R -p $(PKGNAME) fakeroot/usr/local
 
 specfile: specfile.template fakeroot
-	sed s/@@VERSION@@/$(VERSION)/g <specfile.template | sed s/@@RELEASE@@/$(RELEASE)/g >specfile
-	$(FIND) fakeroot/usr/local/avr-tools -type d | awk '{ printf("%%dir /%s\n", substr($$1, 10)); }' >>specfile
-	$(FIND) fakeroot/usr/local/avr-tools -type f | cut -c 9- >>specfile
-	$(FIND) fakeroot/usr/local/avr-tools -type l | cut -c 9- >>specfile
+	sed s/@@PKGNAME@@/$(PKGNAME)/g <specfile.template | sed s/@@VERSION@@/$(VERSION)/g | sed s/@@RELEASE@@/$(RELEASE)/g >specfile
+	$(FIND) fakeroot/usr/local/$(PKGNAME) -type d | awk '{ printf("%%dir /%s\n", substr($$1, 10)); }' >>specfile
+	$(FIND) fakeroot/usr/local/$(PKGNAME) -type f | cut -c 9- >>specfile
+	$(FIND) fakeroot/usr/local/$(PKGNAME) -type l | cut -c 9- >>specfile
 
 rpm: specfile
 	rpmbuild --buildroot=`pwd`/fakeroot --define="_topdir `pwd`/rpmbuild" -bb specfile
 	cp rpmbuild/RPMS/*/*.rpm .
+endif
 
 ################################################################################
 
 # Clean out working files
 
 clean:
-	-rm *.done
-	-rm $(PKGNAME)*.tgz
 	rm -rf $(INSTBASE)
 	rm -rf $(BINUTILSRC)
 	rm -rf $(GCCSRC)
 	rm -rf $(GCCOBJ)
 	rm -rf $(AVRLIBCSRC)
-	rm -rf fakeroot specfile rpmbuild *.rpm
+	rm -rf fakeroot specfile rpmbuild *.done *.rpm *.tgz
 
 distclean: clean
