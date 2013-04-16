@@ -25,7 +25,7 @@
 
 AVRSRC		?= ..
 
-AVRTOOLS	?= /usr/local/avr-tools
+AVRTOOLS	?= /usr/local/avr-mcu-tools
 CROSS_COMPILE	?= $(AVRTOOLS)/bin/avr-
 
 CC		= $(CROSS_COMPILE)gcc
