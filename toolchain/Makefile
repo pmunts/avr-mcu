@@ -64,7 +64,13 @@ else
 TARBALL		= $(PKGNAME)-$(VERSION)-$(shell uname -s)-$(shell uname -i).tgz
 endif
 
-.PHONY: default download tarball clean distclean
+ifeq ($(shell uname), OpenBSD)
+GCCEXTRACONFIG	+= --with-gmp=/usr/local
+GCCEXTRACONFIG	+= --with-mpc=/usr/local
+GCCEXTRACONFIG	+= --with-mpfr=/usr/local
+PACKAGENAME	= $(PKGNAME)-$(VERSION).tgz
+TAR		= gtar
+endif
 
 default: readme.done
 
@@ -173,6 +179,38 @@ specfile: specfile.template fakeroot
 rpm: specfile
 	rpmbuild --buildroot=`pwd`/fakeroot --define="_topdir `pwd`/rpmbuild" -bb specfile
 	cp rpmbuild/RPMS/*/*.rpm .
+endif
+
+################################################################################
+
+# Create OpenBSD package
+
+ifeq ($(shell uname), OpenBSD)
+
+fakeroot: readme.done
+	mkdir -p fakeroot/usr/local
+	cp -R -p $(PKGNAME) fakeroot/usr/local
+
+CONTENTS: fakeroot
+	echo "@owner root"				>CONTENTS
+	echo "@group wheel"				>>CONTENTS
+	echo "@mode -w"					>>CONTENTS
+	echo "@cwd /usr/local"				>>CONTENTS
+	find fakeroot/usr/local/$(PKGNAME) -type d | awk '{ printf("@dir %s\n", substr($$1, 20)); }' >>CONTENTS
+	find fakeroot -type f | cut -c 20- | sort	>>CONTENTS
+	find fakeroot -type l | awk '{ printf("echo %s `readlink %s`\n", $$1, $$1); }' | sh | \
+	awk '{ printf("@exec ln -s %s %s\n", $$2, substr($$1,9)); }'            >>CONTENTS
+	find fakeroot -type l | awk '{ printf("@unexec rm %s\n", substr($$1, 9)); }' >>CONTENTS
+
+COMMENT:
+	echo "AVR Microcontroller Toolchain"		>COMMENT
+
+$(PACKAGENAME): CONTENTS COMMENT
+	pkg_create -A `uname -m` -f CONTENTS -D COMMENT="`cat COMMENT`" -d COMMENT -p / -B fakeroot $(PACKAGENAME)
+	@-rm CONTENTS
+	@-rm COMMENT
+
+package: $(PACKAGENAME)
 endif
 
 ################################################################################
