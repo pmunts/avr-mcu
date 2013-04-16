@@ -2,12 +2,12 @@
                       AVR Microcontroller Toolchain Notes
 
    This toolchain includes binutils, gcc, and [1]avr-libc. It may be built
-   for Windows (using Cygwin) and for Linux. The Windows and Linux
-   releases are virtually identical in every respect. (This is the reason
-   I created my own toolchain: I routinely flip back and forth between
-   Windows and Linux development environments.)
+   for Linux, OpenBSD, and Windows (using Cygwin). The Linux, OpenBSD and
+   Windows releases are virtually identical in every respect. (This is the
+   reason I created my own toolchain: I routinely flip back and forth
+   among Linux, OpenBSD, and Windows development environments.)
 
-   I build my releases on a Scientific Linux 6 machine.
+   I build my Linux releases on a Scientific Linux 6 machine.
 
    I use the [2]Atmel AVRISP mkII and [3]avrdude for in system
    programming. Since avrdude is rather OS dependent, and native binaries
