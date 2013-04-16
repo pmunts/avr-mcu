@@ -10,6 +10,8 @@ News
      * 9 November 2012 -- Upgraded binutils to 2.23.
      * 25 January 2012 -- Added copyright and license text to all original
        works.
+     * 16 April 2012 -- Upgraded binutils to 2.23.2 and gcc to 4.7.3.
+       Changed the toolchain package name from avr-tools to avr-mcu-tools.
 
    Note: I have largely migrated to [2]ARM microcontrollers. This AVR
    framework will only be updated sporadically.
