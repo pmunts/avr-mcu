@@ -21,7 +21,7 @@ KERNEL=="ttyACM*", ATTRS{idVendor}=="16c0", ATTRS{idProduct}=="04[789]?", SYMLIN
 #
 # Older modem proding (eg, Ubuntu 9.04) caused very slow serial device detection.
 # To fix, add this near top of /lib/udev/rules.d/77-nm-probe-modem-capabilities.rules
-#   SUBSYSTEMS=="usb", ATTRS{idVendor}=="16c0", ATTRS{idProduct}=="04[789]?", GOTO="nm_modem_probe_end" 
+#   SUBSYSTEMS=="usb", ATTRS{idVendor}=="16c0", ATTRS{idProduct}=="04[789]?", GOTO="nm_modem_probe_end"
 #
 #
 # (old udev rules)
