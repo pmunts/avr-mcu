@@ -31,13 +31,13 @@ TAR		= tar
 TEMP		= /tmp
 
 BINUTILVER	= 2.23.2
-BINUTILSERVER	= ftp://ftp.gnu.org/pub/gnu/binutils
+BINUTILSERVER	= http://ftp.gnu.org/pub/gnu/binutils
 BINUTILDIST	= $(TEMP)/binutils-$(BINUTILVER).tar.bz2
 BINUTILURL	= $(BINUTILSERVER)/`basename $(BINUTILDIST)`
 BINUTILSRC	= binutils-$(BINUTILVER)
 
-GCCVER		= 4.7.3
-GCCSERVER	= ftp://ftp.gnu.org/pub/gnu/gcc/gcc-$(GCCVER)
+GCCVER		= 4.8.1
+GCCSERVER	= http://ftp.gnu.org/pub/gnu/gcc/gcc-$(GCCVER)
 GCCDIST		= $(TEMP)/gcc-$(GCCVER).tar.bz2
 GCCURL		= $(GCCSERVER)/`basename $(GCCDIST)`
 GCCSRC		= gcc-$(GCCVER)
