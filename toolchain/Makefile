@@ -61,7 +61,7 @@ RELEASE		= 1
 ifeq ($(findstring CYGWIN, $(shell uname)), CYGWIN)
 TARBALL		= $(PKGNAME)-$(VERSION)-cygwin.tgz
 else
-TARBALL		= $(PKGNAME)-$(VERSION)-$(shell uname -s)-$(shell uname -i).tgz
+TARBALL		= $(PKGNAME)-$(VERSION)-$(shell uname -s)-$(shell uname -m).tgz
 endif
 
 ifeq ($(shell uname), OpenBSD)
