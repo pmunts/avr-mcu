@@ -15,6 +15,7 @@ News
      * 6 August 2013 -- Upgraded gcc to 4.8.1.
      * 26 December 2013 -- Upgraded binutils to 2.24 and gcc to 4.8.2.
        Happy Boxing Day!
+     * 17 September 2014 -- Upgraded gcc to 4.8.3 and avr-libc to 1.8.1.
 
    Note: I have largely migrated to [2]ARM microcontrollers, so this AVR
    framework will only be updated sporadically from now on.
