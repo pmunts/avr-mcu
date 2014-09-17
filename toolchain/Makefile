@@ -36,14 +36,14 @@ BINUTILDIST	= $(TEMP)/binutils-$(BINUTILVER).tar.bz2
 BINUTILURL	= $(BINUTILSERVER)/`basename $(BINUTILDIST)`
 BINUTILSRC	= binutils-$(BINUTILVER)
 
-GCCVER		= 4.8.2
+GCCVER		= 4.8.3
 GCCSERVER	= http://ftp.gnu.org/pub/gnu/gcc/gcc-$(GCCVER)
 GCCDIST		= $(TEMP)/gcc-$(GCCVER).tar.bz2
 GCCURL		= $(GCCSERVER)/`basename $(GCCDIST)`
 GCCSRC		= gcc-$(GCCVER)
 GCCOBJ		= gcc-$(GCCVER).obj
 
-AVRLIBCVER	= 1.8.0
+AVRLIBCVER	= 1.8.1
 AVRLIBCSERVER	= http://download.savannah.gnu.org/releases/avr-libc
 AVRLIBCDIST	= $(TEMP)/avr-libc-$(AVRLIBCVER).tar.bz2
 AVRLIBCURL	= $(AVRLIBCSERVER)/`basename $(AVRLIBCDIST)`
@@ -71,6 +71,10 @@ GCCEXTRACONFIG	+= --with-mpfr=/usr/local
 PACKAGENAME	= $(PKGNAME)-$(VERSION).tgz
 TAR		= gtar
 endif
+
+PKGARCH		= `dpkg --print-architecture`
+PKGDIR		= $(PKGNAME)-$(VERSION)-debian7-$(PKGARCH)
+PKGFILE		= $(PKGDIR).deb
 
 default: readme.done
 
@@ -163,6 +167,25 @@ endif
 
 ################################################################################
 
+# Create Linux .deb package
+
+ifeq ($(shell uname), Linux)
+deb: readme.done
+	mkdir -p					$(PKGDIR)/DEBIAN
+	mkdir -p					$(PKGDIR)/usr/local
+	install -cm 0444 control.template		$(PKGDIR)/DEBIAN/control
+	sed -i s/@@ARCH@@/$(PKGARCH)/g			$(PKGDIR)/DEBIAN/control
+	sed -i s/@@NAME@@/$(PKGNAME)/g			$(PKGDIR)/DEBIAN/control
+	sed -i s/@@VERSION@@/$(VERSION)/g		$(PKGDIR)/DEBIAN/control
+	sed -i /Version:/s/_/-/g			$(PKGDIR)/DEBIAN/control
+	cp -R -P -p $(PKGNAME)				$(PKGDIR)/usr/local
+	chmod -R ugo-w					$(PKGDIR)/usr/local
+	fakeroot dpkg-deb --build			$(PKGDIR)
+	chmod -R ugo+w					$(PKGDIR)/usr/local
+endif
+
+################################################################################
+
 # Create Linux RPM package
 
 ifeq ($(shell uname), Linux)
@@ -223,6 +246,6 @@ clean:
 	rm -rf $(GCCSRC)
 	rm -rf $(GCCOBJ)
 	rm -rf $(AVRLIBCSRC)
-	rm -rf fakeroot specfile rpmbuild *.done *.rpm *.tgz
+	rm -rf fakeroot specfile rpmbuild *.done *.deb *.rpm *.tgz $(PKGDIR)
 
 distclean: clean
