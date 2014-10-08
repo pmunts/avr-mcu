@@ -117,4 +117,3 @@ AVR_mk_clean:
 
 # Include optional subordinate makefiles
 
-sinclude $(HOME)/src/include/subversion.mk
