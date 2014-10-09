@@ -114,6 +114,3 @@ lib: lib$(MCU).a
 AVR_mk_clean:
 	rm -f *.a *.asm *.bin *.elf *.hex *.map *.o
 	$(MAKE) common_clean
-
-# Include optional subordinate makefiles
-
