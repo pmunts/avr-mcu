@@ -30,13 +30,13 @@ FIND		= find
 TAR		= tar
 TEMP		= /tmp
 
-BINUTILVER	= 2.24
+BINUTILVER	= 2.25
 BINUTILSERVER	= http://ftp.gnu.org/pub/gnu/binutils
 BINUTILDIST	= $(TEMP)/binutils-$(BINUTILVER).tar.bz2
 BINUTILURL	= $(BINUTILSERVER)/`basename $(BINUTILDIST)`
 BINUTILSRC	= binutils-$(BINUTILVER)
 
-GCCVER		= 4.8.3
+GCCVER		= 4.8.4
 GCCSERVER	= http://ftp.gnu.org/pub/gnu/gcc/gcc-$(GCCVER)
 GCCDIST		= $(TEMP)/gcc-$(GCCVER).tar.bz2
 GCCURL		= $(GCCSERVER)/`basename $(GCCDIST)`
@@ -64,6 +64,13 @@ else
 TARBALL		= $(PKGNAME)-$(VERSION)-$(shell uname -s)-$(shell uname -m).tgz
 endif
 
+ifeq ($(shell uname), Darwin)
+GCCEXTRACONFIG	+= --with-gmp=/sw
+GCCEXTRACONFIG	+= --with-mpc=/sw
+GCCEXTRACONFIG	+= --with-mpfr=/sw
+GCCEXTRACONFIG	+= --with-libiconv-prefix=/sw
+endif
+
 ifeq ($(shell uname), OpenBSD)
 GCCEXTRACONFIG	+= --with-gmp=/usr/local
 GCCEXTRACONFIG	+= --with-mpc=/usr/local
@@ -72,8 +79,15 @@ PACKAGENAME	= $(PKGNAME)-$(VERSION).tgz
 TAR		= gtar
 endif
 
+ifeq ($(shell uname), Darwin)
+OSNAME		= MacOS
+PKGARCH		= $(shell dpkg --print-installation-architecture)
+SED		= sed -i ''
+else
 OSNAME		= debian7
-PKGARCH		= `dpkg --print-architecture`
+PKGARCH		= $(shell dpkg --print-architecture)
+SED		= sed -i
+endif
 PKGDIR		= $(PKGNAME)-$(VERSION)-$(OSNAME)-$(PKGARCH)
 PKGFILE		= $(PKGDIR).deb
 
@@ -170,20 +184,23 @@ endif
 
 # Create Linux .deb package
 
-ifeq ($(shell uname), Linux)
-deb: readme.done
+deb:	readme.done
 	mkdir -p					$(PKGDIR)/DEBIAN
 	mkdir -p					$(PKGDIR)/usr/local
 	install -cm 0444 control.template		$(PKGDIR)/DEBIAN/control
-	sed -i s/@@ARCH@@/$(PKGARCH)/g			$(PKGDIR)/DEBIAN/control
-	sed -i s/@@NAME@@/$(PKGNAME)/g			$(PKGDIR)/DEBIAN/control
-	sed -i s/@@VERSION@@/$(VERSION)/g		$(PKGDIR)/DEBIAN/control
-	sed -i /Version:/s/_/-/g			$(PKGDIR)/DEBIAN/control
+	$(SED) s/@@ARCH@@/$(PKGARCH)/g			$(PKGDIR)/DEBIAN/control
+	$(SED) s/@@NAME@@/$(PKGNAME)/g			$(PKGDIR)/DEBIAN/control
+	$(SED) s/@@VERSION@@/$(VERSION)/g		$(PKGDIR)/DEBIAN/control
+	$(SED) /Version:/s/_/-/g			$(PKGDIR)/DEBIAN/control
 	cp -R -P -p $(PKGNAME)				$(PKGDIR)/usr/local
 	chmod -R ugo-w					$(PKGDIR)/usr/local
+ifeq ($(shell uname), Darwin)
+	chown -R 0:0					$(PKGDIR)/usr/local
+	dpkg-deb --build				$(PKGDIR)
+else
 	fakeroot dpkg-deb --build			$(PKGDIR)
-	chmod -R ugo+w					$(PKGDIR)/usr/local
 endif
+	chmod -R ugo+w					$(PKGDIR)/usr/local
 
 ################################################################################
 
@@ -210,7 +227,6 @@ endif
 # Create OpenBSD package
 
 ifeq ($(shell uname), OpenBSD)
-
 fakeroot: readme.done
 	mkdir -p fakeroot/usr/local
 	cp -R -p $(PKGNAME) fakeroot/usr/local
