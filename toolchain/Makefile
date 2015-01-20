@@ -26,6 +26,8 @@
 PKGNAME		= avr-mcu-tools
 INSTBASE	= $(shell pwd)/$(PKGNAME)
 
+CC		= gcc
+CXX		= g++
 FIND		= find
 TAR		= tar
 TEMP		= /tmp
@@ -35,19 +37,27 @@ BINUTILSERVER	= http://ftp.gnu.org/pub/gnu/binutils
 BINUTILDIST	= $(TEMP)/binutils-$(BINUTILVER).tar.bz2
 BINUTILURL	= $(BINUTILSERVER)/`basename $(BINUTILDIST)`
 BINUTILSRC	= binutils-$(BINUTILVER)
+BINUTILBLD	= build/binutils-$(BINUTILVER)
 
 GCCVER		= 4.8.4
 GCCSERVER	= http://ftp.gnu.org/pub/gnu/gcc/gcc-$(GCCVER)
 GCCDIST		= $(TEMP)/gcc-$(GCCVER).tar.bz2
 GCCURL		= $(GCCSERVER)/`basename $(GCCDIST)`
 GCCSRC		= gcc-$(GCCVER)
-GCCOBJ		= gcc-$(GCCVER).obj
+GCCBLD		= build/gcc-$(GCCVER)
+
+LIBICONVVER	= 1.14
+LIBICONVSERVER	= http://ftp.gnu.org/pub/gnu/libiconv
+LIBICONVDIST	= $(TEMP)/libiconv-$(LIBICONVVER).tar.gz
+LIBICONVURL	= $(LIBICONVSERVER)/`basename $(LIBICONVDIST)`
+LIBICONVSRC	= libiconv-$(LIBICONVVER)
 
 AVRLIBCVER	= 1.8.1
 AVRLIBCSERVER	= http://download.savannah.gnu.org/releases/avr-libc
 AVRLIBCDIST	= $(TEMP)/avr-libc-$(AVRLIBCVER).tar.bz2
 AVRLIBCURL	= $(AVRLIBCSERVER)/`basename $(AVRLIBCDIST)`
 AVRLIBCSRC	= avr-libc-$(AVRLIBCVER)
+AVRLIBCBLD	= build/avr-libc-$(AVRLIBCVER)
 
 AVRLIBCMPDIST	= $(TEMP)/avr-libc-manpages-$(AVRLIBCVER).tar.bz2
 AVRLIBCMPURL	= $(AVRLIBCSERVER)/`basename $(AVRLIBCMPDIST)`
@@ -59,44 +69,62 @@ VERSION		= $(BINUTILVER)_$(GCCVER)_$(AVRLIBCVER)
 RELEASE		= 1
 
 ifeq ($(findstring CYGWIN, $(shell uname)), CYGWIN)
-TARBALL		= $(PKGNAME)-$(VERSION)-cygwin.tgz
-else
-TARBALL		= $(PKGNAME)-$(VERSION)-$(shell uname -s)-$(shell uname -m).tgz
+PKGSUFFIX	= cygwin
+TARBALL		= $(PKGNAME)-$(VERSION)-$(PKGSUFFIX).tgz
+TAROWNER	=
+TARGROUP	=
 endif
 
 ifeq ($(shell uname), Darwin)
-GCCEXTRACONFIG	+= --with-gmp=/sw
-GCCEXTRACONFIG	+= --with-mpc=/sw
-GCCEXTRACONFIG	+= --with-mpfr=/sw
-GCCEXTRACONFIG	+= --with-libiconv-prefix=/sw
+CC		= gcc-4
+CXX		= g++-4
+PKGSUFFIX	= $(shell uname -s)-$(shell uname -r)-$(shell uname -m)
+TARBALL		= $(PKGNAME)-$(VERSION)-$(PKGSUFFIX).tgz
+TAROWNER	= --owner root
+TARGROUP	= --group wheel
+endif
+
+ifeq ($(shell uname), Linux)
+OSNAME		= unknown
+PKGARCH		= $(shell dpkg --print-architecture)
+PKGSUFFIX	= $(OSNAME)-$(PKGARCH)
+PKGDIR		= $(PKGNAME)-$(VERSION)-$(PKGSUFFIX)
+PKGFILE		= $(PKGDIR).deb
+TARBALL		= $(PKGNAME)-$(VERSION)-$(PKGSUFFIX).tgz
+TAROWNER	= --owner root
+TARGROUP	= --group root
 endif
 
 ifeq ($(shell uname), OpenBSD)
-GCCEXTRACONFIG	+= --with-gmp=/usr/local
-GCCEXTRACONFIG	+= --with-mpc=/usr/local
-GCCEXTRACONFIG	+= --with-mpfr=/usr/local
 TAR		= gtar
+PKGFILE		= $(PKGNAME)-$(VERSION).tgz
 endif
 
-ifeq ($(shell uname), Darwin)
-OSNAME		= MacOS
-PKGARCH		= $(shell dpkg --print-installation-architecture)
-SED		= sed -i ''
-else
-OSNAME		= debian7
-PKGARCH		= $(shell dpkg --print-architecture)
-SED		= sed -i
-endif
-PKGDIR		= $(PKGNAME)-$(VERSION)-$(OSNAME)-$(PKGARCH)
-PKGFILE		= $(PKGDIR).deb
+BUILDCONFIG	= CC=$(CC) CXX=$(CXX)
 
 default: readme.done
 
 ################################################################################
 
+DISTFILES	= $(BINUTILDIST) $(GCCDIST) $(LIBICONVDIST) $(AVRLIBCDIST) $(AVRLIBCMPDIST) $(AVRLIBCUMDIST)
+
 # Download source distributions:
 
-download: $(BINUTILDIST) $(GCCDIST) $(AVRLIBCDIST)
+download: $(DISTFILES)
+
+################################################################################
+
+# Unpack all source distributions
+
+source.done: $(DISTFILES)
+	$(TAR) xjf $(BINUTILDIST)
+	$(TAR) xjf $(GCCDIST)
+	cd $(GCCSRC) ; ./contrib/download_prerequisites
+	$(TAR) xzf $(LIBICONVDIST)
+	ln -s "../$(LIBICONVSRC)" $(GCCSRC)/libiconv
+	$(TAR) xjf $(AVRLIBCDIST)
+	ln -s "../$(AVRLIBCSRC)/newlib" $(GCCSRC)/newlib
+	touch $@
 
 ################################################################################
 
@@ -107,13 +135,20 @@ $(BINUTILDIST):
 
 # Compile binutils
 
-binutils.done: $(BINUTILDIST)
-	rm -rf $(BINUTILSRC)
-	$(TAR) xjf $(BINUTILDIST)
-	cd $(BINUTILSRC) && ./configure --prefix=$(INSTBASE) --target=avr --disable-lto --disable-nls --disable-shared --disable-werror
-	$(MAKE) -C $(BINUTILSRC)
-	$(MAKE) -C $(BINUTILSRC) install
+binutils.done: source.done
+	rm -rf $(BINUTILBLD)
+	mkdir -p $(BINUTILBLD)
+	cd $(BINUTILBLD) && ../../$(BINUTILSRC)/configure --prefix=$(INSTBASE) $(BUILDCONFIG) --target=avr --enable-lto --disable-nls --disable-shared --disable-werror
+	$(MAKE) $(MAKEJOBS) -C $(BINUTILBLD)
+	$(MAKE) -C $(BINUTILBLD) install
 	touch binutils.done
+
+################################################################################
+
+# Download libiconv
+
+$(LIBICONVDIST):
+	wget -nv -P $(TEMP) $(LIBICONVURL)
 
 ################################################################################
 
@@ -124,14 +159,12 @@ $(GCCDIST):
 
 # Compile gcc
 
-gcc.done: binutils.done $(GCCDIST)
-	rm -rf $(GCCSRC)
-	rm -rf $(GCCOBJ)
-	$(TAR) xjf $(GCCDIST)
-	mkdir -p $(GCCOBJ)
-	cd $(GCCOBJ) && ../$(GCCSRC)/configure --prefix=$(INSTBASE) --target=avr --disable-lto --enable-languages=c --disable-libssp --disable-libgomp --disable-nls --disable-shared --disable-werror $(GCCEXTRACONFIG)
-	export PATH=$$PATH':'$(INSTBASE)/bin && $(MAKE) -C $(GCCOBJ)
-	export PATH=$$PATH':'$(INSTBASE)/bin && $(MAKE) -C $(GCCOBJ) install
+gcc.done: binutils.done
+	rm -rf $(GCCBLD)
+	mkdir -p $(GCCBLD)
+	cd $(GCCBLD) && ../../$(GCCSRC)/configure --prefix=$(INSTBASE) $(BUILDCONFIG) --target=avr --enable-lto --enable-languages=c --disable-libssp --disable-libgomp --disable-nls --disable-shared --disable-werror --with-system-zlib
+	export PATH=$$PATH':'$(INSTBASE)/bin && $(MAKE) $(MAKEJOBS) -C $(GCCBLD)
+	export PATH=$$PATH':'$(INSTBASE)/bin && $(MAKE) -C $(GCCBLD) install
 	touch gcc.done
 
 ################################################################################
@@ -145,12 +178,12 @@ $(AVRLIBCDIST):
 
 # Compile avr-libc
 
-avr-libc.done: binutils.done gcc.done $(AVRLIBCDIST) $(AVRLIBCMPDIST) $(AVRLIBCUMDIST)
-	rm -rf $(AVRLIBCSRC)
-	$(TAR) xjf $(AVRLIBCDIST)
-	export PATH=$$PATH':'$(INSTBASE)/bin && cd $(AVRLIBCSRC) && ./configure --prefix=$(INSTBASE) --host=avr
-	export PATH=$$PATH':'$(INSTBASE)/bin && $(MAKE) -C $(AVRLIBCSRC)
-	export PATH=$$PATH':'$(INSTBASE)/bin && $(MAKE) -C $(AVRLIBCSRC) install
+avr-libc.done: gcc.done
+	rm -rf $(AVRLIBCBLD)
+	mkdir -p $(AVRLIBCBLD)
+	export PATH=$$PATH':'$(INSTBASE)/bin && cd $(AVRLIBCBLD) && ../../$(AVRLIBCSRC)/configure --prefix=$(INSTBASE) --host=avr
+	export PATH=$$PATH':'$(INSTBASE)/bin && $(MAKE) -C $(AVRLIBCBLD)
+	export PATH=$$PATH':'$(INSTBASE)/bin && $(MAKE) -C $(AVRLIBCBLD) install
 	$(TAR) xjf $(AVRLIBCMPDIST) --directory=$(INSTBASE)
 	$(TAR) xjf $(AVRLIBCUMDIST) --directory=$(INSTBASE)/share
 	touch avr-libc.done
@@ -173,32 +206,23 @@ readme.done: binutils.done gcc.done avr-libc.done
 # Create toolchain tarball
 
 tarball: readme.done
-ifeq ($(findstring CYGWIN, $(shell uname)), CYGWIN)
-	$(TAR) czf $(TARBALL) `basename $(INSTBASE)` --mode=ugo-w
-else
-	$(TAR) czf $(TARBALL) `basename $(INSTBASE)` --owner=root --group=root --mode=ugo-w
-endif
+	$(TAR) czf $(TARBALL) `basename $(INSTBASE)` --mode=ugo-w $(TAROWNER) $(TARGROUP)
 
 ################################################################################
 
 # Create Linux .deb package
 
-deb:	readme.done
+package.deb:	readme.done
 	mkdir -p					$(PKGDIR)/DEBIAN
 	mkdir -p					$(PKGDIR)/usr/local
 	install -cm 0444 control.template		$(PKGDIR)/DEBIAN/control
-	$(SED) s/@@ARCH@@/$(PKGARCH)/g			$(PKGDIR)/DEBIAN/control
-	$(SED) s/@@NAME@@/$(PKGNAME)/g			$(PKGDIR)/DEBIAN/control
-	$(SED) s/@@VERSION@@/$(VERSION)/g		$(PKGDIR)/DEBIAN/control
-	$(SED) /Version:/s/_/-/g			$(PKGDIR)/DEBIAN/control
+	sed -i s/@@ARCH@@/$(PKGARCH)/g			$(PKGDIR)/DEBIAN/control
+	sed -i s/@@NAME@@/$(PKGNAME)/g			$(PKGDIR)/DEBIAN/control
+	sed -i s/@@VERSION@@/$(VERSION)/g		$(PKGDIR)/DEBIAN/control
+	sed -i /Version:/s/_/-/g			$(PKGDIR)/DEBIAN/control
 	cp -R -P -p $(PKGNAME)				$(PKGDIR)/usr/local
 	chmod -R ugo-w					$(PKGDIR)/usr/local
-ifeq ($(shell uname), Darwin)
-	chown -R 0:0					$(PKGDIR)/usr/local
-	dpkg-deb --build				$(PKGDIR)
-else
 	fakeroot dpkg-deb --build			$(PKGDIR)
-endif
 	chmod -R ugo+w					$(PKGDIR)/usr/local
 
 ################################################################################
@@ -241,12 +265,10 @@ CONTENTS: fakeroot.openbsd
 COMMENT:
 	echo "AVR Microcontroller Toolchain"		>COMMENT
 
-$(PKGNAME)-$(VERSION).tgz: CONTENTS COMMENT
-	pkg_create -A `uname -m` -f CONTENTS -D COMMENT="`cat COMMENT`" -d COMMENT -p / -B fakeroot.openbsd $(PKGNAME)-$(VERSION).tgz
+package.openbsd: CONTENTS COMMENT
+	pkg_create -A `uname -m` -f CONTENTS -D COMMENT="`cat COMMENT`" -d COMMENT -p / -B fakeroot.openbsd $(PKGFILE)
 	@-rm CONTENTS
 	@-rm COMMENT
-
-package.openbsd: $(PKGNAME)-$(VERSION).tgz
 
 ################################################################################
 
@@ -256,8 +278,8 @@ clean:
 	rm -rf $(INSTBASE)
 	rm -rf $(BINUTILSRC)
 	rm -rf $(GCCSRC)
-	rm -rf $(GCCOBJ)
+	rm -rf $(LIBICONVSRC)
 	rm -rf $(AVRLIBCSRC)
-	rm -rf fakeroot.* specfile rpmbuild *.done *.deb *.rpm *.tgz $(PKGDIR)
+	rm -rf build fakeroot.* specfile rpmbuild *.done *.deb *.rpm *.tgz $(PKGDIR)
 
 distclean: clean
