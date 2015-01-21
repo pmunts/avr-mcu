@@ -18,6 +18,8 @@ News
      * 17 September 2014 -- Upgraded gcc to 4.8.3 and avr-libc to 1.8.1.
 
      * 1 January 2015 -- Ugraded binutils to 2.25 and gcc to 4.8.4.
+     * 21 January 2015 -- Cleaned up the toolchain makefile. Build gcc
+       prerequisites, including libiconv, from scratch.
 
    Note: I have largely migrated to [2]ARM microcontrollers, so this AVR
    framework will only be updated sporadically from now on.
