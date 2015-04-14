@@ -31,12 +31,20 @@ CFLAGS ?= -O2 -Wall
 teensy_loader_cli: teensy_loader_cli.c
 	$(CC) $(CFLAGS) -s -DUSE_UHID -o teensy_loader_cli teensy_loader_cli.c
 
+else ifeq ($(OS), MACFINK) # MacOS X w/Fink
+CC ?= cc
+CFLAGS ?= -O2 -Wall -I/sw/include -L/sw/lib
+teensy_loader_cli: teensy_loader_cli.c
+	$(CC) $(CFLAGS) -DUSE_LIBUSB -o teensy_loader_cli teensy_loader_cli.c -lusb
+
 
 endif
 
 install:
 	install -csm 0555 teensy_loader_cli	/usr/local/bin
+ifeq ($(OS), LINUX)
 	install -cm 0444 49-teensy.rules	/etc/udev/rules.d
+endif
 
 clean:
 	rm -f teensy_loader_cli teensy_loader_cli.exe
