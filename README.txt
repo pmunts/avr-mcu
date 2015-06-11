@@ -5,24 +5,19 @@
 
 News
 
-     * 3 April 2012 -- Reorganized into subdirectories.
-     * 8 October 2012 -- Upgraded gcc to 4.7.2.
-     * 9 November 2012 -- Upgraded binutils to 2.23.
-     * 25 January 2012 -- Added copyright and license text to all original
-       works.
-     * 16 April 2012 -- Upgraded binutils to 2.23.2 and gcc to 4.7.3.
-       Changed the toolchain package name from avr-tools to avr-mcu-tools.
-     * 6 August 2013 -- Upgraded gcc to 4.8.1.
-     * 26 December 2013 -- Upgraded binutils to 2.24 and gcc to 4.8.2.
-       Happy Boxing Day!
-     * 17 September 2014 -- Upgraded gcc to 4.8.3 and avr-libc to 1.8.1.
-
      * 1 January 2015 -- Ugraded binutils to 2.25 and gcc to 4.8.4.
      * 21 January 2015 -- Cleaned up the toolchain makefile. Build gcc
        prerequisites, including libiconv, from scratch.
 
    Note: I have largely migrated to [2]ARM microcontrollers, so this AVR
    framework will only be updated sporadically from now on.
+
+Git Repository
+
+   The source code is available at: [3]http://git.munts.com
+
+   Use the following command to clone it:
+git clone http://git.munts.com/avr-mcu.git
 
 Copyright:
 
@@ -51,7 +46,7 @@ POSSIBILITY OF SUCH DAMAGE.
    respective authors.
      __________________________________________________________________
 
-   Questions or comments to Philip Munts [3]phil@munts.net
+   Questions or comments to Philip Munts [4]phil@munts.net
 
    $Id$
 
@@ -62,4 +57,5 @@ References
 
    1. http://www.atmel.com/products/microcontrollers/avr/default.aspx
    2. http://tech.munts.com/MCU/Frameworks/ARM
-   3. mailto:phil@munts.net
+   3. http://git.munts.com/
+   4. mailto:phil@munts.net
