@@ -5,9 +5,10 @@
 
 News
 
-     * 1 January 2015 -- Ugraded binutils to 2.25 and gcc to 4.8.4.
+     * 1 January 2015 -- Upgraded binutils to 2.25 and gcc to 4.8.4.
      * 21 January 2015 -- Cleaned up the toolchain makefile. Build gcc
        prerequisites, including libiconv, from scratch.
+     * 5 August 2015 -- Upgraded gcc to 4.9.3.
 
    Note: I have largely migrated to [2]ARM microcontrollers, so this AVR
    framework will only be updated sporadically from now on.
