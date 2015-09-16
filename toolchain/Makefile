@@ -97,8 +97,10 @@ TARGROUP	= --group root
 endif
 
 ifeq ($(shell uname), OpenBSD)
+CC		= egcc
+CXX		= eg++
 TAR		= gtar
-PKGFILE		= $(PKGNAME)-$(VERSION).tgz
+PKGFILE		= $(PKGNAME)-$(VERSION)_$(shell uname -r).tgz
 endif
 
 BUILDCONFIG	= CC=$(CC) CXX=$(CXX)
@@ -122,6 +124,7 @@ source.done: $(DISTFILES)
 	$(TAR) xjf $(GCCDIST)
 	cd $(GCCSRC) ; ./contrib/download_prerequisites
 	$(TAR) xzf $(LIBICONVDIST)
+	if [ -f libiconv.patch ]; then cd $(LIBICONVSRC) ; patch -b -p0 <../libiconv.patch ; fi
 	ln -s "../$(LIBICONVSRC)" $(GCCSRC)/libiconv
 	$(TAR) xjf $(AVRLIBCDIST)
 	ln -s "../$(AVRLIBCSRC)/newlib" $(GCCSRC)/newlib
