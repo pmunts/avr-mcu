@@ -100,7 +100,7 @@ ifeq ($(shell uname), OpenBSD)
 CC		= egcc
 CXX		= eg++
 TAR		= gtar
-PKGFILE		= $(PKGNAME)-$(VERSION)_$(shell uname -r).tgz
+PKGFILE		= $(PKGNAME)-$(VERSION)_$(shell uname -p)_$(shell uname -r).tgz
 endif
 
 BUILDCONFIG	= CC=$(CC) CXX=$(CXX)
