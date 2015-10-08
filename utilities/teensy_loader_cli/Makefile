@@ -32,14 +32,16 @@ teensy_loader_cli: teensy_loader_cli.c
 	$(CC) $(CFLAGS) -s -DUSE_UHID -o teensy_loader_cli teensy_loader_cli.c
 
 else ifeq ($(OS), MACFINK) # MacOS X w/Fink
+FINKPREFIX ?= /sw
 CC ?= cc
-CFLAGS ?= -O2 -Wall -I/sw/include -L/sw/lib
+CFLAGS ?= -O2 -Wall -I$(FINKPREFIX)/include -L$(FINKPREFIX)/lib
 teensy_loader_cli: teensy_loader_cli.c
 	$(CC) $(CFLAGS) -DUSE_LIBUSB -o teensy_loader_cli teensy_loader_cli.c -lusb
 
 else ifeq ($(OS), MACPORTS) # MacOS X w/MacPorts
+MACPORTSPREFIX ?= /opt/local
 CC ?= cc
-CFLAGS ?= -O2 -Wall -I/opt/local/include -L/opt/local/lib
+CFLAGS ?= -O2 -Wall -I$(MACPORTSPREFIX)/include -L$(MACPORTSPREFIX)/lib
 teensy_loader_cli: teensy_loader_cli.c
 	$(CC) $(CFLAGS) -DUSE_LIBUSB -o teensy_loader_cli teensy_loader_cli.c -lusb
 
