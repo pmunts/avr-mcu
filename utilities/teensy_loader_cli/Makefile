@@ -37,6 +37,11 @@ CFLAGS ?= -O2 -Wall -I/sw/include -L/sw/lib
 teensy_loader_cli: teensy_loader_cli.c
 	$(CC) $(CFLAGS) -DUSE_LIBUSB -o teensy_loader_cli teensy_loader_cli.c -lusb
 
+else ifeq ($(OS), MACPORTS) # MacOS X w/MacPorts
+CC ?= cc
+CFLAGS ?= -O2 -Wall -I/opt/local/include -L/opt/local/lib
+teensy_loader_cli: teensy_loader_cli.c
+	$(CC) $(CFLAGS) -DUSE_LIBUSB -o teensy_loader_cli teensy_loader_cli.c -lusb
 
 endif
 
