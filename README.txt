@@ -9,6 +9,7 @@ News
      * 21 January 2015 -- Cleaned up the toolchain makefile. Build gcc
        prerequisites, including libiconv, from scratch.
      * 5 August 2015 -- Upgraded gcc to 4.9.3.
+     * 22 January 2016 -- Upgraded gcc to 5.3.0.
 
    Note: I have largely migrated to [2]ARM microcontrollers, so this AVR
    framework will only be updated sporadically from now on.
@@ -18,11 +19,13 @@ Git Repository
    The source code is available at: [3]http://git.munts.com
 
    Use the following command to clone it:
-git clone http://git.munts.com/avr-mcu.git
+
+   git clone http://git.munts.com/avr-mcu.git
 
 Copyright:
 
    Original works herein are copyrighted as follows:
+
 Copyright (C)2013-2015, Philip Munts, President, Munts AM Corp.
 
 Redistribution and use in source and binary forms, with or without

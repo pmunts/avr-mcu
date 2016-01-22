@@ -53,17 +53,15 @@ LIBICONVDIST	= $(TEMP)/libiconv-$(LIBICONVVER).tar.gz
 LIBICONVURL	= $(LIBICONVSERVER)/`basename $(LIBICONVDIST)`
 LIBICONVSRC	= libiconv-$(LIBICONVVER)
 
-AVRLIBCVER	= 1.8.1
-AVRLIBCSERVER	= http://download.savannah.gnu.org/releases/avr-libc
-AVRLIBCDIST	= $(TEMP)/avr-libc-$(AVRLIBCVER).tar.bz2
-AVRLIBCURL	= $(AVRLIBCSERVER)/`basename $(AVRLIBCDIST)`
+AVRLIBCVER	= 1.8.1+svn
+AVRLIBCURL	= http://svn.savannah.nongnu.org/svn/avr-libc/trunk
 AVRLIBCSRC	= avr-libc-$(AVRLIBCVER)
 AVRLIBCBLD	= build/avr-libc-$(AVRLIBCVER)
 
-AVRLIBCMPDIST	= $(TEMP)/avr-libc-manpages-$(AVRLIBCVER).tar.bz2
+AVRLIBCSERVER	= http://download.savannah.gnu.org/releases/avr-libc
+AVRLIBCMPDIST	= $(TEMP)/avr-libc-manpages-1.8.1.tar.bz2
 AVRLIBCMPURL	= $(AVRLIBCSERVER)/`basename $(AVRLIBCMPDIST)`
-
-AVRLIBCUMDIST	= $(TEMP)/avr-libc-user-manual-$(AVRLIBCVER).tar.bz2
+AVRLIBCUMDIST	= $(TEMP)/avr-libc-user-manual-1.8.1.tar.bz2
 AVRLIBCUMURL	= $(AVRLIBCSERVER)/`basename $(AVRLIBCUMDIST)`
 
 VERSION		= $(BINUTILVER)_$(GCCVER)_$(AVRLIBCVER)
@@ -109,7 +107,7 @@ default: readme.done
 
 ################################################################################
 
-DISTFILES	= $(BINUTILDIST) $(GCCDIST) $(LIBICONVDIST) $(AVRLIBCDIST) $(AVRLIBCMPDIST) $(AVRLIBCUMDIST)
+DISTFILES	= $(BINUTILDIST) $(GCCDIST) $(LIBICONVDIST) $(AVRLIBCMPDIST) $(AVRLIBCUMDIST)
 
 # Download source distributions:
 
@@ -126,8 +124,7 @@ source.done: $(DISTFILES)
 	$(TAR) xzf $(LIBICONVDIST)
 	if [ -f libiconv.patch ]; then cd $(LIBICONVSRC) ; patch -b -p0 <../libiconv.patch ; fi
 	ln -s "../$(LIBICONVSRC)" $(GCCSRC)/libiconv
-	$(TAR) xjf $(AVRLIBCDIST)
-	ln -s "../$(AVRLIBCSRC)/newlib" $(GCCSRC)/newlib
+	svn co $(AVRLIBCURL) $(AVRLIBCSRC)
 	touch $@
 
 ################################################################################
@@ -175,9 +172,10 @@ gcc.done: binutils.done
 
 # Download avr-libc
 
-$(AVRLIBCDIST):
-	wget -nv -P $(TEMP) $(AVRLIBCURL)
+$(AVRLIBCMPDIST):
 	wget -nv -P $(TEMP) $(AVRLIBCMPURL)
+
+$(AVRLIBCUMDIST):
 	wget -nv -P $(TEMP) $(AVRLIBCUMURL)
 
 # Compile avr-libc
@@ -185,7 +183,8 @@ $(AVRLIBCDIST):
 avr-libc.done: gcc.done
 	rm -rf $(AVRLIBCBLD)
 	mkdir -p $(AVRLIBCBLD)
-	export PATH=$$PATH':'$(INSTBASE)/bin && cd $(AVRLIBCBLD) && ../../$(AVRLIBCSRC)/configure --prefix=$(INSTBASE) --host=avr
+	cd $(AVRLIBCSRC)/avr-libc ; ./bootstrap
+	export PATH=$$PATH':'$(INSTBASE)/bin && cd $(AVRLIBCBLD) && ../../$(AVRLIBCSRC)/avr-libc/configure --prefix=$(INSTBASE) --host=avr
 	export PATH=$$PATH':'$(INSTBASE)/bin && $(MAKE) -C $(AVRLIBCBLD)
 	export PATH=$$PATH':'$(INSTBASE)/bin && $(MAKE) -C $(AVRLIBCBLD) install
 	$(TAR) xjf $(AVRLIBCMPDIST) --directory=$(INSTBASE)
