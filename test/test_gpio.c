@@ -1,6 +1,6 @@
 /* Simple bit twiddler test program */
 
-// $Id$
+// $Id: test_gpio.c 9918 2016-02-09 07:53:15Z svn $
 
 // Copyright (C)2013-2016, Philip Munts, President, Munts AM Corp.
 //
