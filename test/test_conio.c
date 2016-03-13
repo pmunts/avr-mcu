@@ -48,7 +48,6 @@ int main(void)
 #endif
 
   puts("\033[H\033[2JAtmel AVR Console I/O Test (" __DATE__ " " __TIME__ ")\n");
-  puts(revision);
   printf("\nCPU Freq:%ld Hz  Compiler:%s\n\n", F_CPU, __VERSION__);
 
 // Test putch()
