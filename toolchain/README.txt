@@ -17,8 +17,6 @@
 
    Questions or comments to [8]phil@munts.net
 
-   $Id: README.txt 9257 2015-08-06 08:33:54Z svn $
-
 References
 
    1. http://www.finkproject.org/

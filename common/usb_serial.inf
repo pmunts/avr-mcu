@@ -1,8 +1,6 @@
 ; Windows INF to load usbser driver for all CDC-ACM USB Serial Ports
 ; Copyright (C) 2008 PJRC.COM, LLC.
 
-; $Id: usb_serial.inf 5145 2013-08-13 07:06:29Z svn $
-
 [Version] 
 Signature="$Windows NT$" 
 Class=Ports
