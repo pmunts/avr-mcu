@@ -1,5 +1,3 @@
-// $Id: usb_serial.c 4958 2013-05-20 08:10:58Z svn $
-
 /* USB Serial Example for Teensy USB Development Board
  * http://www.pjrc.com/teensy/usb_serial.html
  * Copyright (c) 2008,2010,2011 PJRC.COM, LLC

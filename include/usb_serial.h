@@ -1,5 +1,3 @@
-// $Id: usb_serial.h 4958 2013-05-20 08:10:58Z svn $
-
 #ifndef usb_serial_h__
 #define usb_serial_h__
 
