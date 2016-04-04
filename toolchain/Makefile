@@ -21,17 +21,13 @@
 # ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
 
+CC		?= gcc
+CXX		?= g++
+FIND		?= find
+TAR		?= tar
 TEMP		?= /tmp
 
-PKGNAME		= avr-mcu-tools
-INSTBASE	= $(shell pwd)/$(PKGNAME)
-
-CC		= gcc
-CXX		= g++
-FIND		= find
-TAR		= tar
-
-BINUTILVER	= 2.25.1
+BINUTILVER	= 2.26
 BINUTILSERVER	= http://ftp.gnu.org/pub/gnu/binutils
 BINUTILDIST	= $(TEMP)/binutils-$(BINUTILVER).tar.bz2
 BINUTILURL	= $(BINUTILSERVER)/`basename $(BINUTILDIST)`
@@ -51,23 +47,24 @@ LIBICONVDIST	= $(TEMP)/libiconv-$(LIBICONVVER).tar.gz
 LIBICONVURL	= $(LIBICONVSERVER)/`basename $(LIBICONVDIST)`
 LIBICONVSRC	= libiconv-$(LIBICONVVER)
 
-AVRLIBCVER	= 1.8.1+svn
-AVRLIBCURL	= http://svn.savannah.nongnu.org/svn/avr-libc/trunk
+AVRLIBCVER	= 2.0.0
+AVRLIBCSERVER	= http://download.savannah.gnu.org/releases/avr-libc
+AVRLIBCDIST	= $(TEMP)/avr-libc-$(AVRLIBCVER).tar.bz2
+AVRLIBCURL	= $(AVRLIBCSERVER)/`basename $(AVRLIBCDIST)`
+AVRLIBCMPDIST	= $(TEMP)/avr-libc-manpages-$(AVRLIBCVER).tar.bz2
+AVRLIBCMPURL	= $(AVRLIBCSERVER)/`basename $(AVRLIBCMPDIST)`
+AVRLIBCUMDIST	= $(TEMP)/avr-libc-user-manual-$(AVRLIBCVER).tar.bz2
+AVRLIBCUMURL	= $(AVRLIBCSERVER)/`basename $(AVRLIBCUMDIST)`
 AVRLIBCSRC	= avr-libc-$(AVRLIBCVER)
 AVRLIBCBLD	= build/avr-libc-$(AVRLIBCVER)
 
-AVRLIBCSERVER	= http://download.savannah.gnu.org/releases/avr-libc
-AVRLIBCMPDIST	= $(TEMP)/avr-libc-manpages-1.8.1.tar.bz2
-AVRLIBCMPURL	= $(AVRLIBCSERVER)/`basename $(AVRLIBCMPDIST)`
-AVRLIBCUMDIST	= $(TEMP)/avr-libc-user-manual-1.8.1.tar.bz2
-AVRLIBCUMURL	= $(AVRLIBCSERVER)/`basename $(AVRLIBCUMDIST)`
-
-VERSION		= $(BINUTILVER)_$(GCCVER)_$(AVRLIBCVER)
-RELEASE		= 1
+PKGVERSION	= $(shell date +%Y-%j)
+PKGNAME		= avr-mcu-tools
+INSTBASE	= $(shell pwd)/$(PKGNAME)
 
 ifeq ($(findstring CYGWIN, $(shell uname)), CYGWIN)
 PKGSUFFIX	= cygwin
-TARBALL		= $(PKGNAME)-$(VERSION)-$(PKGSUFFIX).tgz
+TARBALL		= $(PKGNAME)-$(PKGVERSION)-$(PKGSUFFIX).tgz
 TAROWNER	=
 TARGROUP	=
 endif
@@ -76,7 +73,7 @@ ifeq ($(shell uname), Darwin)
 CC		= gcc-4
 CXX		= g++-4
 PKGSUFFIX	= $(shell uname -s)-$(shell uname -r)-$(shell uname -m)
-TARBALL		= $(PKGNAME)-$(VERSION)-$(PKGSUFFIX).tgz
+TARBALL		= $(PKGNAME)-$(PKGVERSION)-$(PKGSUFFIX).tgz
 TAROWNER	= --owner root
 TARGROUP	= --group wheel
 endif
@@ -85,9 +82,9 @@ ifeq ($(shell uname), Linux)
 OSNAME		?= unknown
 PKGARCH		= $(shell dpkg --print-architecture)
 PKGSUFFIX	= $(OSNAME)-$(PKGARCH)
-PKGDIR		= $(PKGNAME)-$(VERSION)-$(PKGSUFFIX)
+PKGDIR		= $(PKGNAME)-$(PKGVERSION)-$(PKGSUFFIX)
 PKGFILE		= $(PKGDIR).deb
-TARBALL		= $(PKGNAME)-$(VERSION)-$(PKGSUFFIX).tgz
+TARBALL		= $(PKGNAME)-$(PKGVERSION)-$(PKGSUFFIX).tgz
 TAROWNER	= --owner root
 TARGROUP	= --group root
 endif
@@ -96,7 +93,7 @@ ifeq ($(shell uname), OpenBSD)
 CC		= egcc
 CXX		= eg++
 TAR		= gtar
-PKGFILE		= $(PKGNAME)-$(VERSION)_$(shell uname -p)_$(shell uname -r).tgz
+PKGFILE		= $(PKGNAME)-$(PKGVERSION)-$(shell uname -p)-$(shell uname -r).tgz
 endif
 
 BUILDCONFIG	= CC=$(CC) CXX=$(CXX)
@@ -105,9 +102,9 @@ default: readme.done
 
 ################################################################################
 
-DISTFILES	= $(BINUTILDIST) $(GCCDIST) $(LIBICONVDIST) $(AVRLIBCMPDIST) $(AVRLIBCUMDIST)
+DISTFILES	= $(BINUTILDIST) $(GCCDIST) $(LIBICONVDIST) $(AVRLIBCDIST) $(AVRLIBCMPDIST) $(AVRLIBCUMDIST)
 
-# Download source distributions:
+# Download source distributions
 
 download: $(DISTFILES)
 
@@ -122,7 +119,7 @@ source.done: $(DISTFILES)
 	$(TAR) xzf $(LIBICONVDIST)
 	if [ -f libiconv.patch ]; then cd $(LIBICONVSRC) ; patch -b -p0 <../libiconv.patch ; fi
 	ln -s "../$(LIBICONVSRC)" $(GCCSRC)/libiconv
-	svn co $(AVRLIBCURL) $(AVRLIBCSRC)
+	$(TAR) xjf $(AVRLIBCDIST)
 	touch $@
 
 ################################################################################
@@ -170,6 +167,9 @@ gcc.done: binutils.done
 
 # Download avr-libc
 
+$(AVRLIBCDIST):
+	wget -nv -P $(TEMP) $(AVRLIBCURL)
+
 $(AVRLIBCMPDIST):
 	wget -nv -P $(TEMP) $(AVRLIBCMPURL)
 
@@ -181,8 +181,8 @@ $(AVRLIBCUMDIST):
 avr-libc.done: gcc.done
 	rm -rf $(AVRLIBCBLD)
 	mkdir -p $(AVRLIBCBLD)
-	cd $(AVRLIBCSRC)/avr-libc ; ./bootstrap
-	export PATH=$$PATH':'$(INSTBASE)/bin && cd $(AVRLIBCBLD) && ../../$(AVRLIBCSRC)/avr-libc/configure --prefix=$(INSTBASE) --host=avr
+	cd $(AVRLIBCSRC) ; ./bootstrap
+	export PATH=$$PATH':'$(INSTBASE)/bin && cd $(AVRLIBCBLD) && ../../$(AVRLIBCSRC)/configure --prefix=$(INSTBASE) --host=avr
 	export PATH=$$PATH':'$(INSTBASE)/bin && $(MAKE) -C $(AVRLIBCBLD)
 	export PATH=$$PATH':'$(INSTBASE)/bin && $(MAKE) -C $(AVRLIBCBLD) install
 	$(TAR) xjf $(AVRLIBCMPDIST) --directory=$(INSTBASE)
@@ -190,6 +190,8 @@ avr-libc.done: gcc.done
 	touch avr-libc.done
 
 ################################################################################
+
+# Create README.txt
 
 readme.done: binutils.done gcc.done avr-libc.done
 	echo "GNU AVR microcontroller toolchain"	>$(INSTBASE)/README.txt
@@ -211,15 +213,15 @@ tarball: readme.done
 
 ################################################################################
 
-# Create Linux .deb package
+# Create Debian package
 
-package.deb:	readme.done
+package.deb: readme.done
 	mkdir -p					$(PKGDIR)/DEBIAN
 	mkdir -p					$(PKGDIR)/usr/local
 	install -cm 0644 control.template		$(PKGDIR)/DEBIAN/control
 	sed -i s/@@ARCH@@/$(PKGARCH)/g			$(PKGDIR)/DEBIAN/control
 	sed -i s/@@NAME@@/$(PKGNAME)/g			$(PKGDIR)/DEBIAN/control
-	sed -i s/@@VERSION@@/$(VERSION)/g		$(PKGDIR)/DEBIAN/control
+	sed -i s/@@VERSION@@/$(PKGVERSION)/g		$(PKGDIR)/DEBIAN/control
 	sed -i /Version:/s/_/-/g			$(PKGDIR)/DEBIAN/control
 	cp -R -P -p $(PKGNAME)				$(PKGDIR)/usr/local
 	chmod -R ugo-w					$(PKGDIR)/usr/local/$(PKGNAME)
@@ -228,29 +230,11 @@ package.deb:	readme.done
 
 ################################################################################
 
-# Create Linux RPM package
-
-fakeroot.rpm: readme.done
-	mkdir -p fakeroot.rpm/usr/local
-	cp -R -p $(PKGNAME) fakeroot.rpm/usr/local
-
-specfile: specfile.template fakeroot.rpm
-	sed s/@@PKGNAME@@/$(PKGNAME)/g <specfile.template | sed s/@@VERSION@@/$(VERSION)/g | sed s/@@RELEASE@@/$(RELEASE)/g >specfile
-	$(FIND) fakeroot.rpm/usr/local/$(PKGNAME) -type d | awk '{ printf("%%dir /%s\n", substr($$1, 14)); }' >>specfile
-	$(FIND) fakeroot.rpm/usr/local/$(PKGNAME) -type f | cut -c 13- >>specfile
-	$(FIND) fakeroot.rpm/usr/local/$(PKGNAME) -type l | cut -c 13- >>specfile
-
-package.rpm: specfile
-	rpmbuild --buildroot=`pwd`/fakeroot.rpm --define="_topdir `pwd`/rpmbuild" -bb specfile
-	cp rpmbuild/RPMS/*/*.rpm .
-
-################################################################################
-
 # Create OpenBSD package
 
 fakeroot.openbsd: readme.done
 	mkdir -p fakeroot.openbsd/usr/local
-	cp -R -p $(PKGNAME) fakeroot.openbsd/usr/local
+	cp -R -P -p $(PKGNAME) fakeroot.openbsd/usr/local
 
 CONTENTS: fakeroot.openbsd
 	echo "@owner root"				>CONTENTS
@@ -281,6 +265,6 @@ clean:
 	rm -rf $(GCCSRC)
 	rm -rf $(LIBICONVSRC)
 	rm -rf $(AVRLIBCSRC)
-	rm -rf build fakeroot.* specfile rpmbuild *.done *.deb *.rpm *.tgz $(PKGDIR)
+	rm -rf build fakeroot.* *.done *.deb *.tgz $(PKGDIR)
 
 distclean: clean
