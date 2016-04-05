@@ -19,7 +19,7 @@
    [10]http://repo.munts.com.
    _______________________________________________________________________
 
-   Questions or comments to [11]phil@munts.net
+   Questions or comments to Philip Munts [11]phil@munts.net
 
    I am available for custom system development (hardware and software) of
    products using AVR or other microcontrollers.
