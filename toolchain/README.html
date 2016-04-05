@@ -1,7 +1,8 @@
 <h1>AVR Microcontroller Toolchain Notes</h1>
 <p>This toolchain includes <b>binutils</b>, <b>gcc</b>, and <b>avr-libc</b>. It
 may be built for Linux, MacOS (using <a href=
-"http://www.finkproject.org">Fink</a>), OpenBSD, and Windows (using <a href=
+"http://www.finkproject.org">Fink</a> or <a href=
+"http://www.macports.org">MacPorts</a>), OpenBSD, and Windows (using <a href=
 "http://www.cygwin.com">Cygwin</a>) development hosts. The toolchains produce
 identical results on every host operating system: This is the reason I created
 my own toolchain; I routinely flip back and forth among Linux, MacOS, OpenBSD,
@@ -9,14 +10,20 @@ and Windows development environments. It is even possible to build the
 toolchain as a <a href=
 "http://en.wikipedia.org/wiki/Cross_compiler#Canadian_Cross">Canadian Cross</a>
 to run on a small Linux system such as the <a href=
-"http://www.raspberrypi.org">Raspberry Pi</a>. See <a href=
-"http://tech.munts.com/MCU/Frameworks/AVR/toolchain/Makefile.rpi"><tt>Makefile.rpi</tt></a>
-for an example.</p>
+"http://www.raspberrypi.org">Raspberry Pi</a> or the <a href=
+"http://beagleboard.org/bone">BeagleBone</a>. See <a href=
+"http://tech.munts.com/MCU/Frameworks/AVR/toolchain/Makefile.cross"><tt>Makefile.cross</tt></a>
+for details.</p>
 <p>I use the <a href=
 "http://www.atmel.com/dyn/products/tools_card.asp?tool_id=3808">Atmel AVRISP
 mkII</a> and <b><a href="http://www.nongnu.org/avrdude">avrdude</a></b> for in
 system programming. Since <b>avrdude</b> is rather OS dependent, and native
 binaries are available for all of the environments I am interested in, I do not
 include it in my toolchain.</p>
+<p>Prebuilt toolchain packages are available at: <a href=
+"http://repo.munts.com">http://repo.munts.com</a>.</p>
 <hr>
-Questions or comments to <a href="mailto:phil@munts.net">phil@munts.net</a>
+<p>Questions or comments to <a href=
+"mailto:phil@munts.net">phil@munts.net</a></p>
+<p>I am available for custom system development (hardware and software) of
+products using AVR or other microcontrollers.</p>
