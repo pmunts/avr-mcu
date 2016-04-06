@@ -58,7 +58,7 @@ AVRLIBCUMURL	= $(AVRLIBCSERVER)/`basename $(AVRLIBCUMDIST)`
 AVRLIBCSRC	= avr-libc-$(AVRLIBCVER)
 AVRLIBCBLD	= build/avr-libc-$(AVRLIBCVER)
 
-PKGVERSION	= $(shell date +%Y-%j)
+PKGVERSION	= $(shell date +%Y.%j)
 PKGNAME		= avr-mcu-tools
 INSTBASE	= $(shell pwd)/$(PKGNAME)
 
