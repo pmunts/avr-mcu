@@ -10,8 +10,8 @@ News
        prerequisites, including libiconv, from scratch.
      * 5 August 2015 -- Upgraded gcc to 4.9.3.
      * 22 January 2016 -- Upgraded gcc to 5.3.0.
-     * 4 April 2016 -- Toolchain release 2016.095: Upgraded binutils to
-       2.26. Upgraded avr-libc to 2.0.0.
+     * 6 April 2016 -- New toolchain release 2016.097: Upgraded binutils
+       to 2.26. Upgraded avr-libc to 2.0.0.
 
    Note: I have largely migrated to [2]ARM microcontrollers, so this AVR
    framework will only be updated sporadically from now on.
