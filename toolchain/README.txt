@@ -17,7 +17,7 @@
 
    Prebuilt toolchain packages are available at:
    [10]http://repo.munts.com.
-   _______________________________________________________________________
+   __________________________________________________________________
 
    Questions or comments to Philip Munts [11]phil@munts.net
 
@@ -32,7 +32,7 @@ References
    4. http://en.wikipedia.org/wiki/Cross_compiler#Canadian_Cross
    5. http://www.raspberrypi.org/
    6. http://beagleboard.org/bone
-   7. http://tech.munts.com/MCU/Frameworks/AVR/toolchain/Makefile.cross
+   7. file:///home/pmunts/src/AVR/toolchain/Makefile.cross
    8. http://www.atmel.com/dyn/products/tools_card.asp?tool_id=3808
    9. http://www.nongnu.org/avrdude
   10. http://repo.munts.com/
