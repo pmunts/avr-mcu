@@ -1,4 +1,4 @@
-# Common library make definitions
+# Generic Makefile for compiling Atmel AVR microcontroller firmware
 
 # Copyright (C)2013-2017, Philip Munts, President, Munts AM Corp.
 #
@@ -20,20 +20,16 @@
 # ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
 
-COMMON_DIR	?= $(AVRSRC)/common
-CFLAGS		+= -I$(COMMON_DIR)
+# Override the follow macro to build out of tree
 
-.PHONY: common_lib common_clean
+AVRSRC		= ../..
 
-COMMON_OBJS	= $(COMMON_DIR)/adc.o $(COMMON_DIR)/conio.o		\
-		  $(COMMON_DIR)/uart.o $(COMMON_DIR)/usb_serial.o
+.PHONY: clean reallyclean distclean
 
-# Add common object files to the MCU library
+include $(AVRSRC)/gcc/include/AVR.mk
 
-common_lib: $(COMMON_OBJS)
-	$(AR) crs lib$(MCU).a $(COMMON_OBJS)
+clean: AVR_mk_clean
 
-# Remove common object files
+reallyclean: clean
 
-common_clean:
-	rm -f $(COMMON_OBJS)
+distclean: reallyclean

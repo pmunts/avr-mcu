@@ -20,8 +20,6 @@
 # ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
 
-AVRSRC		?= ..
-
 AVRTOOLS	?= /usr/local/avr-mcu-tools
 CROSS_COMPILE	?= $(AVRTOOLS)/bin/avr-
 
@@ -44,7 +42,7 @@ OPTFLAGS	?= -O0
 IOFLAGS		?=
 EXTRAFLAGS	?=
 CFLAGS		+= -Wall
-CFLAGS		+= -I$(AVRSRC)/include -I.
+CFLAGS		+= -I$(AVRSRC)/gcc/include -I.
 CFLAGS		+= $(CPUFLAGS) $(OPTFLAGS) $(CONFIGFLAGS) $(IOFLAGS) $(DEBUGFLAGS) $(EXTRAFLAGS)
 LDFLAGS		= -L. -l$(MCU) -Wl,-Map,$*.map,--cref $(EXTRAOBJS)
 
@@ -98,7 +96,7 @@ AVR_mk_default:
 
 # Support for common library functions
 
-COMMON_DIR	= $(AVRSRC)/common
+COMMON_DIR	= $(AVRSRC)/gcc/common
 include $(COMMON_DIR)/common.mk
 
 # Build processor dependent libraries
