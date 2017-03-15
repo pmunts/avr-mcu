@@ -1,4 +1,4 @@
-# Build a Canadian Cross Compiler targeting ARM microcontrollers
+# Build a Canadian Cross Compiler targeting AVR microcontrollers
 
 # Copyright (C)2013-2017, Philip Munts, President, Munts AM Corp.
 # All rights reserved.
