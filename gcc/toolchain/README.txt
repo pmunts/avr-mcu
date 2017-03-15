@@ -32,7 +32,7 @@ References
    4. http://en.wikipedia.org/wiki/Cross_compiler#Canadian_Cross
    5. http://www.raspberrypi.org/
    6. http://beagleboard.org/bone
-   7. http://git.munts.com/avr-mcu/toolchain/Makefile.cross
+   7. http://git.munts.com/avr-mcu/gcc/toolchain/Makefile.cross
    8. http://www.atmel.com/dyn/products/tools_card.asp?tool_id=3808
    9. http://www.nongnu.org/avrdude
   10. http://repo.munts.com/
