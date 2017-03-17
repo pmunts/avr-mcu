@@ -12,14 +12,19 @@ News
      * 22 January 2016 -- Upgraded gcc to 5.3.0.
      * 6 April 2016 -- New toolchain release 2016.097: Upgraded binutils
        to 2.26. Upgraded avr-libc to 2.0.0.
-     * 21 November 2016 -- Upgraded binutils to 2.27 and gcc to 6.2.0
+     * 21 November 2016 -- Upgraded binutils to 2.27 and gcc to 6.2.0.
+     * 12 March 2017 -- Moved the original GCC framework into the gcc/
+       subdirectory.
+     * 17 March 2017 -- Upgraded binutils to 2.28 and gcc to 6.3.0.
+       Imported [2]LEGO Power Functions Infrared Remote Control Protocol.
+       implementation.
 
-   Note: I have largely migrated to [2]ARM microcontrollers, so this AVR
+   Note: I have largely migrated to [3]ARM microcontrollers, so this AVR
    framework will only be updated sporadically from now on.
 
 Git Repository
 
-   The source code is available at: [3]http://git.munts.com
+   The source code is available at: [4]http://git.munts.com
 
    Use the following command to clone it:
 
@@ -52,7 +57,7 @@ POSSIBILITY OF SUCH DAMAGE.
    respective authors.
    ___________________________________________________________________
 
-   Questions or comments to Philip Munts [4]phil@munts.net
+   Questions or comments to Philip Munts [5]phil@munts.net
 
    I am available for custom system development (hardware and software) of
    products using AVR or other microcontrollers.
@@ -60,6 +65,7 @@ POSSIBILITY OF SUCH DAMAGE.
 References
 
    1. http://www.atmel.com/products/microcontrollers/avr/default.aspx
-   2. http://git.munts.com/arm-mcu
-   3. http://git.munts.com/
-   4. mailto:phil@munts.net
+   2. https://www.lego.com/en-us/powerfunctions/articles/8884-control-5fcb2efbb4e74f0c926948df71445765
+   3. http://git.munts.com/arm-mcu
+   4. http://git.munts.com/
+   5. mailto:phil@munts.net
