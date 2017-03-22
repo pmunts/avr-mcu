@@ -363,7 +363,7 @@ int16_t usb_serial_getchar(void)
 		if (c & (1<<RXOUTI)) {
 			UEINTX = 0x6B;
 			goto retry;
-		}	
+		}
 		SREG = intr_state;
 		return -1;
 	}
