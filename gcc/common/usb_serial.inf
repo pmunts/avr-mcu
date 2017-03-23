@@ -1,15 +1,15 @@
 ; Windows INF to load usbser driver for all CDC-ACM USB Serial Ports
 ; Copyright (C) 2008 PJRC.COM, LLC.
 
-[Version] 
-Signature="$Windows NT$" 
+[Version]
+Signature="$Windows NT$"
 Class=Ports
-ClassGuid={4D36E978-E325-11CE-BFC1-08002BE10318} 
-Provider=%MFGNAME% 
+ClassGuid={4D36E978-E325-11CE-BFC1-08002BE10318}
+Provider=%MFGNAME%
 DriverVer=01/01/2008,1.0.0.0
 ;CatalogFile=cdc_acm_class.cat
 
-[Manufacturer] 
+[Manufacturer]
 %MFGNAME%=DeviceList, NTamd64
 
 [DeviceList]
@@ -26,8 +26,8 @@ DriverVer=01/01/2008,1.0.0.0
 
 [SourceDisksFiles]
 
-[DestinationDirs] 
-DefaultDestDir=12 
+[DestinationDirs]
+DefaultDestDir=12
 
 [DriverInstall]
 Include=mdmcpq.inf
@@ -39,9 +39,9 @@ HKR,,EnumPropPages32,,"msports.dll,SerialPortPropPageProvider"
 
 [DriverInstall.Services]
 Include=mdmcpq.inf
-AddService=usbser,0x00000002,LowerFilter_Service_Inst 
+AddService=usbser,0x00000002,LowerFilter_Service_Inst
 
-[Strings] 
+[Strings]
 MFGNAME="Munts Technologies"
 DEVNAME="Microcontroller USB Serial Port"
 CD1NAME="No CDROM required, usbser.sys is provided by Windows"
