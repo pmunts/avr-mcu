@@ -18,6 +18,7 @@ News
      * 17 March 2017 -- Upgraded binutils to 2.28 and gcc to 6.3.0.
        Imported [2]LEGO Power Functions Infrared Remote Control Protocol
        implementation.
+     * 19 September 2017 -- Upgraded binutils to 2.29 and gcc to 7.2.0.
 
    Note: I have largely migrated to [3]ARM microcontrollers, so this AVR
    framework will only be updated sporadically from now on.
@@ -27,7 +28,6 @@ Git Repository
    The source code is available at: [4]http://git.munts.com
 
    Use the following command to clone it:
-
    git clone http://git.munts.com/avr-mcu.git
 
 Copyright:
