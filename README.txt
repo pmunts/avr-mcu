@@ -25,7 +25,7 @@ News
 
 Git Repository
 
-   The source code is available at: [4]http://git.munts.com
+   The source code is available at: [4]http://git.munts.com/avr-mcu
 
    Use the following command to clone it:
 
@@ -42,5 +42,5 @@ References
    1. http://www.atmel.com/products/microcontrollers/avr/default.aspx
    2. https://www.lego.com/en-us/powerfunctions/articles/8884-control-5fcb2efbb4e74f0c926948df71445765
    3. http://git.munts.com/arm-mcu
-   4. http://git.munts.com/
+   4. http://git.munts.com/avr-mcu
    5. mailto:phil@munts.net
