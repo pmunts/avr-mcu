@@ -1,0 +1,4 @@
+PROGRAM test_led;
+
+BEGIN
+END.
