@@ -37,7 +37,7 @@ WORKINGFILES	+= $(COMMONDIR)/*.asm $(COMMONDIR)/*.ini $(COMMONDIR)/*.*mcl
 # Define a pattern rule to build a Mikropascal AVR project
 
 %.hex: %.mppav
-	$(MIKROPASCAL) -DL -O11111114 -Y -PF $<
+	$(MIKROPASCAL) -DL -RA -SSA -PF $<
 
 # Remove working files
 
