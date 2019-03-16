@@ -25,7 +25,7 @@
 AVRSRC		?= $(HOME)/src/AVR
 MIKROPASCALSRC	?= $(AVRSRC)/mikropascal
 
-MCU		:= atmega1284p
+MCU		:= atmega1284
 
 # Compile the program
 
