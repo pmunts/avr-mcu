@@ -19,20 +19,22 @@ News
        Imported [2]LEGO Power Functions Infrared Remote Control Protocol
        implementation.
      * 19 September 2017 -- Upgraded binutils to 2.29 and gcc to 7.2.0.
+     * 16 March 2019 -- Added make files and a demo program using
+       [3]mikroPascal PRO for AVR.
 
-   Note: I have largely migrated to [3]ARM microcontrollers, so this AVR
+   Note: I have largely migrated to [4]ARM microcontrollers, so this AVR
    framework will only be updated sporadically from now on.
 
 Git Repository
 
-   The source code is available at: [4]http://git.munts.com/avr-mcu
+   The source code is available at: [5]http://git.munts.com/avr-mcu
 
    Use the following command to clone it:
 
    git clone http://git.munts.com/avr-mcu.git
    _______________________________________________________________________
 
-   Questions or comments to Philip Munts [5]phil@munts.net
+   Questions or comments to Philip Munts [6]phil@munts.net
 
    I am available for custom system development (hardware and software) of
    products using AVR or other microcontrollers.
@@ -41,6 +43,7 @@ References
 
    1. http://www.atmel.com/products/microcontrollers/avr/default.aspx
    2. https://www.lego.com/en-us/powerfunctions/articles/8884-control-5fcb2efbb4e74f0c926948df71445765
-   3. http://git.munts.com/arm-mcu
-   4. http://git.munts.com/avr-mcu
-   5. mailto:phil@munts.net
+   3. https://www.mikroe.com/mikropascal-avr
+   4. http://git.munts.com/arm-mcu
+   5. http://git.munts.com/avr-mcu
+   6. mailto:phil@munts.net
