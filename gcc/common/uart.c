@@ -292,7 +292,9 @@ int uart_putch(char c)
 
 /* Serial port receive buffer */
 
+#ifndef RXBUFSIZE
 #define RXBUFSIZE	64
+#endif
 
 volatile unsigned char UART_Rcv_head;
 volatile unsigned char UART_Rcv_tail;
