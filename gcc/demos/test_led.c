@@ -1,4 +1,4 @@
-// AVR LED toggle test
+// AVR LED toggle test (works on Arduino Uno Rev 3, et al, with LED on PB5)
 
 // Copyright (C)2019, Philip Munts, President, Munts AM Corp.
 //
