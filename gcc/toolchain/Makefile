@@ -27,14 +27,14 @@ SED		= sed
 TAR		= tar
 TEMP		?= /tmp
 
-BINUTILVER	= 2.29
+BINUTILVER	= 2.32
 BINUTILSERVER	= http://ftp.gnu.org/pub/gnu/binutils
 BINUTILDIST	= $(TEMP)/binutils-$(BINUTILVER).tar.bz2
 BINUTILURL	= $(BINUTILSERVER)/`basename $(BINUTILDIST)`
 BINUTILSRC	= binutils-$(BINUTILVER)
 BINUTILBLD	= build/binutils-$(BINUTILVER)
 
-GCCVER		= 7.2.0
+GCCVER		= 8.3.0
 GCCSERVER	= http://ftp.gnu.org/pub/gnu/gcc/gcc-$(GCCVER)
 GCCDIST		= $(TEMP)/gcc-$(GCCVER).tar.gz
 GCCURL		= $(GCCSERVER)/`basename $(GCCDIST)`
@@ -155,7 +155,7 @@ $(GCCDIST):
 gcc.done: binutils.done
 	rm -rf $(GCCBLD)
 	mkdir -p $(GCCBLD)
-	cd $(GCCBLD) && ../../$(GCCSRC)/configure --prefix=$(INSTBASE) $(BUILDCONFIG) --target=avr --enable-lto --enable-languages=c --disable-libssp --disable-libgomp --disable-nls --disable-shared --disable-werror --with-system-zlib
+	cd $(GCCBLD) && ../../$(GCCSRC)/configure --prefix=$(INSTBASE) $(BUILDCONFIG) --target=avr --enable-lto --enable-languages=c,c++ --disable-libssp --disable-libgomp --disable-nls --disable-shared --disable-werror --with-system-zlib
 	export PATH=$$PATH':'$(INSTBASE)/bin && $(MAKE) $(MAKEJOBS) -C $(GCCBLD)
 	export PATH=$$PATH':'$(INSTBASE)/bin && $(MAKE) -C $(GCCBLD) install
 	touch gcc.done
