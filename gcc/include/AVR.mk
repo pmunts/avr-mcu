@@ -24,6 +24,7 @@ AVRTOOLS	?= /usr/local/avr-mcu-tools
 CROSS_COMPILE	?= $(AVRTOOLS)/bin/avr-
 
 CC		= $(CROSS_COMPILE)gcc
+CXX		= $(CROSS_COMPILE)g++
 LD		= $(CROSS_COMPILE)ld
 AR		= $(CROSS_COMPILE)ar
 STRIP		= $(CROSS_COMPILE)strip
@@ -35,7 +36,7 @@ MCU		?= UNDEFINED
 CPUFLAGS	+= -mmcu=$(MCU)
 CONFIGFLAGS	?=
 DEBUGFLAGS	?= -g
-OPTFLAGS	?= -O0
+OPTFLAGS	?= -O3
 IOFLAGS		?=
 EXTRAFLAGS	?=
 CFLAGS		+= -Wall
@@ -43,47 +44,36 @@ CFLAGS		+= -I$(AVRSRC)/gcc/include -I.
 CFLAGS		+= $(CPUFLAGS) $(OPTFLAGS) $(CONFIGFLAGS) $(IOFLAGS) $(DEBUGFLAGS) $(EXTRAFLAGS)
 LDFLAGS		= -L. -l$(MCU) -Wl,-Map,$*.map,--cref $(EXTRAOBJS)
 
-# These targets are not files
+# Now define some pattern rules
 
-.PHONY: AVR_mk_default AVR_mk_clean lib
+%.o: %.cpp
+	$(CXX) $(CXXFLAGS) $(CFLAGS) -c -o $@ $<
 
-# These are the target suffixes
-
-.SUFFIXES: .asm .c .bin .elf .hex .o .program .teensy .s .S
-
-# Don't delete intermediate files
-
-.SECONDARY:
-
-# Define default target placeholder
-
-AVR_mk_default:
-	@echo ERROR: You must explicitly specify a make target
-	@exit 1
-
-# Now define some suffix rules
-
-.c.o:
+%.o: %.c
 	$(CC) $(CFLAGS) -c -o $@ $<
 
-.o.elf:
+%.elf: %.o
 	$(MAKE) lib$(MCU).a MCU=$(MCU)
 	$(CC) $(CFLAGS) -o $@ $< $(LDFLAGS)
 
-.elf.asm:
+%.asm: %.elf
 	$(OBJDUMP) -S -d $< >$@
 
-.elf.bin:
+%.bin: %.elf
 	$(OBJCOPY) -S -O binary --gap-fill=0 $< $@
 
-.elf.hex:
+%.hex: %.elf
 	$(OBJCOPY) -S -O ihex $< $@
 
-.s.o:
+%.o: %.s
 	$(CC) $(CFLAGS) -o $@ -c $<
 
-.S.o:
+%.o: %.S
 	$(CC) $(CFLAGS) -o $@ -c $<
+
+# Define default target placeholder
+
+AVR_mk_default: default
 
 # Support for common library functions
 
