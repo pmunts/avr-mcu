@@ -24,9 +24,10 @@
 
 AVRSRC		= ../..
 
-.PHONY: clean reallyclean distclean
-
 include $(AVRSRC)/gcc/include/AVR.mk
+
+default:
+	for F in *.c ; do $(MAKE) `basename $$F .c`.hex ; done
 
 clean: AVR_mk_clean
 
