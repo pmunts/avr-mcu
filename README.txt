@@ -21,6 +21,11 @@ News
      * 19 September 2017 -- Upgraded binutils to 2.29 and gcc to 7.2.0.
      * 16 March 2019 -- Added make files and a demo program using
        [3]mikroPascal PRO for AVR.
+     * 18 March 2019 -- Upgraded binutils to 2.32 and gcc to 8.3.0. Enable
+       C++ when building the toolchain. Added sbit.h and gpio.h for bit
+       operations. Imported libstream. Added an LED test demo program,
+       which works on the Arduino Uno Rev 3 and similar boards with the
+       LED connected to PB5.
 
    Note: I have largely migrated to [4]ARM microcontrollers, so this AVR
    framework will only be updated sporadically from now on.
