@@ -29,6 +29,7 @@ CFLAGS		+= -I$(COMMON_DIR)
 
 COMMON_OBJS	+= $(COMMON_DIR)/adc.o
 COMMON_OBJS	+= $(COMMON_DIR)/conio.o
+COMMON_OBJS	+= $(COMMON_DIR)/libstream.o
 COMMON_OBJS	+= $(COMMON_DIR)/uart.o
 COMMON_OBJS	+= $(COMMON_DIR)/usb_serial.o
 
