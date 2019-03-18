@@ -1,6 +1,6 @@
-# Common library make definitions
+# Common component library make definitions
 
-# Copyright (C)2013-2018, Philip Munts, President, Munts AM Corp.
+# Copyright (C)2013-2019, Philip Munts, President, Munts AM Corp.
 #
 # Redistribution and use in source and binary forms, with or without
 # modification, are permitted provided that the following conditions are met:
@@ -25,15 +25,19 @@ CFLAGS		+= -I$(COMMON_DIR)
 
 .PHONY: common_lib common_clean
 
-COMMON_OBJS	= $(COMMON_DIR)/adc.o $(COMMON_DIR)/conio.o		\
-		  $(COMMON_DIR)/uart.o $(COMMON_DIR)/usb_serial.o
+# Compile common components
 
-# Add common object files to the MCU library
+COMMON_OBJS	+= $(COMMON_DIR)/adc.o
+COMMON_OBJS	+= $(COMMON_DIR)/conio.o
+COMMON_OBJS	+= $(COMMON_DIR)/uart.o
+COMMON_OBJS	+= $(COMMON_DIR)/usb_serial.o
+
+# Add common component object files to the MCU library
 
 common_lib: $(COMMON_OBJS)
 	$(AR) crs lib$(MCU).a $(COMMON_OBJS)
 
-# Remove common object files
+# Remove common component object files
 
 common_clean:
 	rm -f $(COMMON_OBJS)
