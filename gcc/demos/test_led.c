@@ -20,8 +20,6 @@
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
 
-#define F_CPU 16000000UL
-
 #include <avr/io.h>
 #include <util/delay.h>
 #include <gpio.h>
