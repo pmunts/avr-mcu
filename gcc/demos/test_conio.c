@@ -23,11 +23,10 @@
 #define __ASSERT_USE_STDERR
 
 #include <assert.h>
+#include <cpu.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-
-#include "cpu.h"
 
 #ifndef BAUDRATE
 #define BAUDRATE 115200

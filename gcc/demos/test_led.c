@@ -20,9 +20,7 @@
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
 
-#include <avr/io.h>
-#include <util/delay.h>
-#include <gpio.h>
+#include <cpu.h>
 
 #define LED	PORTB_5
 
