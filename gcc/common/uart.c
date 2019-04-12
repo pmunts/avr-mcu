@@ -20,10 +20,7 @@
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
 
-#include "cpu.h"
-#include "uart.h"
-
-#include <avr/interrupt.h>
+#include <cpu.h>
 
 // The following hodgepodge of macros are an attempt to make sense of the
 // myriad variations of serial ports in the AVR family.

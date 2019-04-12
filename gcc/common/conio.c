@@ -20,11 +20,8 @@
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
 
+#include <cpu.h>
 #include <string.h>
-
-#include "cpu.h"
-#include "uart.h"
-#include "usb_serial.h"
 
 static FILE mystdout = FDEV_SETUP_STREAM(conio_putch, NULL, _FDEV_SETUP_WRITE);
 static FILE mystdin = FDEV_SETUP_STREAM(NULL, conio_getch, _FDEV_SETUP_READ);
