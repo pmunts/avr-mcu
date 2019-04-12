@@ -24,6 +24,8 @@
 #ifndef _ERRNO_H_
 #define _ERRNO_H_
 
+#include <cplusplus.h>
+
 #define EOK         0   // Success
 #define EPERM       1   // Not super-user
 #define ENOENT      2   // No such file or directory
@@ -61,13 +63,10 @@
 #define ERANGE      34  // Math result not representable
 #define ECONNRESET  104 // Connection reset by peer
 
-#ifdef __cplusplus
-extern "C"
-{
-#endif
-  extern int errno;
-#ifdef __cplusplus
-}
-#endif
+_BEGIN_STD_C
+
+extern int errno;
+
+_END_STD_C
 
 #endif

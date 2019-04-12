@@ -20,6 +20,9 @@
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
 
+#ifndef _CPU_H_
+#define _CPU_H_
+
 #ifndef F_CPU
 #define F_CPU 16000000L
 #endif
@@ -31,5 +34,8 @@
 
 #include <util/delay.h>
 
-#include "adc.h"
-#include "conio.h"
+#include <adc.h>
+#include <conio.h>
+#include <gpio.h>
+#include <sbit.h>
+#endif

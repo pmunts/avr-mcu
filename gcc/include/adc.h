@@ -20,4 +20,15 @@
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
 
-extern unsigned short int ReadADC(unsigned char channel);
+#ifndef _ADC_H_
+#define _ADC_H_
+
+#include <cplusplus.h>
+
+_BEGIN_STD_C
+
+unsigned short int ReadADC(unsigned char channel);
+
+_END_STD_C
+
+#endif

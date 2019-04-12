@@ -20,7 +20,13 @@
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
 
+#ifndef _CONIO_H_
+#define _CONIO_H_
+
+#include <cplusplus.h>
 #include <stdio.h>
+
+_BEGIN_STD_C
 
 void conio_init(unsigned long int baudrate);
 
@@ -40,3 +46,7 @@ int keypressed(void);
 int getch(void);
 
 int cgets(char *s, int size);
+
+_END_STD_C
+
+#endif

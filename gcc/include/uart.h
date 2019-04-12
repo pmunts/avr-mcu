@@ -20,6 +20,10 @@
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
 
+#include <cplusplus.h>
+
+_BEGIN_STD_C
+
 void uart_init(unsigned long int baudrate);
 
 int uart_putch(char c);
@@ -27,3 +31,5 @@ int uart_putch(char c);
 int uart_getch(void);
 
 int uart_available(void);
+
+_END_STD_C

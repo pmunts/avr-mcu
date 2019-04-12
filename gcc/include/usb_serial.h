@@ -2,6 +2,9 @@
 #define usb_serial_h__
 
 #include <stdint.h>
+#include <cplusplus.h>
+
+_BEGIN_STD_C
 
 // setup
 void usb_init(void);			// initialize everything
@@ -25,6 +28,8 @@ uint8_t usb_serial_get_paritytype(void);// get the parity type
 uint8_t usb_serial_get_numbits(void);	// get the number of data bits
 uint8_t usb_serial_get_control(void);	// get the RTS and DTR signal state
 int8_t usb_serial_set_control(uint8_t signals); // set DSR, DCD, RI, etc
+
+_END_STD_C
 
 // constants corresponding to the various serial parameters
 #define USB_SERIAL_DTR			0x01
