@@ -39,5 +39,6 @@
 #include <gpio.h>
 #include <sbit.h>
 #include <uart.h>
+#include <usb_serial.h>
 
 #endif
