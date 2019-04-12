@@ -38,4 +38,6 @@
 #include <conio.h>
 #include <gpio.h>
 #include <sbit.h>
+#include <uart.h>
+
 #endif
