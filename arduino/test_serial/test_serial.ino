@@ -1,6 +1,6 @@
 // Serial port dialog test
 
-// Copyright (C)2025, Philip Munts dba Munts Technologies.
+// Copyright (C)2025-2026, Philip Munts dba Munts Technologies.
 //
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions are met:
@@ -19,6 +19,8 @@
 // CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
+
+#include <Arduino.h>
 
 // Command handler functions follow
 

@@ -1,6 +1,6 @@
 // Arduino Button and LED Test
 
-// Copyright (C)2025, Philip Munts dba Munts Technologies.
+// Copyright (C)2025-2026, Philip Munts dba Munts Technologies.
 //
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions are met:
@@ -25,6 +25,8 @@
 // Arduino Uno R3 (5V logic!)
 // Grove Base Shield v2.1
 // Grove Red LED Button plugged into socket D5
+
+#include <Arduino.h>
 
 // GPIO pin assignments:
 
