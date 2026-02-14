@@ -4,11 +4,9 @@
             "name": "Arduino",
             "includePath": [
                 "${workspaceFolder}/**",
-                "${LOCALAPPDATA}/arduino15/packages/arduino/hardware/avr/1.8.7/**"
+                "${HOME}/.arduino15/packages/arduino/hardware/avr/1.8.7/**"
             ],
-            "compilerPath": "${LOCALAPPDATA}/arduino15/packages/arduino/tools/avr-gcc/7.3.0-atmel3.6.1-arduino7/bin/avr-gcc.exe",
-            "cStandard": "c17",
-            "cppStandard": "c++17",
+            "compilerPath": "${HOME}/.arduino15/packages/arduino/tools/avr-gcc/7.3.0-atmel3.6.1-arduino7/bin/avr-gcc",
             "intelliSenseMode": "${default}"
         }
     ],
