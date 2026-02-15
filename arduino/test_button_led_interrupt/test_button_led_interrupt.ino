@@ -30,8 +30,8 @@
 
 // GPIO pin assignments:
 
-const int Button = 3;  // Active low
-const int LED    = 2;  // Active high
+#define Button 3  // Active low
+#define LED    2  // Active high
 
 // Button Input Interrupt Service Routine
 
@@ -39,8 +39,6 @@ void EdgeHandler(void)
 {
   digitalWrite(LED, !digitalRead(Button));
 }
-
-// Initialization Code (run once at startup)
 
 void setup()
 {
@@ -54,8 +52,6 @@ void setup()
 
   attachInterrupt(digitalPinToInterrupt(Button), EdgeHandler, CHANGE);
 }
-
-// Event Loop (run repeatedly forever)
 
 void loop()
 {

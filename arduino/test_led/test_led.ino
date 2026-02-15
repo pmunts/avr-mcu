@@ -1,4 +1,4 @@
-// Simplest Arduino Example Program: Flash the LED connected to D13
+// Simplest Arduino Example Program: Flash an LED
 
 // Copyright (C)2015-2026, Philip Munts dba Munts Technologies.
 //
@@ -33,6 +33,7 @@ void setup()
 
 void loop()
 {
+  // Toggle the LED
   digitalWrite(LED_BUILTIN, !digitalRead(LED_BUILTIN));
   delay(500);
 }

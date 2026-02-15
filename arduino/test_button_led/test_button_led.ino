@@ -33,15 +33,11 @@
 #define Button 3  // Active low
 #define LED    2  // Active high
 
-// Initialization Code (run once at startup)
-
 void setup()
 {
   pinMode(Button, INPUT);
   pinMode(LED, OUTPUT);
 }
-
-// Event Loop (run repeatedly forever)
 
 void loop()
 {
