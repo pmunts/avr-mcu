@@ -21,14 +21,14 @@
 # POSSIBILITY OF SUCH DAMAGE.
 
 ARDUINOCLI	?= arduino-cli
-ARDUINOPORT	?= COM1
 ARDUINOFQBN	?= arduino:avr:uno
+ARDUINOPORT	?= COM1
 
 install: build
 	$(ARDUINOCLI) upload -b $(ARDUINOFQBN) -p $(ARDUINOPORT)
 
 build:
-	$(ARDUINOCLI) compile -b $(ARDUINOFQBN) -e
+	$(ARDUINOCLI) compile $(COMPILEFLAGS) -b $(ARDUINOFQBN) -e
 
 clean:
 	rm -rf build
