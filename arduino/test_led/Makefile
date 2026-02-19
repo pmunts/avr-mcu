@@ -23,6 +23,7 @@
 ARDUINOCLI	?= arduino-cli
 ARDUINOFQBN	?= arduino:avr:uno
 ARDUINOPORT	?= COM1
+COMPILEFLAGS	+= --libraries $(AVRSRC)/arduino/libraries
 
 install: build
 	$(ARDUINOCLI) upload -b $(ARDUINOFQBN) -p $(ARDUINOPORT)
