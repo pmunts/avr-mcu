@@ -28,15 +28,15 @@
 
 void setup()
 {
+  Serial.begin(115200);
+  Serial.println("Arduino AVR LED Test");
+  Serial.setTimeout(10000);
+
   pinMode(LED_BUILTIN, OUTPUT);
 }
 
 void loop()
 {
-  Serial.begin(115200);
-  Serial.println("Arduino AVR LED Test");
-  Serial.setTimeout(10000);
-
   // Toggle the LED
   digitalWrite(LED_BUILTIN, !digitalRead(LED_BUILTIN));
   delay(500);
