@@ -23,13 +23,13 @@
 // Hardware configuration (bottom to top):
 //
 // Arduino Uno R3 (5V logic!)
-// Momentary switch plugged into D12 and GND
+// Momentary switch plugged into D3 and GND
 
 #include <Arduino.h>
 
 // GPIO pin assignments:
 
-#define Button 12  // Active low
+#define Button 3   // Active low interrupt
 #define LED    13  // Active high
 
 // Button Input Interrupt Service Routine
