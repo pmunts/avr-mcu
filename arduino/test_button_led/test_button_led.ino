@@ -30,12 +30,12 @@
 
 // GPIO pin assignments:
 
-#define Button 3  // Active low
-#define LED    2  // Active high
+#define Button 12  // Active low
+#define LED    13  // Active high
 
 void setup()
 {
-  pinMode(Button, INPUT);
+  pinMode(Button, INPUT_PULLUP);
   pinMode(LED, OUTPUT);
 }
 
