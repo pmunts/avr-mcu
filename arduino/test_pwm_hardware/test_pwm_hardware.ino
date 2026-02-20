@@ -1,4 +1,4 @@
-// Arduino hardware PWM output test
+// Arduino AVR Hardware PWM Output Test
 
 // Copyright (C)2026, Philip Munts dba Munts Technologies.
 //
@@ -38,7 +38,7 @@ AVR_PWM *outp;
 void setup()
 {
   Serial.begin(115200);
-  Serial.println("Arduino hardware PWM output test\r\n");
+  Serial.println("Arduino AVR Hardware PWM Output Test\r\n");
   Serial.setTimeout(10000);
 
   outp = new AVR_PWM(PWMPin, PWMFreq, 0.0);

@@ -1,4 +1,4 @@
-// Arduino Button and LED Test
+// Arduino AVR Button and LED Test
 
 // Copyright (C)2025-2026, Philip Munts dba Munts Technologies.
 //
@@ -34,6 +34,10 @@
 
 void setup()
 {
+  Serial.begin(115200);
+  Serial.println("Arduino AVR Button and LED Test\r\n");
+  Serial.setTimeout(10000);
+
   pinMode(Button, INPUT_PULLUP);
   pinMode(LED, OUTPUT);
 }

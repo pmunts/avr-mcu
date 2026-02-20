@@ -1,4 +1,4 @@
-// Serial port dialog test
+// Arduino AVR Serial Port Dialog Test
 
 // Copyright (C)2025-2026, Philip Munts dba Munts Technologies.
 //
@@ -71,7 +71,7 @@ void Execute(const String cmd)
 void setup()
 {
   Serial.begin(115200);
-  Serial.println("Serial Port Dialog Test\r\n");
+  Serial.println("Arduino AVR Serial Port Dialog Test\r\n");
   Serial.setTimeout(10000);
 }
 

@@ -1,4 +1,4 @@
-// Arduino Button and LED Test
+// Arduino AVR Button and LED Test Using Interrupts
 
 // Copyright (C)2025-2026, Philip Munts dba Munts Technologies.
 //
@@ -42,7 +42,8 @@ void EdgeHandler(void)
 void setup()
 {
   Serial.begin(115200);
-  Serial.println("Button and LED Test");
+  Serial.println("Arduino AVR Button and LED Test Using Interrupts");
+  Serial.setTimeout(10000);
 
   pinMode(Button, INPUT_PULLUP);
   pinMode(LED, OUTPUT);
