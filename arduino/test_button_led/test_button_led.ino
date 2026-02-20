@@ -23,8 +23,7 @@
 // Hardware configuration (bottom to top):
 //
 // Arduino Uno R3 (5V logic!)
-// Grove Base Shield v2.1
-// Grove Red LED Button plugged into Grove socket D5
+// Momentary switch plugged into D12 and GND
 
 #include <Arduino.h>
 
