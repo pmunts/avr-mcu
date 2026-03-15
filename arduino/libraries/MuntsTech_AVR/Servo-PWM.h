@@ -23,7 +23,7 @@
 #ifndef _MUNTSTECH_SERVO_PWM_H
 #define _MUNTSTECH_SERVO_PWM_H
 
-#include <cassert>
+#include <assert.h>
 #include <pwm-interface.h>
 #include <servo-interface.h>
 
