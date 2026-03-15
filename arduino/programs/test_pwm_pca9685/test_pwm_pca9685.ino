@@ -1,4 +1,4 @@
-// Arduino AVR PCA9685 PWM Output Test
+// Arduino PCA9685 PWM Output Test
 
 // Copyright (C)2026, Philip Munts dba Munts Technologies.
 //
@@ -21,19 +21,19 @@
 // POSSIBILITY OF SUCH DAMAGE.
 
 #include <Arduino.h>
-#include <PCA9685PWM.h>
+#include <PWM-PCA9685.h>
 
 using namespace MuntsTech::Interfaces::PWM;
 
-MuntsTech::PCA9685::PWM::Device dev;
-MuntsTech::PCA9685::PWM::Output outp;
+MuntsTech::PWM::PCA9685::Device dev;
+MuntsTech::PWM::PCA9685::Output_Class outp;
 
 void setup()
 {
   Serial.begin(115200);
-  Serial.println("Arduino AVR PCA9685 PWM Output Test\n");
+  Serial.println("Arduino PCA9685 PWM Output Test\n");
 
-  dev.Initialize(0x40, 1000);
+  dev.Initialize(0x7F, 1000);
   outp.Initialize(&dev, 0);
 }
 
@@ -41,7 +41,7 @@ void loop()
 {
   for (float duty = DUTYCYCLE_MIN; duty <= DUTYCYCLE_MAX; duty += 0.5F)
   {
-    outp = duty;
+    outp.write(duty);
     delay(50);
   }
 }
