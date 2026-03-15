@@ -1,4 +1,4 @@
-// Abstract interface for RC (Radio Controlled) analog servo outputs
+// Abstract interface for PWM (Pulse Width Modulated) outputs
 
 // Copyright (C)2026, Philip Munts dba Munts Technologies.
 //
@@ -20,27 +20,25 @@
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
 
-#ifndef _MUNTSTECH_SERVO_INTERFACE_H
-#define _MUNTSTECH_SERVO_INTERFACE_H
+#ifndef _MUNTSTECH_PWM_INTERFACE_H
+#define _MUNTSTECH_PWM_INTERFACE_H
 
-namespace MuntsTech::Interfaces::Servo
+#include <actuator-interface.h>
+
+namespace MuntsTech::Interfaces::PWM
 {
-  // Normalized servo position constants
+  // Duty cycle constants
 
-  static constexpr float POSITION_MIN     = -1.0F;
-  static constexpr float POSITION_NEUTRAL = 0.0F;
-  static constexpr float POSITION_MAX     = 1.0F;
+  static constexpr float DUTYCYCLE_MIN =   0.0F;
+  static constexpr float DUTYCYCLE_MAX = 100.0F;
 
-  struct Output
+  // Duty cycle output interface
+
+  struct Output_Interface : MuntsTech::Interfaces::Actuator_Interface<float>
   {
-    // Servo output methods
-
-    virtual void write(const float position) = 0;
-
-    // Servo output operators
-
-    virtual void operator =(const float position) = 0;
   };
+
+  typedef Output_Interface *Output;
 }
 
 #endif

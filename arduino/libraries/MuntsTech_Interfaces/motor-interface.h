@@ -1,4 +1,4 @@
-// Abstract interface for PWM (Pulse Width Modulated) outputs
+// Abstract interface for Motor driver outputs
 
 // Copyright (C)2026, Philip Munts dba Munts Technologies.
 //
@@ -20,26 +20,29 @@
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
 
-#ifndef _MUNTSTECH_PWM_INTERFACE_H
-#define _MUNTSTECH_PWM_INTERFACE_H
+#ifndef _MUNTSTECH_MOTOR_INTERFACE_H
+#define _MUNTSTECH_MOTOR_INTERFACE_H
 
-namespace MuntsTech::Interfaces::PWM
+#include <actuator-interface.h>
+
+namespace MuntsTech::Interfaces::Motor
 {
-  // Duty cycle constants
+  // Full speed rotation counterclocksize (nominal)
+  static constexpr float SPEED_MIN  = -1.0F;
 
-  static constexpr float DUTYCYCLE_MIN = 0.0F;
-  static constexpr float DUTYCYCLE_MAX = 100.0F;
+  // Stopped
+  static constexpr float SPEED_STOP =  0.0F;
 
-  struct Output
+  // Full speed rotation clockwise (nominal)
+  static constexpr float SPEED_MAX  =  1.0F;
+
+  // Motor driver output interface
+
+  struct Output_Interface : MuntsTech::Interfaces::Actuator_Interface<float>
   {
-    // PWM output methods
-
-    virtual void write(const float dutycycle) = 0;
-
-    // PWM output operators
-
-    virtual void operator =(const float dutycycle) = 0;
   };
+
+  typedef Output_Interface *Output;
 }
 
 #endif
