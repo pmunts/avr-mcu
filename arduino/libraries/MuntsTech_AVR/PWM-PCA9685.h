@@ -20,14 +20,14 @@
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
 
-#ifndef _PCA9685_PWM_H
-#define _PCA9685_PWM_H
+#ifndef _PWM_PCA9685_H
+#define _PWM_PCA9685_H
 
 #include <assert.h>
 #include <pwm-interface.h>
 #include <FaBoPWM_PCA9685.h>
 
-namespace MuntsTech::PCA9685::PWM
+namespace MuntsTech::PWM::PCA9685
 {
   // PCA9685 device class definition
 
@@ -72,12 +72,12 @@ namespace MuntsTech::PCA9685::PWM
 
   // PWM output class definition
 
-  struct Output: public MuntsTech::Interfaces::PWM::Output
+  struct Output_Class: public MuntsTech::Interfaces::PWM::Output_Interface
   {
     // Parameterless stub constructor--Requires a subsequent
     // call to Initialize().
 
-    Output()
+    Output_Class()
     {
       this->dev     = NULL;
       this->channel = 0;
@@ -85,7 +85,7 @@ namespace MuntsTech::PCA9685::PWM
 
     // PWM output constructor
 
-    Output(Device *dev, unsigned channel, 
+    Output_Class(Device *dev, unsigned channel,
       float dutycycle = MuntsTech::Interfaces::PWM::DUTYCYCLE_MIN)
     {
       this->Initialize(dev, channel, dutycycle);
@@ -119,10 +119,12 @@ namespace MuntsTech::PCA9685::PWM
 
     // PWM output operators
 
+#ifdef ENABLE_ASSIGNMENT_OPERATOR
     virtual void operator =(const float dutycycle)
     {
       this->write(dutycycle);
     }
+#endif
 
   private:
 
