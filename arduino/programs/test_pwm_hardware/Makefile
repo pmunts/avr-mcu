@@ -25,11 +25,13 @@ ARDUINOFQBN	?= arduino:avr:uno
 ARDUINOPORT	?= COM1
 COMPILEFLAGS	+= --libraries "$(HOME)/.arduino15/libraries,$(AVRSRC)/arduino/libraries"
 
-install: build
-	$(ARDUINOCLI) upload -b $(ARDUINOFQBN) -p $(ARDUINOPORT)
+default: clean install
 
 build:
 	$(ARDUINOCLI) compile $(COMPILEFLAGS) -b $(ARDUINOFQBN) -e
+
+install: build
+	$(ARDUINOCLI) upload -b $(ARDUINOFQBN) -p $(ARDUINOPORT)
 
 clean:
 	rm -rf build
