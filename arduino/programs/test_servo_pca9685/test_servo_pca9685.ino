@@ -1,4 +1,4 @@
-// Arduino AVR Servo Output Test
+// Arduino Servo Output Test
 
 // Copyright (C)2026, Philip Munts dba Munts Technologies.
 //
@@ -21,19 +21,19 @@
 // POSSIBILITY OF SUCH DAMAGE.
 
 #include <Arduino.h>
-#include <PCA9685PWM.h>
-#include <ServoPWM.h>
+#include <PWM-PCA9685.h>
+#include <Servo-PWM.h>
 
 using namespace MuntsTech::Interfaces::Servo;
 
-MuntsTech::PCA9685::PWM::Device dev;
-MuntsTech::PCA9685::PWM::Output pwmout;
-MuntsTech::ServoPWM::Output outp;
+MuntsTech::PWM::PCA9685::Device dev;
+MuntsTech::PWM::PCA9685::Output_Class pwmout;
+MuntsTech::Servo::PWM::Output_Class outp;
 
 void setup()
 {
   Serial.begin(115200);
-  Serial.println("Arduino AVR Servo Output Test\n");
+  Serial.println("Arduino Servo Output Test\n");
 
   dev.Initialize(0x40, 50);
   pwmout.Initialize(&dev, 0);
@@ -44,19 +44,19 @@ void loop()
 {
   for (float pos = POSITION_NEUTRAL; pos <= POSITION_MAX; pos += 0.015F)
   {
-    outp = pos;
+    outp.write(pos);
     delay(20);
   }
 
   for (float pos = POSITION_MAX; pos >= POSITION_MIN; pos -= 0.015F)
   {
-    outp = pos;
+    outp.write(pos);
     delay(20);
   }
-  
+
   for (float pos = POSITION_MIN; pos <= POSITION_NEUTRAL; pos += 0.015F)
   {
-    outp = pos;
+    outp.write(pos);
     delay(20);
   }
 }
