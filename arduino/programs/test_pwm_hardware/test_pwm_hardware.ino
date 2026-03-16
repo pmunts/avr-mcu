@@ -1,4 +1,4 @@
-// Arduino AVR Hardware PWM Output Test
+// Arduino Hardware PWM Output Test
 
 // Copyright (C)2026, Philip Munts dba Munts Technologies.
 //
@@ -20,36 +20,26 @@
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
 
-// Hardware configuration (bottom to top):
-//
-// Arduino Uno R3 (5V logic!)
-
 #include <Arduino.h>
-#include <AVR_PWM.h>
+#include <PWM-Hardware.h>
 
-// Note: On the Arduino Uno, hardware PWM seems to only work on D9 and D10
-// (using 16-bit Timer 1) and with frequency >= 250 Hz.
+using namespace MuntsTech::Interfaces::PWM;
 
-#define PWMPin    10
-#define PWMFreq   250 // Hz
-
-AVR_PWM *outp;
+MuntsTech::PWM::Hardware::Output_Class outp;
 
 void setup()
 {
   Serial.begin(115200);
-  Serial.println("Arduino AVR Hardware PWM Output Test\r\n");
-  Serial.setTimeout(10000);
+  Serial.println("Arduino Hardware PWM Output Test\n");
 
-  outp = new AVR_PWM(PWMPin, PWMFreq, 0.0);
-  outp->setPWM();
+  outp.Initialize(9, 1000);
 }
 
 void loop()
 {
-  static double duty = 0.0;
-  outp->setPWM(PWMPin, PWMFreq, duty);
-  duty += 1.0;
-  if (duty > 100.0) duty = 0.0;
-  delay(100);
+  for (float duty = DUTYCYCLE_MIN; duty <= DUTYCYCLE_MAX; duty += 0.5F)
+  {
+    outp.write(duty);
+    delay(50);
+  }
 }
