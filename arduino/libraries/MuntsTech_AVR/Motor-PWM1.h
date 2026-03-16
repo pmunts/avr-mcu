@@ -1,4 +1,5 @@
-// Motor Driver Services, using two PWM outputs
+// Motor Driver Services, using one PWM output (speed) and one GPIO output
+// (direction).
 
 // Copyright (C)2026, Philip Munts dba Munts Technologies.
 //
