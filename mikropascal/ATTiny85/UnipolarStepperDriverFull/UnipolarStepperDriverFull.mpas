@@ -18,11 +18,10 @@
 { ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE  }
 { POSSIBILITY OF SUCH DAMAGE.                                                 }
 
-PROGRAM UnipolarStepperDriver;
+PROGRAM UnipolarStepperDriverFull;
 
 CONST
   FullStep : ARRAY [0 .. 3] OF byte = ($09, $0C, $06, $03);
-  HalfStep : ARRAY [0 .. 7] OF byte = ($08, $0C, $04, $06, $02, $03, $01, $09);
 
 VAR
   Dir  : SBIT AT PINB.B5;
