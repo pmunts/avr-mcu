@@ -1,0 +1,13 @@
+PROGRAM Stepper;
+
+VAR
+  DIR  : SBIT AT PORTB.B5;
+  STEP : SBIT AT PORTB.B4;
+
+BEGIN
+  DDRB := $0F;
+
+  REPEAT
+    PORTB := NOT PORTB;
+  UNTIL False;
+END.
