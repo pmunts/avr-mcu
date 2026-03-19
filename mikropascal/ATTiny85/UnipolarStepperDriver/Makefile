@@ -27,7 +27,7 @@ MCU		:= attiny85
 
 # Compile the program
 
-build: Stepper.hex
+build: UnipolarStepperDriver.hex
 
 # Remove working files
 
