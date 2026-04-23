@@ -44,9 +44,9 @@ BEGIN
     IF NewState AND NOT OldState THEN
       BEGIN
         IF Dir THEN
-          OutputIndex := (OutputIndex + 1) AND $07
+          OutputIndex := (OutputIndex - 1) AND $07
         ELSE
-          OutputIndex := (OutputIndex - 1) AND $07;
+          OutputIndex := (OutputIndex + 1) AND $07;
 
         PORTB := HalfStep[OutputIndex];
       END;
