@@ -21,11 +21,11 @@
 PROGRAM UnipolarStepperDriverFull;
 
 CONST
-  FullStep : ARRAY [0 .. 3] OF byte = ($09, $0C, $06, $03);
+  FullStep : ARRAY [0 .. 3] OF byte = ($11, $14, $06, $03);
 
 VAR
-  Dir  : SBIT AT PINB.B5;
-  Step : SBIT AT PINB.B4;
+  Dir  : SBIT AT PINB.B3;
+  Step : SBIT AT PINB.B5;
 
   OutputIndex : Byte;
   OldState    : Boolean;
@@ -33,7 +33,7 @@ VAR
 
 BEGIN
   PORTB       := $00;
-  DDRB        := $0F;
+  DDRB        := $17;
   OutputIndex := 0;
   PORTB       := FullStep[OutputIndex];
   OldState    := Step;
