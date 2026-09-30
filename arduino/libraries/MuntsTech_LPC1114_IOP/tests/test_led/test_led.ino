@@ -33,19 +33,12 @@ LPC1114_IOP::GPIO LED;
 
 void setup()
 {
-  Serial.begin(115200);
-  Serial.println("LPC1114 I/O Processor LED Test\n");
-
   IOP.Init();
   LED.Init(&IOP, LPC1114_LED, LPC1114_GPIO_OUTPUT, false);
 }
 
 void loop()
 {
-  Serial.print("Turning LED ");
-  Serial.print(LED ? "OFF" : "ON");
-  Serial.print("\r\n");
-
   // Toggle the LED
 
   LED = !LED;
